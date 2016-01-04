@@ -28,6 +28,14 @@ module Statement
       Utils.remove_generic_urls!(results)
     end
 
+    def self.current_year
+      if Date.today.month == 1
+        Date.today.year-1
+      else
+        Date.today.year
+      end
+    end
+
     def self.member_methods
       [:crenshaw, :capuano, :cold_fusion, :conaway, :chabot, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison,
       :vitter, :inhofe, :document_query, :swalwell, :fischer, :clark, :edwards, :culberson_chabot_grisham, :barton, :schiff,
@@ -40,7 +48,7 @@ module Statement
     end
 
     def self.member_scrapers
-      year = Date.today.year
+      year = current_year
       results = [crenshaw, capuano, cold_fusion(year, nil), conaway, chabot, klobuchar(year), billnelson(page=0), ellison,
         document_query(page=1), document_query(page=2), swalwell(page=1), crapo, boxer, grassley(page=0), burr, cassidy,
         vitter(year=year), inhofe(year=year), fischer, clark(year=year), edwards, culberson_chabot_grisham(page=1), barton, welch,
@@ -63,7 +71,7 @@ module Statement
     end
 
     def self.committee_scrapers
-      year = Date.today.year
+      year = current_year
       results = [senate_approps_majority, senate_approps_minority, senate_banking(year), senate_hsag_majority(year), senate_hsag_minority(year),
          senate_indian, senate_aging, senate_smallbiz_minority, senate_intel(113, 2013, 2014), house_energy_minority, house_homeland_security_minority,
          house_judiciary_majority, house_rules_majority, house_ways_means_majority].flatten
@@ -98,7 +106,7 @@ module Statement
       results
     end
 
-    def self.senate_banking(year=Date.today.year)
+    def self.senate_banking(year=current_year)
       results = []
       url = "http://www.banking.senate.gov/public/index.cfm?FuseAction=Newsroom.PressReleases&ContentRecordType_id=b94acc28-404a-4fc6-b143-a9e15bf92da4&Region_id=&Issue_id=&MonthDisplay=0&YearDisplay=#{year}"
       doc = open_html(url)
@@ -109,7 +117,7 @@ module Statement
       results
     end
 
-    def self.senate_hsag_majority(year=Date.today.year)
+    def self.senate_hsag_majority(year=current_year)
       results = []
       url = "http://www.hsgac.senate.gov/media/majority-media?year=#{year}"
       doc = open_html(url)
@@ -121,7 +129,7 @@ module Statement
       results
     end
 
-    def self.senate_hsag_minority(year=Date.today.year)
+    def self.senate_hsag_minority(year=current_year)
       results = []
       url = "http://www.hsgac.senate.gov/media/minority-media?year=#{year}"
       doc = open_html(url)
@@ -166,7 +174,7 @@ module Statement
       results
     end
 
-    def self.senate_intel(congress=113, start_year=2013, end_year=2014)
+    def self.senate_intel(congress=114, start_year=2015, end_year=2016)
       results = []
       url = "http://www.intelligence.senate.gov/press/releases.cfm?congress=#{congress}&y1=#{start_year}&y2=#{end_year}"
       doc = open_html(url)
@@ -266,9 +274,9 @@ module Statement
       return results[0..-5]
     end
 
-    def self.crenshaw(year=Date.today.year, month=nil)
+    def self.crenshaw(year=current_year, month=nil)
       results = []
-      year = Date.today.year if not year
+      year = current_year if not year
       domain = 'crenshaw.house.gov'
       if month
         url = "http://crenshaw.house.gov/index.cfm/pressreleases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
@@ -286,9 +294,9 @@ module Statement
       results
     end
 
-    def self.cold_fusion(year=Date.today.year, month=nil, skip_domains=[])
+    def self.cold_fusion(year=current_year, month=nil, skip_domains=[])
       results = []
-      year = Date.today.year if not year
+      year = current_year if not year
       domains = ['www.ronjohnson.senate.gov','www.risch.senate.gov', 'www.lee.senate.gov', 'www.barrasso.senate.gov', 'www.heitkamp.senate.gov', 'www.shelby.senate.gov', 'www.tillis.senate.gov']
       domains = domains - skip_domains if skip_domains
       domains.each do |domain|
@@ -353,7 +361,7 @@ module Statement
       results
     end
 
-    def self.chabot(year=Date.today.year)
+    def self.chabot(year=current_year)
       results = []
       base_url = "http://chabot.house.gov/news/"
       url = base_url + "documentquery.aspx?DocumentTypeID=2508&Year=#{year}"
@@ -377,17 +385,14 @@ module Statement
       results
     end
 
-    def self.klobuchar(year)
+    def self.klobuchar(year=current_year)
       results = []
-      base_url = "http://www.klobuchar.senate.gov/"
-      [year.to_i-1,year.to_i].each do |year|
-        year_url = base_url + "public/news-releases?MonthDisplay=0&YearDisplay=#{year}"
-        doc = open_html(year_url)
-        return if doc.nil?
-        doc.xpath("//tr")[1..-1].each do |row|
-          next if row.children[3].children[0].text.strip == 'Title'
-          results << { :source => year_url, :url => row.children[3].children[0]['href'], :title => row.children[3].children[0].text.strip, :date => Date.strptime(row.children[1].text, "%m/%d/%y"), :domain => "klobuchar.senate.gov" }
-        end
+      url = "http://www.klobuchar.senate.gov/public/news-releases?MonthDisplay=0&YearDisplay=#{year}"
+      doc = open_html(url)
+      return if doc.nil?
+      doc.xpath("//tr")[2..-1].each do |row|
+        next if row.text.strip[0..3] == "Date"
+        results << { :source => url, :url => row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.strptime(row.children[1].text.strip, "%m/%d/%y"), :domain => "www.klobuchar.senate.gov" }
       end
       results
     end
@@ -545,7 +550,7 @@ module Statement
       results
     end
 
-    def self.fischer(year=Date.today.year)
+    def self.fischer(year=current_year)
       results = []
       url = "http://www.fischer.senate.gov/public/index.cfm/press-releases?MonthDisplay=0&YearDisplay=#{year}"
       doc = open_html(url)
@@ -592,7 +597,7 @@ module Statement
       results
     end
 
-    def self.vitter(year=Date.today.year)
+    def self.vitter(year=current_year)
       results = []
       url = "http://www.vitter.senate.gov/newsroom/"
       domain = "www.vitter.senate.gov"
@@ -606,7 +611,7 @@ module Statement
     end
 
     # deprecated
-    def self.donnelly(year=Date.today.year)
+    def self.donnelly(year=current_year)
       results = []
       url = "http://www.donnelly.senate.gov/newsroom/"
       domain = "www.donnelly.senate.gov"
@@ -630,7 +635,7 @@ module Statement
       results
     end
 
-    def self.inhofe(year=Date.today.year)
+    def self.inhofe(year=current_year)
       results = []
       url = "http://www.inhofe.senate.gov/newsroom/press-releases?year=#{year}"
       domain = "www.inhofe.senate.gov"
@@ -645,7 +650,7 @@ module Statement
       results
     end
 
-    def self.clark(year=Date.today.year)
+    def self.clark(year=current_year)
       results = []
       domain = 'katherineclark.house.gov'
       url = "http://katherineclark.house.gov/index.cfm/press-releases?MonthDisplay=0&YearDisplay=#{year}"
@@ -658,7 +663,7 @@ module Statement
       results
     end
 
-    def self.sessions(year=Date.today.year)
+    def self.sessions(year=current_year)
       results = []
       domain = 'sessions.senate.gov'
       url = "http://www.sessions.senate.gov/public/index.cfm/news-releases?YearDisplay=#{year}"
@@ -748,10 +753,10 @@ module Statement
       results
     end
 
-    def self.farr(year=2014)
+    def self.farr(year=2015)
       results = []
       domain = 'www.farr.house.gov'
-      if year == 2014
+      if year == 2015
         url = "http://www.farr.house.gov/index.php/newsroom/press-releases"
       else
         url = "http://www.farr.house.gov/index.php/newsroom/press-releases-archive/#{year.to_s}-press-releases"
@@ -776,7 +781,7 @@ module Statement
       results
     end
 
-    def self.olson(year=2014)
+    def self.olson(year=current_year)
       results = []
       domain = 'olson.house.gov'
       url = "http://olson.house.gov/#{year}-press-releases/"

@@ -5,39 +5,10 @@ include Statement
 
 describe Statement do
   it "parses an rss feed" do
-    @feed_url = "http://ruiz.house.gov/rss.xml"
+    @feed_url = "https://ruiz.house.gov/rss.xml"
     WebMock.stub_request(:any, @feed_url).to_return(:body => File.new(File.join(File.dirname(__FILE__), "ruiz_rss.xml")), :status => 200)
     @results = Feed.from_rss(@feed_url)
     @results.first[:domain].must_equal "ruiz.house.gov"
-  end
-
-  it "parses House GOP press release page" do
-    @feed_url = "http://www.gop.gov/republicans/news?offset=03/29/13"
-    WebMock.stub_request(:any, @feed_url).to_return(:body => File.new(File.join(File.dirname(__FILE__), "house_gop_releases.html")), :status => 200)
-    @results = Scraper.house_gop(@feed_url)
-    @results.first[:source].must_equal @feed_url
-  end
-
-  it "does not attempt to parse dates when none are present" do
-    @feed_url = "http://culberson.house.gov/feed/rss/"
-    WebMock.stub_request(:any, @feed_url).to_return(:body => File.new(File.join(File.dirname(__FILE__), "culberson_rss.xml")), :status => 200)
-    @results = Feed.from_rss(@feed_url)
-    @results.first[:date].must_equal nil
-  end
-
-  it "parses invalid RSS" do
-    @feed_url = "http://www.burr.senate.gov/public/index.cfm?FuseAction=RSS.Feed"
-    WebMock.stub_request(:any, @feed_url).to_return(:body => File.new(File.join(File.dirname(__FILE__), "richard_burr.xml")), :status => 200)
-    @results = Feed.from_rss(@feed_url)
-    @results.first[:url].must_equal "http://www.burr.senate.gov/public/index.cfm?FuseAction=PressOffice.PressReleases&Type=Press Release&ContentRecord_id=65dbea38-d64c-6208-ef8f-2b000e899b3a"
-    @results.first[:date].to_s.must_equal "2013-05-02"
-  end
-
-  it "handles relative URLs" do
-    @feed_url = "http://www.gop.gov/republicans/news?offset=03/29/13"
-    WebMock.stub_request(:any, @feed_url).to_return(:body => File.new(File.join(File.dirname(__FILE__), "house_gop_releases.html")), :status => 200)
-    @results = Scraper.house_gop(@feed_url)
-    @results.last[:url].must_equal "http://www.gop.gov/republicans/other/relative_url_test.html"
   end
 
   it "scrapes a senate cold fusion page (old bill nelson)" do
@@ -46,8 +17,6 @@ describe Statement do
     WebMock.stub_request(:get, "http://www.billnelson.senate.gov/newsroom/press-releases?page=2013").
        with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent'=>'Ruby'}).
        to_return(:status => 200, :body => File.new(File.join(File.dirname(__FILE__), 'bill_nelson_press-coldfusion.html')), :headers => {})
-
-
     @results = Scraper.billnelson(year=2013)
     @results.last[:url].must_equal "http://www.billnelson.senate.gov/newsroom/press-releases/lawmakers-call-on-feds-to-investigate-use-of-supercookies"
   end
