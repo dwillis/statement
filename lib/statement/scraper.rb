@@ -37,8 +37,8 @@ module Statement
     end
 
     def self.member_methods
-      [:crenshaw, :capuano, :cold_fusion, :conaway, :chabot, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison,
-      :vitter, :inhofe, :document_query, :swalwell, :fischer, :clark, :edwards, :culberson_chabot_grisham, :barton, :schiff,
+      [:crenshaw, :capuano, :cold_fusion, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison,
+      :vitter, :inhofe, :document_query, :swalwell, :fischer, :clark, :edwards, :barton, :schiff,
       :welch, :sessions, :gabbard, :costa, :farr, :mcclintock, :olson, :schumer, :cassidy, :lowey, :mcmorris, :takano,
       :bennie_thompson, :speier, :poe, :grassley, :bennet, :shaheen, :keating, :drupal, :jenkins, :durbin, :rand_paul, :senate_drupal]
     end
@@ -49,9 +49,9 @@ module Statement
 
     def self.member_scrapers
       year = current_year
-      results = [crenshaw, capuano, cold_fusion(year, nil), conaway, chabot, klobuchar(year), billnelson(page=0), ellison,
+      results = [crenshaw, capuano, cold_fusion(year, nil), klobuchar(year), billnelson(page=0), ellison,
         document_query(page=1), document_query(page=2), swalwell(page=1), crapo, boxer, grassley(page=0), burr, cassidy,
-        vitter(year=year), inhofe(year=year), fischer, clark(year=year), edwards, culberson_chabot_grisham(page=1), barton, welch,
+        vitter(year=year), inhofe(year=year), fischer, clark(year=year), edwards, barton, welch,
         sessions(year=year), gabbard, costa, farr, olson, schumer, bennie_thompson, speier, lowey, mcmorris, schiff, takano,
         poe(year=year, month=0), bennet(page=1), shaheen(page=1), perlmutter, keating, drupal, jenkins, durbin(page=1),
         rand_paul(page = 1), senate_drupal].flatten
@@ -62,7 +62,7 @@ module Statement
     def self.backfill_from_scrapers
       results = [cold_fusion(2012, 0), cold_fusion(2011, 0), cold_fusion(2010, 0), billnelson(year=2012), document_query(page=3),
         document_query(page=4), grassley(page=1), grassley(page=2), grassley(page=3), burr(page=2), burr(page=3), burr(page=4),
-        vitter(year=2012), vitter(year=2011), swalwell(page=2), swalwell(page=3), clark(year=2013), culberson_chabot_grisham(page=2),
+        vitter(year=2012), vitter(year=2011), swalwell(page=2), swalwell(page=3), clark(year=2013), 
         sessions(year=2013), pryor(page=1), farr(year=2013), farr(year=2012), farr(year=2011), cassidy(page=2), cassidy(page=3),
         olson(year=2013), schumer(page=2), schumer(page=3), poe(year=2015, month=2), ellison(page=1), ellison(page=2), lowey(page=1),
         lowey(page=2), lowey(page=3), poe(year=2015, month=1), mcmorris(page=2), mcmorris(page=3), schiff(page=2), schiff(page=3),
@@ -347,18 +347,6 @@ module Statement
         end
       end
       results.flatten
-    end
-
-    def self.conaway(page=1)
-      results = []
-      base_url = "http://conaway.house.gov/news/"
-      page_url = base_url + "documentquery.aspx?DocumentTypeID=1279&Page=#{page}"
-      doc = open_html(page_url)
-      return if doc.nil?
-      doc.xpath("//li")[41..50].each do |row|
-        results << { :source => page_url, :url => base_url + row.children[1]['href'], :title => row.children[1].children.text.strip, :date => Date.parse(row.children[3].text.strip), :domain => "conaway.house.gov" }
-      end
-      results
     end
 
     def self.chabot(year=current_year)
@@ -689,22 +677,6 @@ module Statement
       results
     end
 
-    def self.culberson_chabot_grisham(page=1)
-      results = []
-      domains = [{'culberson.house.gov' => 2573}, {'chabot.house.gov' => 2508}, {'lujangrisham.house.gov' => 2447}]
-      domains.each do |domain|
-        doc = open_html("http://"+domain.keys.first+"/news/documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}")
-        return if doc.nil?
-        doc.css('ul.UnorderedNewsList li').each do |row|
-          link = "http://"+domain.keys.first+"/news/" + row.children[1]['href']
-          title = row.children[1].text.strip
-          date = Date.parse(row.children[3].text.strip)
-          results << { :source => "http://"+domain.keys.first+"/news/"+"documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}", :title => title, :url => link, :date => date, :domain => domain.keys.first }
-        end
-      end
-      results.flatten
-    end
-
     def self.barton
       results = []
       domain = 'joebarton.house.gov'
@@ -819,7 +791,10 @@ module Statement
         {"wittman.house.gov" => 2670},
         {"kinzinger.house.gov" => 2665},
         {"ellmers.house.gov" => 27},
-        {"frankel.house.gov" => 27}
+        {"frankel.house.gov" => 27},
+        {"conaway.house.gov" => 1279},
+        {'culberson.house.gov' => 2573},
+        {'chabot.house.gov' => 2508}
       ]
       domains.each do |domain|
         doc = open_html("http://"+domain.keys.first+"/news/documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}")
@@ -988,7 +963,8 @@ module Statement
             "https://waters.house.gov/media-center/press-releases",
             "https://walden.house.gov/media-center/press-releases",
             "https://brooks.house.gov/media-center/news-releases",
-            "https://swalwell.house.gov/media-center/press-releases"
+            "https://swalwell.house.gov/media-center/press-releases",
+            "https://lujangrisham.house.gov/media-center/press-releases"
         ]
       end
 
