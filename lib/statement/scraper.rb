@@ -62,7 +62,7 @@ module Statement
     def self.backfill_from_scrapers
       results = [cold_fusion(2012, 0), cold_fusion(2011, 0), cold_fusion(2010, 0), billnelson(year=2012), document_query(page=3),
         document_query(page=4), grassley(page=1), grassley(page=2), grassley(page=3), burr(page=2), burr(page=3), burr(page=4),
-        vitter(year=2012), vitter(year=2011), swalwell(page=2), swalwell(page=3), clark(year=2013), 
+        vitter(year=2012), vitter(year=2011), swalwell(page=2), swalwell(page=3), clark(year=2013),
         sessions(year=2013), pryor(page=1), farr(year=2013), farr(year=2012), farr(year=2011), cassidy(page=2), cassidy(page=3),
         olson(year=2013), schumer(page=2), schumer(page=3), poe(year=2015, month=2), ellison(page=1), ellison(page=2), lowey(page=1),
         lowey(page=2), lowey(page=3), poe(year=2015, month=1), mcmorris(page=2), mcmorris(page=3), schiff(page=2), schiff(page=3),
@@ -347,19 +347,6 @@ module Statement
         end
       end
       results.flatten
-    end
-
-    def self.chabot(year=current_year)
-      results = []
-      base_url = "http://chabot.house.gov/news/"
-      url = base_url + "documentquery.aspx?DocumentTypeID=2508&Year=#{year}"
-      doc = open_html(url)
-      return if doc.nil?
-      doc.xpath("//li")[40..48].each do |row|
-        next if not row.text.include?('Posted')
-        results << { :source => url, :url => base_url + row.children[1]['href'], :title => row.children[1].children.text.strip, :date => Date.parse(row.children[3].text.strip), :domain => "chabot.house.gov" }
-      end
-      results
     end
 
     def self.mcmorris(page=1)
