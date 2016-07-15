@@ -1041,6 +1041,7 @@ module Statement
       results = []
 
       urls.each do |url|
+        uri = URI(url)
         source_url = "#{url}?page=#{page}"
 
         domain =  URI.parse(source_url).host
@@ -1050,21 +1051,13 @@ module Statement
         doc.css("#region-content .views-row").each do |row|
             title_anchor = row.css("h3 a")
             title = title_anchor.text
-            release_url = "http://#{domain + title_anchor.attr('href')}"
+            release_url = "#{uri.scheme}://#{domain + title_anchor.attr('href')}"
             raw_date = row.css(".views-field-created").text
             results << { :source => source_url,
                          :url => release_url,
                          :title => title,
                          :date => begin Date.parse(raw_date) rescue nil end,
                          :domain => domain }
-        end
-
-        # mike quigley's release page doesn't have dates, so we fetch those individually
-        if url == "https://quigley.house.gov/media-center/press-releases"
-          results.select{|r| r[:source] == source_url}.each do |result|
-            doc = open_html(result[:url])
-            result[:date] = Date.parse(doc.css(".pane-content").children[0].text.strip)
-          end
         end
       end
       results
