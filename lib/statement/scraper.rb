@@ -40,7 +40,7 @@ module Statement
       [:crenshaw, :capuano, :cold_fusion, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich,
       :vitter, :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :delauro, :barbaralee, :cantwell, :wyden, :cornyn,
       :welch, :sessions, :gabbard, :farr, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand,
-      :bennie_thompson, :speier, :poe, :grassley, :bennet, :shaheen, :keating, :drupal, :durbin, :rand_paul, :senate_drupal]
+      :bennie_thompson, :speier, :poe, :grassley, :bennet, :shaheen, :keating, :drupal, :durbin, :senate_drupal]
     end
 
     def self.committee_methods
@@ -53,8 +53,7 @@ module Statement
         document_query(page=1), document_query(page=2), crapo, boxer, grassley(page=0), burr, cassidy, cantwell, cornyn,
         vitter(year=year), inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden,
         sessions(year=year), gabbard, farr, schumer, bennie_thompson, speier, lowey, mcmorris, schiff, takano, heinrich,
-        poe(year=year, month=0), bennet(page=1), shaheen(page=1), keating, drupal, durbin(page=1), gillibrand,
-        rand_paul(page = 1), senate_drupal].flatten
+        poe(year=year, month=0), bennet(page=1), shaheen(page=1), keating, drupal, durbin(page=1), gillibrand, senate_drupal].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -399,26 +398,6 @@ module Statement
       end
       results
     end
-
-    def self.rand_paul(page = 1)
-      # each page contains a max of 20 results
-      page_url = "https://www.paul.senate.gov/news/press?PageNum_rs=#{page}"
-      doc = open_html(page_url)
-      return if doc.nil?
-      results = doc.search('#press .title').inject([]) do |arr, title|
-        article_url = URI.join(page_url, title.search('a')[0]['href'])
-        article_datestr = title.previous_element.text # e.g. "05.11.15"
-        arr << {
-          :source => page_url,
-          :url => article_url.to_s,
-          :domain => article_url.host,
-          :title => title.text,
-          :date => Date.strptime(article_datestr, '%m.%d.%y')
-        }
-      end
-      results
-    end
-
 
     def self.patrick_meehan(page = 0)
       # This is a Drupal page and it uses the View plugin, but unlike the other
@@ -1082,7 +1061,7 @@ module Statement
     def self.barbaralee
       results = []
       url = "https://lee.house.gov/news/press-releases"
-      doc = open_html(source_url)
+      doc = open_html(url)
       return if doc.nil?
       doc.css("#newscontent h2").each do |row|
           title = row.text.strip
