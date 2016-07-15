@@ -1099,6 +1099,7 @@ module Statement
       results = []
 
       urls.each do |url|
+        uri = URI(url)
         source_url = "#{url}?page=#{page}"
 
         domain =  URI.parse(source_url).host
@@ -1107,7 +1108,7 @@ module Statement
 
         doc.css("#newscontent h2").each do |row|
             title = row.text.strip
-            release_url = "http://#{domain + row.css('a').first['href']}"
+            release_url = "#{uri.scheme}://#{domain + row.css('a').first['href']}"
             raw_date = row.previous.previous.text
             results << { :source => source_url,
                          :url => release_url,
