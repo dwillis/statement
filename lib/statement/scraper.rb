@@ -39,7 +39,7 @@ module Statement
     def self.member_methods
       [:crenshaw, :capuano, :cold_fusion, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich,
       :vitter, :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :delauro, :barbaralee, :cantwell, :wyden, :cornyn,
-      :welch, :sessions, :gabbard, :farr, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand,
+      :welch, :sessions, :gabbard, :farr, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski,
       :bennie_thompson, :speier, :poe, :grassley, :bennet, :shaheen, :keating, :drupal, :durbin, :senate_drupal]
     end
 
@@ -52,7 +52,7 @@ module Statement
       results = [crenshaw, capuano, cold_fusion(year, nil), klobuchar(year), billnelson(page=0), ellison, delauro, kilmer, lacyclay,
         document_query(page=1), document_query(page=2), crapo, boxer, grassley(page=0), burr, cassidy, cantwell, cornyn, kind,
         vitter(year=year), inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden,
-        sessions(year=year), gabbard, farr, schumer, bennie_thompson, speier, lowey, mcmorris, schiff, takano, heinrich,
+        sessions(year=year), gabbard, farr, schumer, bennie_thompson, speier, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski,
         poe(year=year, month=0), bennet(page=1), shaheen(page=1), keating, drupal, durbin(page=1), gillibrand, senate_drupal].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
@@ -61,7 +61,7 @@ module Statement
     def self.backfill_from_scrapers
       results = [cold_fusion(2012, 0), cold_fusion(2011, 0), cold_fusion(2010, 0), billnelson(year=2012), document_query(page=3), cardin(page=2), cornyn(page=1),
         document_query(page=4), grassley(page=1), grassley(page=2), grassley(page=3), burr(page=2), burr(page=3), burr(page=4), cantwell(page=2),
-        vitter(year=2012), vitter(year=2011), clark(year=2013), kilmer(page=2), kilmer(page=3), heinrich(page=2), kind(page=1),
+        vitter(year=2012), vitter(year=2011), clark(year=2013), kilmer(page=2), kilmer(page=3), heinrich(page=2), kind(page=1), walorski(page=2), 
         sessions(year=2013), pryor(page=1), farr(year=2013), farr(year=2012), farr(year=2011), cassidy(page=2), cassidy(page=3), gillibrand(page=2),
         olson(year=2013), schumer(page=2), schumer(page=3), poe(year=2015, month=2), ellison(page=1), ellison(page=2), lowey(page=1), wyden(page=2),
         lowey(page=2), lowey(page=3), poe(year=2015, month=1), mcmorris(page=2), mcmorris(page=3), schiff(page=2), schiff(page=3),
@@ -243,6 +243,17 @@ module Statement
     end
 
     ## special cases for members without RSS feeds
+
+    def self.sinema
+      results = []
+      url = "https://sinema.house.gov/latest-news/"
+      doc = open_html(url)
+      return if doc.nil?
+      doc.xpath("//li[@class='article']").each do |row|
+        results << { source: url, url: "https://sinema.house.gov"+row.children[3].children[1]['href'], title: row.children[3].children[1].text.strip, date: Date.parse(row.children[5].text), domain: 'sinema.house.gov' }
+      end
+      results
+    end
 
     def self.capuano
       results = []
@@ -703,6 +714,19 @@ module Statement
       results
     end
 
+    def self.walorski(page=nil)
+      results = []
+      url = "http://walorski.house.gov/news/"
+      url = url + "page/#{page}" if page
+      doc = open_html(url)
+      return if doc.nil?
+      doc.xpath("//div[@class='media-body']").each do |row|
+        date = row.children[5].text.strip == '' ? nil : Date.parse(row.children[5].text)
+        results << { source: url, url: row.children[1]['href'], title: row.children[3].text.strip, date: date, domain: "walorski.house.gov"}
+      end
+      results
+    end
+
     def self.welch
       results = []
       domain = 'welch.house.gov'
@@ -806,6 +830,7 @@ module Statement
         {"babin.house.gov" => 27},
         {"bridenstine.house.gov" => 2412},
         {"allen.house.gov" => 27},
+        {"holding.house.gov" => 27},
         {"davidscott.house.gov" => 377},
         {"buddycarter.house.gov" => 27},
         {"grothman.house.gov" => 27},
@@ -1034,7 +1059,16 @@ module Statement
             "https://walden.house.gov/media-center/press-releases",
             "https://brooks.house.gov/media-center/news-releases",
             "https://swalwell.house.gov/media-center/press-releases",
-            "https://lujangrisham.house.gov/media-center/press-releases"
+            "https://lujangrisham.house.gov/media-center/press-releases",
+            "https://keating.house.gov/media-center/press-releases",
+            "https://blumenauer.house.gov/media-center/press-releases",
+            "http://issa.house.gov/news-room/press-releases",
+            "https://larson.house.gov/media-center/press-releases",
+            "https://doggett.house.gov/media-center/press-releases",
+            "https://kaptur.house.gov/media-center/press-releases",
+            "https://esty.house.gov/media-center/press-releases",
+            "https://neal.house.gov/media-center/press-releases",
+            "https://vela.house.gov/media-center/press-releases"
         ]
       end
 
