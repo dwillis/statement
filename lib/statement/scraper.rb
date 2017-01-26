@@ -1076,6 +1076,7 @@ module Statement
             "https://banks.house.gov/media/press-releases",
             "https://mitchell.house.gov/media/press-releases",
             "https://gottheimer.house.gov/media/press-releases",
+            "https://gabbard.house.gov/news/press-releases"
         ]
       end
 
