@@ -820,7 +820,6 @@ module Statement
       domains = [
         {"thornberry.house.gov" => 1776},
         {"wenstrup.house.gov" => 2491},
-        {"clawson.house.gov" => 2641},
         {"palazzo.house.gov" => 2519},
         {"roe.house.gov" => 1532},
         {"perry.house.gov" => 2607},
@@ -836,11 +835,9 @@ module Statement
         {"grothman.house.gov" => 27},
         {"beyer.house.gov" => 27},
         {"kathleenrice.house.gov" => 27},
-        {"hanna.house.gov" => 27},
         {"lamborn.house.gov" => 27},
         {"wittman.house.gov" => 2670},
         {"kinzinger.house.gov" => 2665},
-        {"ellmers.house.gov" => 27},
         {"frankel.house.gov" => 27},
         {"conaway.house.gov" => 1279},
         {'culberson.house.gov' => 2573},
@@ -852,7 +849,8 @@ module Statement
         {'chaffetz.house.gov' => 27},
         {'curbelo.house.gov' => 27},
         {'tonko.house.gov' => 27},
-        {'perlmutter.house.gov' => 27}
+        {'perlmutter.house.gov' => 27},
+        {'francisrooney.house.gov' => 27}
       ]
       domains.each do |domain|
         doc = open_html("http://"+domain.keys.first+"/news/documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}")
@@ -1072,7 +1070,6 @@ module Statement
             "https://khanna.house.gov/media/press-releases",
             "https://panetta.house.gov/media/press-releases",
             "https://demings.house.gov/media/press-releases",
-            "https://francisrooney.house.gov/media/press-releases",
             "https://banks.house.gov/media/press-releases",
             "https://mitchell.house.gov/media/press-releases",
             "https://gottheimer.house.gov/media/press-releases",
