@@ -850,7 +850,13 @@ module Statement
         {'curbelo.house.gov' => 27},
         {'tonko.house.gov' => 27},
         {'perlmutter.house.gov' => 27},
-        {'francisrooney.house.gov' => 27}
+        {'francisrooney.house.gov' => 27},
+        {'crist.house.gov' => 27},
+        {'faso.house.gov' => 27},
+        {'bergman.house.gov' => 27},
+        {'jasonlewis.house.gov' => 27},
+        {'kihuen.house.gov' => 27},
+        {'stephaniemurphy.house.gov' => 27},
       ]
       domains.each do |domain|
         doc = open_html("http://"+domain.keys.first+"/news/documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}")
@@ -1132,7 +1138,9 @@ module Statement
           "https://www.hoeven.senate.gov/news/news-releases",
           "https://www.murkowski.senate.gov/press/press-releases",
           "http://www.stabenow.senate.gov/news",
-          "https://www.harris.senate.gov/press-releases"
+          "https://www.harris.senate.gov/press-releases",
+          "https://www.vanhollen.senate.gov/press-releases",
+          "https://www.young.senate.gov/press-releases"
         ]
       end
 
