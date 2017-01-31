@@ -37,10 +37,10 @@ module Statement
     end
 
     def self.member_methods
-      [:crenshaw, :capuano, :cold_fusion, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich,
+      [:capuano, :cold_fusion, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich,
       :vitter, :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :delauro, :barbaralee, :cantwell, :wyden, :cornyn,
-      :welch, :sessions, :gabbard, :farr, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski,
-      :bennie_thompson, :speier, :poe, :grassley, :bennet, :shaheen, :keating, :drupal, :durbin, :senate_drupal]
+      :welch, :sessions, :gabbard, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski,
+      :bennie_thompson, :speier, :poe, :grassley, :bennet, :shaheen, :keating, :drupal, :durbin, :senate_drupal, :toddyoung]
     end
 
     def self.committee_methods
@@ -49,10 +49,10 @@ module Statement
 
     def self.member_scrapers
       year = current_year
-      results = [crenshaw, capuano, cold_fusion(year, nil), klobuchar(year), billnelson(page=0), ellison, delauro, kilmer, lacyclay,
-        document_query(page=1), document_query(page=2), crapo, boxer, grassley(page=0), burr, cassidy, cantwell, cornyn, kind,
+      results = [capuano, cold_fusion(year, nil), klobuchar(year), billnelson(page=0), ellison, delauro, kilmer, lacyclay,
+        document_query(page=1), document_query(page=2), crapo, boxer, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, toddyoung,
         vitter(year=year), inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden,
-        sessions(year=year), gabbard, farr, schumer, bennie_thompson, speier, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski,
+        sessions(year=year), gabbard, schumer, bennie_thompson, speier, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski,
         poe(year=year, month=0), bennet(page=1), shaheen(page=1), keating, drupal, durbin(page=1), gillibrand, senate_drupal].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
@@ -61,8 +61,8 @@ module Statement
     def self.backfill_from_scrapers
       results = [cold_fusion(2012, 0), cold_fusion(2011, 0), cold_fusion(2010, 0), billnelson(year=2012), document_query(page=3), cardin(page=2), cornyn(page=1),
         document_query(page=4), grassley(page=1), grassley(page=2), grassley(page=3), burr(page=2), burr(page=3), burr(page=4), cantwell(page=2),
-        vitter(year=2012), vitter(year=2011), clark(year=2013), kilmer(page=2), kilmer(page=3), heinrich(page=2), kind(page=1), walorski(page=2),
-        sessions(year=2013), pryor(page=1), farr(year=2013), farr(year=2012), farr(year=2011), cassidy(page=2), cassidy(page=3), gillibrand(page=2),
+        clark(year=2013), kilmer(page=2), kilmer(page=3), heinrich(page=2), kind(page=1), walorski(page=2),
+        sessions(year=2013), cassidy(page=2), cassidy(page=3), gillibrand(page=2),
         olson(year=2013), schumer(page=2), schumer(page=3), poe(year=2015, month=2), ellison(page=1), ellison(page=2), lowey(page=1), wyden(page=2),
         lowey(page=2), lowey(page=3), poe(year=2015, month=1), mcmorris(page=2), mcmorris(page=3), schiff(page=2), schiff(page=3),
         takano(page=2), takano(page=3)].flatten
@@ -273,26 +273,6 @@ module Statement
       return results[0..-5]
     end
 
-    def self.crenshaw(year=current_year, month=nil)
-      results = []
-      year = current_year if not year
-      domain = 'crenshaw.house.gov'
-      if month
-        url = "https://crenshaw.house.gov/index.cfm/pressreleases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
-      else
-        url = "https://crenshaw.house.gov/index.cfm/pressreleases"
-      end
-      doc = Statement::Scraper.open_html(url)
-      return if doc.nil?
-      doc.xpath("//tr")[2..-1].each do |row|
-        date_text, title = row.children.map{|c| c.text.strip}.reject{|c| c.empty?}
-        next if date_text == 'Date' or date_text.size > 10
-        date = Date.parse(date_text)
-        results << { :source => url, :url => row.children[3].children.first['href'], :title => title, :date => date, :domain => domain }
-      end
-      results
-    end
-
     #fixme
     def self.cold_fusion(year=current_year, month=nil, skip_domains=[])
       results = []
@@ -368,6 +348,17 @@ module Statement
       doc.xpath("//tr")[2..-1].each do |row|
         next if row.text.strip[0..3] == "Date"
         results << { :source => url, :url => row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.strptime(row.children[1].text.strip, "%m/%d/%y"), :domain => "www.klobuchar.senate.gov" }
+      end
+      results
+    end
+
+    def self.toddyoung
+      results = []
+      url = "https://www.young.senate.gov/press-releases"
+      doc = open_html(url)
+      return if doc.nil?
+      doc.css('.views-row').each do |row|
+        results << {:source => url, :url => 'https://www.young.senate.gov' + row.css('h2 a').first['href'], :title => row.css('h2').text.strip, :date => Date.parse(row.css(".field-name-post-date").text), :domain => 'www.young.senate.gov'}
       end
       results
     end
@@ -763,22 +754,6 @@ module Statement
       results
     end
 
-    def self.farr(year=2015)
-      results = []
-      domain = 'www.farr.house.gov'
-      if year == 2015
-        url = "http://www.farr.house.gov/index.php/newsroom/press-releases"
-      else
-        url = "http://www.farr.house.gov/index.php/newsroom/press-releases-archive/#{year.to_s}-press-releases"
-      end
-      doc = open_html(url)
-      return if doc.nil?
-      doc.xpath("//tr[@class='cat-list-row0']").each do |row|
-        results << { :source => url, :url => "http://farr.house.gov" + row.children[1].children[1]['href'], :title => row.children[1].children[1].text.strip, :date => Date.parse(row.children[3].text.strip), :domain => domain}
-      end
-      results
-    end
-
     def self.mcclintock
       results = []
       domain = 'mcclintock.house.gov'
@@ -1138,6 +1113,7 @@ module Statement
           "https://www.hoeven.senate.gov/news/news-releases",
           "https://www.murkowski.senate.gov/press/press-releases",
           "http://www.stabenow.senate.gov/news",
+
           "https://www.harris.senate.gov/press-releases",
           "https://www.vanhollen.senate.gov/press-releases",
           "https://www.young.senate.gov/press-releases"
@@ -1151,7 +1127,7 @@ module Statement
         source_url = "#{url}?page=#{page}"
 
         domain =  URI.parse(source_url).host
-        doc = open_html(source_url)
+        doc = Statement::Scraper.open_html(source_url)
         return if doc.nil?
 
         doc.css("#newscontent h2").each do |row|
