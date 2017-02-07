@@ -40,7 +40,7 @@ module Statement
       [:capuano, :cold_fusion, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins,
       :vitter, :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :delauro, :barbaralee, :cantwell, :wyden, :cornyn,
       :welch, :gabbard, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski,
-      :bennie_thompson, :speier, :poe, :grassley, :bennet, :keating, :drupal, :durbin, :senate_drupal, :toddyoung]
+      :speier, :poe, :grassley, :bennet, :keating, :drupal, :durbin, :senate_drupal, :toddyoung]
     end
 
     def self.committee_methods
@@ -52,7 +52,7 @@ module Statement
       results = [capuano, cold_fusion(year, nil), klobuchar(year), billnelson(page=0), ellison, delauro, kilmer, lacyclay,
         document_query(page=1), document_query(page=2), crapo, boxer, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, toddyoung,
         vitter(year=year), inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden,
-        gabbard, schumer, bennie_thompson, speier, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins,
+        gabbard, schumer, speier, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins,
         poe(year=year, month=0), bennet(page=1), keating, drupal, durbin(page=1), gillibrand, senate_drupal].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
@@ -340,9 +340,9 @@ module Statement
       results
     end
 
-    def self.klobuchar(year=current_year)
+    def self.klobuchar(year=current_year, month=0)
       results = []
-      url = "http://www.klobuchar.senate.gov/public/news-releases?MonthDisplay=0&YearDisplay=#{year}"
+      url = "http://www.klobuchar.senate.gov/public/index.cfm/news-releases?MonthDisplay=#{month}&YearDisplay=#{year}"
       doc = open_html(url)
       return if doc.nil?
       doc.xpath("//tr")[2..-1].each do |row|
@@ -904,18 +904,6 @@ module Statement
       results
     end
 
-    def self.bennie_thompson
-      results = []
-      domain = "benniethompson.house.gov"
-      url = "http://benniethompson.house.gov/index.php?option=com_content&view=category&id=41&Itemid=148"
-      doc = open_html(url)
-      return if doc.nil?
-      doc.xpath('//*[@id="adminForm"]/table/tbody/tr').each do |row|
-        results << {:source => url, :url => 'http://benniethompson.house.gov' + row.children[1].children[1]['href'], :title => row.children[1].children[1].text.strip, :date => Date.parse(row.children[3].text.strip), :domain => domain }
-      end
-      results
-    end
-
     def self.lowey(page=0)
       results = []
       domain = "lowey.house.gov"
@@ -1056,7 +1044,9 @@ module Statement
             "https://gabbard.house.gov/news/press-releases",
             "https://schneider.house.gov/media/press-releases",
             "https://louise.house.gov/media-center/press-releases",
-            "https://schweikert.house.gov/media-center/press-releases"
+            "https://schweikert.house.gov/media-center/press-releases",
+            "https://benniethompson.house.gov/media/press-releases",
+            "https://austinscott.house.gov/media-center/press-releases"
         ]
       end
 
