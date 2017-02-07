@@ -37,7 +37,7 @@ module Statement
     end
 
     def self.member_methods
-      [:capuano, :cold_fusion, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich,
+      [:capuano, :cold_fusion, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins,
       :vitter, :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :delauro, :barbaralee, :cantwell, :wyden, :cornyn,
       :welch, :gabbard, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski,
       :bennie_thompson, :speier, :poe, :grassley, :bennet, :keating, :drupal, :durbin, :senate_drupal, :toddyoung]
@@ -52,7 +52,7 @@ module Statement
       results = [capuano, cold_fusion(year, nil), klobuchar(year), billnelson(page=0), ellison, delauro, kilmer, lacyclay,
         document_query(page=1), document_query(page=2), crapo, boxer, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, toddyoung,
         vitter(year=year), inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden,
-        gabbard, schumer, bennie_thompson, speier, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski,
+        gabbard, schumer, bennie_thompson, speier, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins,
         poe(year=year, month=0), bennet(page=1), keating, drupal, durbin(page=1), gillibrand, senate_drupal].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
@@ -786,6 +786,18 @@ module Statement
       return if doc.nil?
       (doc/:h3).each do |row|
         results << {:source => url, :url => 'https://olson.house.gov' + row.children[1]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.next.next.text), :domain => domain }
+      end
+      results
+    end
+
+    def self.jenkins
+      results = []
+      domain = 'lynnjenkins.house.gov'
+      url = 'https://lynnjenkins.house.gov/press-releases/'
+      doc = open_html(url)
+      return if doc.nil?
+      doc.css('li[@class="article"]').each do |row|
+        results << {source: url, url: 'https://lynnjenkins.house.gov' + row.children[3].children[1]['href'], title: row.children[3].text.strip, date: Date.parse(row.children[5].text), domain: domain }
       end
       results
     end
