@@ -40,7 +40,7 @@ module Statement
       [:capuano, :cold_fusion, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich,
       :vitter, :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :delauro, :barbaralee, :cantwell, :wyden, :cornyn,
       :welch, :gabbard, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski,
-      :bennie_thompson, :speier, :poe, :grassley, :bennet, :shaheen, :keating, :drupal, :durbin, :senate_drupal, :toddyoung]
+      :bennie_thompson, :speier, :poe, :grassley, :bennet, :keating, :drupal, :durbin, :senate_drupal, :toddyoung]
     end
 
     def self.committee_methods
@@ -53,7 +53,7 @@ module Statement
         document_query(page=1), document_query(page=2), crapo, boxer, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, toddyoung,
         vitter(year=year), inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden,
         gabbard, schumer, bennie_thompson, speier, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski,
-        poe(year=year, month=0), bennet(page=1), shaheen(page=1), keating, drupal, durbin(page=1), gillibrand, senate_drupal].flatten
+        poe(year=year, month=0), bennet(page=1), keating, drupal, durbin(page=1), gillibrand, senate_drupal].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -868,19 +868,6 @@ module Statement
       results
     end
 
-    def self.shaheen(page=1)
-      results = []
-      domain = 'www.shaheen.senate.gov'
-      url = "https://www.shaheen.senate.gov/news/press/index.cfm?PageNum_rs=#{page}"
-      doc = open_html(url)
-      return if doc.nil?
-      (doc/:ul)[3].children.each do |row|
-        next if row.text.strip == ''
-        results << {:source => url, :url => row.children[2].children[0]['href'], :title => row.children[2].text.strip, :date => Date.parse(row.children.first.text), :domain => domain }
-      end
-      results
-    end
-
     def self.cantwell(page=1)
       results = []
       domain = 'www.cantwell.senate.gov'
@@ -1113,7 +1100,7 @@ module Statement
           "https://www.hoeven.senate.gov/news/news-releases",
           "https://www.murkowski.senate.gov/press/press-releases",
           "http://www.stabenow.senate.gov/news",
-
+          "https://www.shaheen.senate.gov/news/press",
           "https://www.harris.senate.gov/press-releases",
           "https://www.vanhollen.senate.gov/press-releases",
           "https://www.young.senate.gov/press-releases"
