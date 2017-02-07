@@ -340,9 +340,9 @@ module Statement
       results
     end
 
-    def self.klobuchar(year=current_year, month=0)
+    def self.klobuchar(year=current_year, month=0, page=1)
       results = []
-      url = "http://www.klobuchar.senate.gov/public/index.cfm/news-releases?MonthDisplay=#{month}&YearDisplay=#{year}"
+      url = "http://www.klobuchar.senate.gov/public/index.cfm/news-releases?MonthDisplay=#{month}&YearDisplay=#{year}&page=#{page}"
       doc = open_html(url)
       return if doc.nil?
       doc.xpath("//tr")[2..-1].each do |row|
