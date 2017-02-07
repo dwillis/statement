@@ -59,7 +59,7 @@ module Statement
     end
 
     def self.backfill_from_scrapers
-      results = [cold_fusion(2012, 0), cold_fusion(2011, 0), cold_fusion(2010, 0), billnelson(year=2012), document_query(page=3), cardin(page=2), cornyn(page=1),
+      results = [cold_fusion(2015, 0), cold_fusion(2014, 0), cold_fusion(2013, 0), billnelson(year=2012), document_query(page=3), cardin(page=2), cornyn(page=1),
         document_query(page=4), grassley(page=1), grassley(page=2), grassley(page=3), burr(page=2), burr(page=3), burr(page=4), cantwell(page=2),
         clark(year=2013), kilmer(page=2), kilmer(page=3), heinrich(page=2), kind(page=1), walorski(page=2),
         cassidy(page=2), cassidy(page=3), gillibrand(page=2),
@@ -1053,7 +1053,10 @@ module Statement
             "https://banks.house.gov/media/press-releases",
             "https://mitchell.house.gov/media/press-releases",
             "https://gottheimer.house.gov/media/press-releases",
-            "https://gabbard.house.gov/news/press-releases"
+            "https://gabbard.house.gov/news/press-releases",
+            "https://schneider.house.gov/media/press-releases",
+            "https://louise.house.gov/media-center/press-releases",
+            "https://schweikert.house.gov/media-center/press-releases"
         ]
       end
 
@@ -1112,10 +1115,11 @@ module Statement
           "https://www.hoeven.senate.gov/news/news-releases",
           "https://www.murkowski.senate.gov/press/press-releases",
           "http://www.stabenow.senate.gov/news",
-          "https://www.shaheen.senate.gov/news/press",
+          "https://www.shaheen.senate.gov/news/press", # fix dates
           "https://www.harris.senate.gov/press-releases",
           "https://www.vanhollen.senate.gov/press-releases",
-          "https://www.young.senate.gov/press-releases"
+          "https://www.young.senate.gov/press-releases",
+          "https://www.lankford.senate.gov/news/press-releases",
         ]
       end
 
