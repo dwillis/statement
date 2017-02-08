@@ -38,7 +38,7 @@ module Statement
 
     def self.member_methods
       [:capuano, :cold_fusion, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins,
-      :vitter, :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :delauro, :barbaralee, :cantwell, :wyden, :cornyn,
+      :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :delauro, :barbaralee, :cantwell, :wyden, :cornyn, :marchant,
       :welch, :gabbard, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski,
       :speier, :poe, :grassley, :bennet, :keating, :drupal, :durbin, :senate_drupal, :toddyoung]
     end
@@ -51,8 +51,8 @@ module Statement
       year = current_year
       results = [capuano, cold_fusion(year, nil), klobuchar(year), billnelson(page=0), ellison, delauro, kilmer, lacyclay,
         document_query(page=1), document_query(page=2), crapo, boxer, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, toddyoung,
-        vitter(year=year), inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden,
-        gabbard, schumer, speier, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins,
+        inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden,
+        gabbard, schumer, speier, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant,
         poe(year=year, month=0), bennet(page=1), keating, drupal, durbin(page=1), gillibrand, senate_drupal].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
@@ -271,6 +271,16 @@ module Statement
         results << { :source => list_url, :url => base_url + link['href'], :title => link.text.split(' ',2).last, :date => date, :domain => "www.house.gov/capuano/" }
       end
       return results[0..-5]
+    end
+
+    def self.marchant
+      results = []
+      url = "https://marchant.house.gov/wp-content/themes/marchant/ajax/newsroom.php"
+      json = JSON.load(open(url).read)
+      json['posts'].each do |post|
+        results << { source: "https://marchant.house.gov/newsroom/?terms=", url: post['guid'], title: post['post_title'], date: Date.parse(post['post_modified']), domain: 'marchant.house.gov' }
+      end
+      results
     end
 
     #fixme
@@ -567,19 +577,6 @@ module Statement
       results
     end
 
-    def self.vitter(year=current_year)
-      results = []
-      url = "https://www.vitter.senate.gov/newsroom/"
-      domain = "www.vitter.senate.gov"
-      doc = open_html(url+"press?year=#{year}")
-      return if doc.nil?
-      doc.xpath("//tr")[1..-1].each do |row|
-        next if row.text.strip.size < 30
-        results << { :source => url, :url => row.children[3].children[0]['href'].strip, :title => row.children[3].text, :date => Date.strptime(row.children[1].text, "%m/%d/%y"), :domain => domain}
-      end
-      results
-    end
-
     # deprecated
     def self.donnelly(year=current_year)
       results = []
@@ -846,7 +843,7 @@ module Statement
         {'stephaniemurphy.house.gov' => 27},
       ]
       domains.each do |domain|
-        doc = open_html("http://"+domain.keys.first+"/news/documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}")
+        doc = Statement::Scraper.open_html("http://"+domain.keys.first+"/news/documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}")
         return if doc.nil?
         doc.xpath("//div[@class='middlecopy']//li").each do |row|
           results << { :source => "http://"+domain.keys.first+"/news/"+"documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}", :url => "http://"+domain.keys.first+"/news/" + row.children[1]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.children[3].text.strip), :domain => domain.keys.first }
