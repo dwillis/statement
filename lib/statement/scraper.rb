@@ -36,10 +36,14 @@ module Statement
       end
     end
 
+    def self.current_month
+      Date.today.month
+    end
+
     def self.member_methods
       [:capuano, :cold_fusion, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins,
       :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :delauro, :barbaralee, :cantwell, :wyden, :cornyn, :marchant,
-      :welch, :gabbard, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski,
+      :welch, :gabbard, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :chaffetz,
       :speier, :poe, :grassley, :bennet, :keating, :drupal, :durbin, :senate_drupal, :toddyoung]
     end
 
@@ -51,7 +55,7 @@ module Statement
       year = current_year
       results = [capuano, cold_fusion(year, nil), klobuchar(year), billnelson(page=0), ellison, delauro, kilmer, lacyclay,
         document_query(page=1), document_query(page=2), crapo, boxer, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, toddyoung,
-        inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden,
+        inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden, chaffetz,
         gabbard, schumer, speier, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant,
         poe(year=year, month=0), bennet(page=1), keating, drupal, durbin(page=1), gillibrand, senate_drupal].flatten
       results = results.compact
@@ -62,7 +66,7 @@ module Statement
       results = [cold_fusion(2015, 0), cold_fusion(2014, 0), cold_fusion(2013, 0), billnelson(year=2012), document_query(page=3), cardin(page=2), cornyn(page=1),
         document_query(page=4), grassley(page=1), grassley(page=2), grassley(page=3), burr(page=2), burr(page=3), burr(page=4), cantwell(page=2),
         clark(year=2013), kilmer(page=2), kilmer(page=3), heinrich(page=2), kind(page=1), walorski(page=2),
-        cassidy(page=2), cassidy(page=3), gillibrand(page=2),
+        cassidy(page=2), cassidy(page=3), gillibrand(page=2), chaffetz(page=2), chaffetz(page=3),
         olson(year=2013), schumer(page=2), schumer(page=3), poe(year=2015, month=2), ellison(page=1), ellison(page=2), lowey(page=1), wyden(page=2),
         lowey(page=2), lowey(page=3), poe(year=2015, month=1), mcmorris(page=2), mcmorris(page=3), schiff(page=2), schiff(page=3),
         takano(page=2), takano(page=3)].flatten
@@ -787,6 +791,18 @@ module Statement
       results
     end
 
+    def self.chaffetz(page=1)
+      results = []
+      domain = 'chaffetz.house.gov'
+      url = "http://chaffetz.house.gov/news/documentquery.aspx?DocumentTypeID=27&Page=#{page}"
+      doc = open_html(url)
+      return if doc.nil?
+      doc.xpath("//div[@class='news-item']").each do |row|
+        results << {:source => url, :url => 'https://chaffetz.house.gov' + row.css('a').last['href'], :title => row.children[1].text.strip, :date => Date.parse(row.css('time').first['datetime']), :domain => domain }
+      end
+      results
+    end
+
     def self.jenkins
       results = []
       domain = 'lynnjenkins.house.gov'
@@ -799,49 +815,50 @@ module Statement
       results
     end
 
-    def self.document_query(page=1)
+    def self.document_query(domains=[], page=1)
       results = []
-      domains = [
-        {"thornberry.house.gov" => 1776},
-        {"wenstrup.house.gov" => 2491},
-        {"palazzo.house.gov" => 2519},
-        {"roe.house.gov" => 1532},
-        {"perry.house.gov" => 2607},
-        {"rodneydavis.house.gov" => 2427},
-        {"kevinbrady.house.gov" => 2657},
-        {"loudermilk.house.gov" => 27},
-        {"babin.house.gov" => 27},
-        {"bridenstine.house.gov" => 2412},
-        {"allen.house.gov" => 27},
-        {"holding.house.gov" => 27},
-        {"davidscott.house.gov" => 377},
-        {"buddycarter.house.gov" => 27},
-        {"grothman.house.gov" => 27},
-        {"beyer.house.gov" => 27},
-        {"kathleenrice.house.gov" => 27},
-        {"lamborn.house.gov" => 27},
-        {"wittman.house.gov" => 2670},
-        {"kinzinger.house.gov" => 2665},
-        {"frankel.house.gov" => 27},
-        {"conaway.house.gov" => 1279},
-        {'culberson.house.gov' => 2573},
-        {'chabot.house.gov' => 2508},
-        {'brat.house.gov' => 27},
-        {'knight.house.gov' => 27},
-        {'goodlatte.house.gov' => 27},
-        {'hice.house.gov' => 27},
-        {'chaffetz.house.gov' => 27},
-        {'curbelo.house.gov' => 27},
-        {'tonko.house.gov' => 27},
-        {'perlmutter.house.gov' => 27},
-        {'francisrooney.house.gov' => 27},
-        {'crist.house.gov' => 27},
-        {'faso.house.gov' => 27},
-        {'bergman.house.gov' => 27},
-        {'jasonlewis.house.gov' => 27},
-        {'kihuen.house.gov' => 27},
-        {'stephaniemurphy.house.gov' => 27},
-      ]
+      if domains.empty?
+        domains = [
+          {"thornberry.house.gov" => 1776},
+          {"wenstrup.house.gov" => 2491},
+          {"palazzo.house.gov" => 2519},
+          {"roe.house.gov" => 1532},
+          {"perry.house.gov" => 2607},
+          {"rodneydavis.house.gov" => 2427},
+          {"kevinbrady.house.gov" => 2657},
+          {"loudermilk.house.gov" => 27},
+          {"babin.house.gov" => 27},
+          {"bridenstine.house.gov" => 2412},
+          {"allen.house.gov" => 27},
+          {"holding.house.gov" => 27},
+          {"davidscott.house.gov" => 377},
+          {"buddycarter.house.gov" => 27},
+          {"grothman.house.gov" => 27},
+          {"beyer.house.gov" => 27},
+          {"kathleenrice.house.gov" => 27},
+          {"lamborn.house.gov" => 27},
+          {"wittman.house.gov" => 2670},
+          {"kinzinger.house.gov" => 2665},
+          {"frankel.house.gov" => 27},
+          {"conaway.house.gov" => 1279},
+          {'culberson.house.gov' => 2573},
+          {'chabot.house.gov' => 2508},
+          {'brat.house.gov' => 27},
+          {'knight.house.gov' => 27},
+          {'goodlatte.house.gov' => 27},
+          {'hice.house.gov' => 27},
+          {'curbelo.house.gov' => 27},
+          {'tonko.house.gov' => 27},
+          {'perlmutter.house.gov' => 27},
+          {'francisrooney.house.gov' => 27},
+          {'crist.house.gov' => 27},
+          {'faso.house.gov' => 27},
+          {'bergman.house.gov' => 27},
+          {'jasonlewis.house.gov' => 27},
+          {'kihuen.house.gov' => 27},
+          {'stephaniemurphy.house.gov' => 27},
+        ]
+      end
       domains.each do |domain|
         doc = Statement::Scraper.open_html("http://"+domain.keys.first+"/news/documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}")
         return if doc.nil?
