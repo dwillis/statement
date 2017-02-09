@@ -1060,7 +1060,9 @@ module Statement
             "https://louise.house.gov/media-center/press-releases",
             "https://schweikert.house.gov/media-center/press-releases",
             "https://benniethompson.house.gov/media/press-releases",
-            "https://austinscott.house.gov/media-center/press-releases"
+            "https://austinscott.house.gov/media-center/press-releases",
+            "https://bordallo.house.gov/media-center/press-releases",
+            "https://radewagen.house.gov/media-center/press-releases"
         ]
       end
 
