@@ -264,7 +264,7 @@ module Statement
       base_url = "http://capuano.house.gov/news/date.shtml"
       doc = open_html(base_url)
       return if doc.nil?
-      doc.xpath("//a").select{|l| !l['href'].nil? and l['href'].include?('/pr')}[1..-5].each do |link|
+      doc.xpath("//p//a").select{|l| !l['href'].nil? and ['/st', '/pr'].any? {|w| l['href'].include?(w)}}[1..-5].each do |link|
         begin
           year = link['href'].split('/').first
           date = Date.parse(link.text.split(' ').first+'/'+year)
