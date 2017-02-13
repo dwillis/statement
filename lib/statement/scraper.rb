@@ -378,9 +378,8 @@ module Statement
 
     def self.poe(year, month=0)
       results = []
-      base_url = "https://poe.house.gov"
-      month_url = base_url + "/press-releases?MonthDisplay=#{month}&YearDisplay=#{year}"
-      doc = open_html(month_url)
+      url = "http://poe.house.gov/press-releases?MonthDisplay=#{month}&YearDisplay=#{year}"
+      doc = open_html(url)
       return if doc.nil?
       doc.xpath("//tr")[1..-1].each do |row|
         next if row.children[3].children[0].text.strip == 'Title'
