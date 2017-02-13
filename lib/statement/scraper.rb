@@ -261,9 +261,8 @@ module Statement
 
     def self.capuano
       results = []
-      base_url = "http://www.house.gov/capuano/news/"
-      list_url = base_url + 'date.shtml'
-      doc = open_html(list_url)
+      base_url = "http://capuano.house.gov/news/date.shtml"
+      doc = open_html(base_url)
       return if doc.nil?
       doc.xpath("//a").select{|l| !l['href'].nil? and l['href'].include?('/pr')}[1..-5].each do |link|
         begin
@@ -272,7 +271,7 @@ module Statement
         rescue
           date = nil
         end
-        results << { :source => list_url, :url => base_url + link['href'], :title => link.text.split(' ',2).last, :date => date, :domain => "www.house.gov/capuano/" }
+        results << { :source => base_url, :url => "http://capuano.house.gov/news/" + link['href'], :title => link.text.split(' ',2).last, :date => date, :domain => "www.house.gov/capuano/" }
       end
       return results[0..-5]
     end
