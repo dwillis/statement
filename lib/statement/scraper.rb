@@ -42,9 +42,9 @@ module Statement
 
     def self.member_methods
       [:capuano, :cold_fusion, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins,
-      :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :delauro, :barbaralee, :cantwell, :wyden, :cornyn, :marchant,
+      :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant,
       :welch, :gabbard, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :chaffetz,
-      :speier, :poe, :grassley, :bennet, :keating, :drupal, :durbin, :senate_drupal, :toddyoung]
+      :poe, :grassley, :bennet, :keating, :drupal, :durbin, :senate_drupal, :toddyoung]
     end
 
     def self.committee_methods
@@ -53,10 +53,10 @@ module Statement
 
     def self.member_scrapers
       year = current_year
-      results = [capuano, cold_fusion(year, nil), klobuchar(year), billnelson(page=0), ellison, delauro, kilmer, lacyclay,
+      results = [capuano, cold_fusion(year, nil), klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay,
         document_query(page=1), document_query(page=2), crapo, boxer, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, toddyoung,
         inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden, chaffetz,
-        gabbard, schumer, speier, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant,
+        gabbard, schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant,
         poe(year=year, month=0), bennet(page=1), keating, drupal, durbin(page=1), gillibrand, senate_drupal].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
@@ -290,20 +290,20 @@ module Statement
     def self.cold_fusion(year=current_year, month=nil, skip_domains=[])
       results = []
       year = current_year if not year
-      domains = ['www.ronjohnson.senate.gov','www.risch.senate.gov', 'www.lee.senate.gov', 'www.barrasso.senate.gov', 'www.heitkamp.senate.gov', 'www.shelby.senate.gov', 'www.tillis.senate.gov', 'www.moran.senate.gov']
+      domains = ['www.feinstein.senate.gov','www.ronjohnson.senate.gov','www.risch.senate.gov', 'www.lee.senate.gov', 'www.barrasso.senate.gov', 'www.heitkamp.senate.gov', 'www.shelby.senate.gov', 'www.tillis.senate.gov', 'www.moran.senate.gov', 'www.heller.senate.gov']
       domains = domains - skip_domains if skip_domains
       domains.each do |domain|
-        if domain == 'www.risch.senate.gov'
+        if domain == 'www.risch.senate.gov' or domain == 'www.heller.senate.gov'
           if not month
             url = "http://www.risch.senate.gov/public/index.cfm/pressreleases"
           else
             url = "http://www.risch.senate.gov/public/index.cfm/pressreleases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
           end
-        elsif domain == 'www.tillis.senate.gov'
+        elsif domain == 'www.tillis.senate.gov' or domain == 'www.feinstein.senate.gov' or domain == 'www.ronjohnson.senate.gov' or domain == 'www.lee.senate.gov'
           if not month
-            url = "https://www.tillis.senate.gov/public/index.cfm/press-releases"
+            url = "https://#{domain}/public/index.cfm/press-releases"
           else
-            url = "https://www.tillis.senate.gov/public/index.cfm/press-releases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
+            url = "https://#{domain}/public/index.cfm/press-releases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
           end
         elsif domain == 'www.shelby.senate.gov'
           if not month
@@ -326,7 +326,7 @@ module Statement
         end
         doc = Statement::Scraper.open_html(url)
         return if doc.nil?
-        if domain == 'www.lee.senate.gov' or domain == 'www.barrasso.senate.gov' or domain == "www.heitkamp.senate.gov" or domain == 'www.tillis.senate.gov' or domain == 'www.moran.senate.gov'
+        if domain == 'www.lee.senate.gov' or domain == 'www.barrasso.senate.gov' or domain == "www.heitkamp.senate.gov" or domain == 'www.tillis.senate.gov' or domain == 'www.moran.senate.gov' or domain == 'www.feinstein.senate.gov'
           rows = doc.xpath("//tr")[1..-1]
         else
           rows = doc.xpath("//tr")[2..-1]
@@ -344,7 +344,7 @@ module Statement
 
     def self.mcmorris(page=1)
       results = []
-      url = "http://mcmorris.house.gov/issues/page/#{page}/?tax=types&term=news_releases"
+      url = "https://mcmorris.house.gov/issues/page/#{page}/?tax=types&term=news_releases"
       doc = open_html(url)
       return if doc.nil?
       doc.css(".feed-result").each do |row|
@@ -469,18 +469,6 @@ module Statement
       rows = doc.css("#press").first.css('h2')
       rows.each do |row|
         results << { :source => url, :url => "http://takano.house.gov" + row.children.first['href'], :title => row.children.last.text.strip, :date => Date.strptime(row.previous.previous.text, "%m.%d.%y"), :domain => "takano.house.gov" }
-      end
-      results
-    end
-
-    def self.speier
-      results = []
-      url = "http://speier.house.gov/index.php?option=com_content&view=category&id=20&Itemid=14"
-      doc = open_html(url)
-      return if doc.nil?
-      rows = doc.css("table.category tr")
-      rows.each do |row|
-        results << { :source => url, :url => "http://speier.house.gov" + row.children[1].children[1]['href'], :title => row.children[1].children[1].text.strip, :date => Date.parse(row.children[3].text.strip), :domain => "speier.house.gov" }
       end
       results
     end
@@ -855,6 +843,8 @@ module Statement
           {'jasonlewis.house.gov' => 27},
           {'kihuen.house.gov' => 27},
           {'stephaniemurphy.house.gov' => 27},
+          {'denham.house.gov' => 27},
+          {'gottheimer.house.gov' => 27}
         ]
       end
       domains.each do |domain|
@@ -984,21 +974,6 @@ module Statement
       results
     end
 
-    def self.delauro
-      results = []
-      domain = "delauro.house.gov"
-      source_url = "http://delauro.house.gov/index.php?option=com_content&view=category&id=2&Itemid=21"
-      doc = open_html(source_url)
-      return if doc.nil?
-
-      doc.css("#adminForm tr")[0..-1].each do |row|
-        url = 'http://' + domain + row.children[1].children[1]['href']
-        title = row.children[1].children[1].text.strip
-        results << { :source => source_url, :url => url, :title => title, :date => Date.parse(row.children[3].text.strip), :domain => domain}
-      end
-      results
-    end
-
     def self.keating
       results = []
       domain = "keating.house.gov"
@@ -1027,7 +1002,6 @@ module Statement
             "http://wilson.house.gov/media-center/press-releases",
             "https://bilirakis.house.gov/press-releases",
             "https://quigley.house.gov/media-center/press-releases",
-            "https://denham.house.gov/media-center/press-releases",
             "https://sewell.house.gov/media-center/press-releases",
             "https://buchanan.house.gov/media-center/press-releases",
             "https://meehan.house.gov/media-center/press-releases",
@@ -1040,7 +1014,7 @@ module Statement
             "https://lujangrisham.house.gov/media-center/press-releases",
             "https://keating.house.gov/media-center/press-releases",
             "https://blumenauer.house.gov/media-center/press-releases",
-            "http://issa.house.gov/news-room/press-releases",
+            "https://issa.house.gov/news-room/press-releases",
             "https://larson.house.gov/media-center/press-releases",
             "https://doggett.house.gov/media-center/press-releases",
             "https://kaptur.house.gov/media-center/press-releases",
@@ -1052,7 +1026,6 @@ module Statement
             "https://demings.house.gov/media/press-releases",
             "https://banks.house.gov/media/press-releases",
             "https://mitchell.house.gov/media/press-releases",
-            "https://gottheimer.house.gov/media/press-releases",
             "https://gabbard.house.gov/news/press-releases",
             "https://schneider.house.gov/media/press-releases",
             "https://louise.house.gov/media-center/press-releases",
@@ -1060,7 +1033,8 @@ module Statement
             "https://benniethompson.house.gov/media/press-releases",
             "https://austinscott.house.gov/media-center/press-releases",
             "https://bordallo.house.gov/media-center/press-releases",
-            "https://radewagen.house.gov/media-center/press-releases"
+            "https://radewagen.house.gov/media-center/press-releases",
+            "https://delauro.house.gov/media-center/press-releases"
         ]
       end
 
