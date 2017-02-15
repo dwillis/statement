@@ -42,7 +42,7 @@ module Statement
 
     def self.member_methods
       [:capuano, :cold_fusion, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins,
-      :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant,
+      :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa,
       :welch, :gabbard, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :chaffetz,
       :poe, :grassley, :bennet, :keating, :drupal, :durbin, :senate_drupal, :toddyoung]
     end
@@ -56,7 +56,7 @@ module Statement
       results = [capuano, cold_fusion(year, nil), klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay,
         document_query(page=1), document_query(page=2), crapo, boxer, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, toddyoung,
         inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden, chaffetz,
-        gabbard, schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant,
+        gabbard, schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa,
         poe(year=year, month=0), bennet(page=1), keating, drupal, durbin(page=1), gillibrand, senate_drupal].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
@@ -66,7 +66,7 @@ module Statement
       results = [cold_fusion(2015, 0), cold_fusion(2014, 0), cold_fusion(2013, 0), billnelson(year=2012), document_query(page=3), cardin(page=2), cornyn(page=1),
         document_query(page=4), grassley(page=1), grassley(page=2), grassley(page=3), burr(page=2), burr(page=3), burr(page=4), cantwell(page=2),
         clark(year=2013), kilmer(page=2), kilmer(page=3), heinrich(page=2), kind(page=1), walorski(page=2),
-        cassidy(page=2), cassidy(page=3), gillibrand(page=2), chaffetz(page=2), chaffetz(page=3),
+        cassidy(page=2), cassidy(page=3), gillibrand(page=2), chaffetz(page=2), chaffetz(page=3), issa(page=1), issa(page=2),
         olson(year=2013), schumer(page=2), schumer(page=3), poe(year=2015, month=2), ellison(page=1), ellison(page=2), lowey(page=1), wyden(page=2),
         lowey(page=2), lowey(page=3), poe(year=2015, month=1), mcmorris(page=2), mcmorris(page=3), schiff(page=2), schiff(page=3),
         takano(page=2), takano(page=3)].flatten
@@ -974,6 +974,16 @@ module Statement
       results
     end
 
+    def self.issa(page=0)
+      results = []
+      domain = 'issa.house.gov'
+      url = "https://issa.house.gov/news-room/press-releases?page=#{page}"
+      doc = open_html(url)
+      doc.css(".view-content .views-row").first(4).each do |row|
+        results << {:source => url, :url => 'https://issa.house.gov' + row.css('h3').first.children.first['href'], :title => row.css('h3').first.children.first.text.strip, :date => Date.parse(row.css(".views-field .field-content")[3].text), :domain => domain }
+      end
+    end
+
     def self.keating
       results = []
       domain = "keating.house.gov"
@@ -1014,7 +1024,6 @@ module Statement
             "https://lujangrisham.house.gov/media-center/press-releases",
             "https://keating.house.gov/media-center/press-releases",
             "https://blumenauer.house.gov/media-center/press-releases",
-            "https://issa.house.gov/news-room/press-releases",
             "https://larson.house.gov/media-center/press-releases",
             "https://doggett.house.gov/media-center/press-releases",
             "https://kaptur.house.gov/media-center/press-releases",
