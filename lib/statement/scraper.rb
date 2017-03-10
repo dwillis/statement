@@ -59,7 +59,7 @@ module Statement
         gabbard, schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa,
         poe(year=year, month=0), bennet(page=1), keating, drupal, durbin(page=1), gillibrand, senate_drupal].flatten
       results = results.compact
-      #Utils.remove_generic_urls!(results)
+      Utils.remove_generic_urls!(results)
     end
 
     def self.backfill_from_scrapers
@@ -983,6 +983,7 @@ module Statement
       doc.css(".view-content .views-row").first(4).each do |row|
         results << {:source => url, :url => 'https://issa.house.gov' + row.css('h3').first.children.first['href'], :title => row.css('h3').first.children.first.text.strip, :date => Date.parse(row.css(".views-field .field-content")[3].text), :domain => domain }
       end
+      results
     end
 
     def self.keating
