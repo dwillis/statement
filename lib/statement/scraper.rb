@@ -810,6 +810,7 @@ module Statement
           {"palazzo.house.gov" => 2519},
           {"roe.house.gov" => 1532},
           {"perry.house.gov" => 2607},
+          {"perry.house.gov" => 2608},
           {"rodneydavis.house.gov" => 2427},
           {"kevinbrady.house.gov" => 2657},
           {"loudermilk.house.gov" => 27},
