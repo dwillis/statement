@@ -59,7 +59,7 @@ module Statement
         gabbard, schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa,
         poe(year=year, month=0), bennet(page=1), keating, drupal, durbin(page=1), gillibrand, senate_drupal].flatten
       results = results.compact
-      Utils.remove_generic_urls!(results)
+      #Utils.remove_generic_urls!(results)
     end
 
     def self.backfill_from_scrapers
