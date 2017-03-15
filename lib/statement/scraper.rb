@@ -44,7 +44,7 @@ module Statement
       [:capuano, :cold_fusion, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins,
       :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa,
       :welch, :gabbard, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :chaffetz,
-      :poe, :grassley, :bennet, :keating, :drupal, :durbin, :senate_drupal, :toddyoung]
+      :poe, :grassley, :bennet, :keating, :drupal, :durbin, :senate_drupal, :toddyoung, :desantis]
     end
 
     def self.committee_methods
@@ -53,7 +53,7 @@ module Statement
 
     def self.member_scrapers
       year = current_year
-      results = [capuano, cold_fusion(year, nil), klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay,
+      results = [capuano, cold_fusion(year, nil), klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis,
         document_query([], page=1), document_query([], page=2), crapo, boxer, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, toddyoung,
         inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden, chaffetz,
         gabbard, schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa,
@@ -409,6 +409,18 @@ module Statement
       dates = doc.xpath("//div[@class='date-box']").map{|d| Date.parse(d.children.map{|x| x.text.strip}.join(" "))}
       (doc/:h3).each_with_index do |row, index|
         results << { :source => url, :url => "http://www.billnelson.senate.gov" + row.children.first['href'], :title => row.children.first.text.strip, :date => dates[index], :domain => "billnelson.senate.gov" }
+      end
+      results
+    end
+
+    def self.desantis(year=current_year, month=0)
+      results = []
+      url = "https://desantis.house.gov/press-releases?MonthDisplay=#{month}&YearDisplay=#{year}"
+      doc = open_html(url)
+      return if doc.nil?
+      doc.css('tr')[1..-1].each do |row|
+        next if row.css('th').first && row.css('th').first.text == 'Date'
+        results << { :source => url, :url => "https://desantis.house.gov" + row.css('td')[1].children.first['href'], :title => row.css('td')[1].children.text.strip, :date => Date.parse(row.css('td')[0].text), :domain => "desantis.house.gov" }
       end
       results
     end
