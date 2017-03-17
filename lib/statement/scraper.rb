@@ -360,7 +360,7 @@ module Statement
       return if doc.nil?
       doc.xpath("//tr")[2..-1].each do |row|
         next if row.text.strip[0..3] == "Date"
-        results << { :source => url, :url => row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.strptime(row.children[1].text.strip, "%m/%d/%y"), :domain => "www.klobuchar.senate.gov" }
+        results << { :source => url, :url => "http://www.klobuchar.senate.gov" + row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.strptime(row.children[1].text.strip, "%m/%d/%y"), :domain => "www.klobuchar.senate.gov" }
       end
       results
     end
