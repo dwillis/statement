@@ -289,7 +289,7 @@ module Statement
     def self.cold_fusion(year=current_year, month=nil, skip_domains=[])
       results = []
       year = current_year if not year
-      domains = ['www.feinstein.senate.gov','www.ronjohnson.senate.gov','www.risch.senate.gov', 'www.lee.senate.gov', 'www.barrasso.senate.gov', 'www.heitkamp.senate.gov', 'www.shelby.senate.gov', 'www.tillis.senate.gov', 'www.moran.senate.gov', 'www.heller.senate.gov', 'www.ernst.senate.gov', 'www.mcconnell.senate.gov']
+      domains = ['www.feinstein.senate.gov','www.ronjohnson.senate.gov','www.risch.senate.gov', 'www.lee.senate.gov', 'www.barrasso.senate.gov', 'www.heitkamp.senate.gov', 'www.shelby.senate.gov', 'www.tillis.senate.gov', 'www.moran.senate.gov', 'www.heller.senate.gov', 'www.ernst.senate.gov', 'www.mcconnell.senate.gov', 'www.wicker.senate.gov']
       domains = domains - skip_domains if skip_domains
       domains.each do |domain|
         if domain == 'www.risch.senate.gov'
@@ -298,7 +298,7 @@ module Statement
           else
             url = "http://#{domain}/public/index.cfm/pressreleases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
           end
-        elsif domain == 'www.tillis.senate.gov' or domain == 'www.feinstein.senate.gov' or domain == 'www.ronjohnson.senate.gov' or domain == 'www.lee.senate.gov'
+        elsif domain == 'www.tillis.senate.gov' or domain == 'www.feinstein.senate.gov' or domain == 'www.ronjohnson.senate.gov' or domain == 'www.lee.senate.gov' or domain == 'www.wicker.senate.gov'
           if not month
             url = "https://#{domain}/public/index.cfm/press-releases"
           else
