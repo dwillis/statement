@@ -646,7 +646,7 @@ module Statement
 
     def self.inhofe(year=current_year)
       results = []
-      url = "http://www.inhofe.senate.gov/newsroom/press-releases?year=#{year}"
+      url = "https://www.inhofe.senate.gov/newsroom/press-releases?year=#{year}"
       domain = "www.inhofe.senate.gov"
       doc = open_html(url)
       return if doc.nil?
