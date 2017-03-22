@@ -1109,7 +1109,8 @@ module Statement
           "https://www.young.senate.gov/press-releases",
           "https://www.cortezmasto.senate.gov/press-releases",
           "https://www.duckworth.senate.gov/press-releases",
-          "https://www.hassan.senate.gov/press-releases"
+          "https://www.hassan.senate.gov/press-releases",
+          "https://www.kennedy.senate.gov/press-releases"
         ]
       end
       results = []
