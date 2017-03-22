@@ -44,7 +44,7 @@ module Statement
       [:capuano, :cold_fusion, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins,
       :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa,
       :welch, :gabbard, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :chaffetz,
-      :poe, :grassley, :bennet, :keating, :drupal, :durbin, :senate_drupal, :toddyoung, :desantis]
+      :poe, :grassley, :bennet, :keating, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis]
     end
 
     def self.committee_methods
@@ -54,7 +54,7 @@ module Statement
     def self.member_scrapers
       year = current_year
       results = [capuano, cold_fusion(year, nil), klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis,
-        document_query([], page=1), document_query([], page=2), crapo, boxer, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, toddyoung,
+        document_query([], page=1), document_query([], page=2), crapo, boxer, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new,
         inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden, chaffetz,
         gabbard, schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa,
         poe(year=year, month=0), bennet(page=1), keating, drupal, durbin(page=1), gillibrand, senate_drupal].flatten
@@ -361,17 +361,6 @@ module Statement
       doc.xpath("//tr")[2..-1].each do |row|
         next if row.text.strip[0..3] == "Date"
         results << { :source => url, :url => "https://www.klobuchar.senate.gov" + row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.strptime(row.children[1].text.strip, "%m/%d/%y"), :domain => "www.klobuchar.senate.gov" }
-      end
-      results
-    end
-
-    def self.toddyoung
-      results = []
-      url = "https://www.young.senate.gov/press-releases"
-      doc = open_html(url)
-      return if doc.nil?
-      doc.css('.views-row').each do |row|
-        results << {:source => url, :url => 'https://www.young.senate.gov' + row.css('h2 a').first['href'], :title => row.css('h2').text.strip, :date => Date.parse(row.css(".field-name-post-date").text), :domain => 'www.young.senate.gov'}
       end
       results
     end
@@ -1107,6 +1096,28 @@ module Statement
       results
     end
 
+    def self.senate_drupal_new(urls=[], page=0)
+      if urls.empty?
+        urls = [
+          "https://www.harris.senate.gov/press-releases",
+          "https://www.vanhollen.senate.gov/press-releases",
+          "https://www.young.senate.gov/press-releases"
+        ]
+      results = []
+      urls.each do |url|
+        uri = URI(url)
+        source_url = "#{url}?page=#{page}"
+
+        domain =  URI.parse(source_url).host
+        doc = Statement::Scraper.open_html(source_url)
+        return if doc.nil?
+        doc.css('.views-row').each do |row|
+          results << {:source => url, :url => "https://#{domain}" + row.css('h2 a').first['href'], :title => row.css('h2').text.strip, :date => Date.parse(row.css(".field-name-post-date").text), :domain => domain}
+        end
+      end
+      results
+    end
+
     def self.senate_drupal(urls=[], page=0)
       if urls.empty?
         urls = [
@@ -1121,9 +1132,6 @@ module Statement
           "https://www.murkowski.senate.gov/press/press-releases",
           "http://www.stabenow.senate.gov/news",
           "https://www.shaheen.senate.gov/news/press", # fix dates
-          "https://www.harris.senate.gov/press-releases",
-          "https://www.vanhollen.senate.gov/press-releases",
-          "https://www.young.senate.gov/press-releases",
           "https://www.lankford.senate.gov/news/press-releases",
         ]
       end
