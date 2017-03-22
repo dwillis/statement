@@ -42,7 +42,7 @@ module Statement
 
     def self.member_methods
       [:capuano, :cold_fusion, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins,
-      :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa,
+      :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly,
       :welch, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :chaffetz, :garypeters,
       :poe, :grassley, :bennet, :keating, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis, :rounds, :sullivan]
     end
@@ -56,7 +56,7 @@ module Statement
       results = [capuano, cold_fusion(year, nil), klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan,
         document_query([], page=1), document_query([], page=2), crapo, boxer, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new,
         inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden, chaffetz,
-        schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds,
+        schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds, connolly, 
         poe(year=year, month=0), bennet(page=1), keating, drupal, durbin(page=1), gillibrand, senate_drupal].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
@@ -804,6 +804,18 @@ module Statement
       results
     end
 
+    def self.connolly(page=1)
+      results = []
+      domain = 'connolly.house.gov'
+      url = "https://connolly.house.gov/news/documentquery.aspx?DocumentTypeID=1951&Page=#{page}"
+      doc = open_html(url)
+      return if doc.nil?
+      doc.xpath("//div[@class='middlecopy']//li").each do |row|
+        results << { :source => url, :url => "https://connolly.house.gov" + row.children[1]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.children[3].text.strip), :domain => domain }
+      end
+      results
+    end
+
     def self.olson(year=current_year)
       results = []
       domain = 'olson.house.gov'
@@ -884,7 +896,8 @@ module Statement
           {'kihuen.house.gov' => 27},
           {'stephaniemurphy.house.gov' => 27},
           {'denham.house.gov' => 27},
-          {'gottheimer.house.gov' => 27}
+          {'gottheimer.house.gov' => 27},
+          {'watsoncoleman.house.gov' => 27}
         ]
       end
       domains.each do |domain|
