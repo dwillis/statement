@@ -286,7 +286,6 @@ module Statement
       results
     end
 
-    #fixme
     def self.cold_fusion(year=current_year, month=nil, skip_domains=[])
       results = []
       year = current_year if not year
@@ -607,11 +606,11 @@ module Statement
 
     def self.cardin(page=1)
       results = []
-      url = "https://www.cardin.senate.gov/newsroom/press/index.cfm?PageNum_rs=#{page}&"
+      url = "https://www.cardin.senate.gov/newsroom/press/table?PageNum_rs=#{page}&"
       doc = open_html(url)
       return if doc.nil?
-      doc.css('table tr').each do |row|
-        results << { :source => url, :url => row.children[3].children[0]['href'].strip, :title => row.children[3].children[0].text.strip, :date => Date.parse(row.children[1].children[0]['datetime']), :domain => 'www.cardin.senate.gov'}
+      doc.css('table tr')[1..-1].each do |row|
+        results << { :source => url, :url => row.children[3].children[1]['href'].strip, :title => row.children[3].children[1].text.strip, :date => Date.parse(row.children[1].children[1]['datetime']), :domain => 'www.cardin.senate.gov'}
       end
       results
     end
