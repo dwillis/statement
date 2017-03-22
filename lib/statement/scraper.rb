@@ -289,14 +289,14 @@ module Statement
     def self.cold_fusion(year=current_year, month=nil, skip_domains=[])
       results = []
       year = current_year if not year
-      domains = ['www.feinstein.senate.gov','www.ronjohnson.senate.gov','www.risch.senate.gov', 'www.lee.senate.gov', 'www.barrasso.senate.gov', 'www.heitkamp.senate.gov', 'www.shelby.senate.gov', 'www.tillis.senate.gov', 'www.moran.senate.gov', 'www.heller.senate.gov']
+      domains = ['www.feinstein.senate.gov','www.ronjohnson.senate.gov','www.risch.senate.gov', 'www.lee.senate.gov', 'www.barrasso.senate.gov', 'www.heitkamp.senate.gov', 'www.shelby.senate.gov', 'www.tillis.senate.gov', 'www.moran.senate.gov', 'www.heller.senate.gov', 'www.ernst.senate.gov']
       domains = domains - skip_domains if skip_domains
       domains.each do |domain|
         if domain == 'www.risch.senate.gov'
           if not month
-            url = "http://www.risch.senate.gov/public/index.cfm/pressreleases"
+            url = "http://#{domain}/public/index.cfm/pressreleases"
           else
-            url = "http://www.risch.senate.gov/public/index.cfm/pressreleases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
+            url = "http://#{domain}/public/index.cfm/pressreleases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
           end
         elsif domain == 'www.tillis.senate.gov' or domain == 'www.feinstein.senate.gov' or domain == 'www.ronjohnson.senate.gov' or domain == 'www.lee.senate.gov'
           if not month
@@ -321,6 +321,12 @@ module Statement
             url = "http://#{domain}/public/index.cfm/news-releases"
           else
             url = "http://#{domain}/public/index.cfm/news-releases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
+          end
+        elsif domain == 'www.ernst.senate.gov'
+          if not month
+            url = "http://#{domain}/public/index.cfm/press-releases"
+          else
+            url = "http://#{domain}/public/index.cfm/press-releases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
           end
         elsif domain == 'www.barrasso.senate.gov'
           if not month
@@ -534,7 +540,7 @@ module Statement
 
     def self.fischer(year=current_year)
       results = []
-      url = "http://www.fischer.senate.gov/public/index.cfm/press-releases?MonthDisplay=0&YearDisplay=#{year}"
+      url = "https://www.fischer.senate.gov/public/index.cfm/press-releases?MonthDisplay=0&YearDisplay=#{year}"
       doc = open_html(url)
       return if doc.nil?
       doc.xpath("//tr")[2..-1].each do |row|
@@ -546,7 +552,7 @@ module Statement
 
     def self.grassley(page=0)
       results = []
-      url = "http://www.grassley.senate.gov/news/news-releases?title=&tid=All&date[value]&page=#{page}"
+      url = "https://www.grassley.senate.gov/news/news-releases?title=&tid=All&date[value]&page=#{page}"
       doc = open_html(url)
       return if doc.nil?
       doc.xpath("//div[@class='views-field views-field-field-release-date']").each do |row|
