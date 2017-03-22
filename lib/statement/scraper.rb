@@ -1103,6 +1103,7 @@ module Statement
           "https://www.vanhollen.senate.gov/press-releases",
           "https://www.young.senate.gov/press-releases"
         ]
+      end
       results = []
       urls.each do |url|
         uri = URI(url)
