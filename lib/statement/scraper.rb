@@ -293,7 +293,7 @@ module Statement
       domains = ['www.feinstein.senate.gov','www.ronjohnson.senate.gov','www.risch.senate.gov', 'www.lee.senate.gov', 'www.barrasso.senate.gov', 'www.heitkamp.senate.gov', 'www.shelby.senate.gov', 'www.tillis.senate.gov', 'www.moran.senate.gov', 'www.heller.senate.gov']
       domains = domains - skip_domains if skip_domains
       domains.each do |domain|
-        if domain == 'www.risch.senate.gov' or domain == 'www.heller.senate.gov'
+        if domain == 'www.risch.senate.gov'
           if not month
             url = "http://www.risch.senate.gov/public/index.cfm/pressreleases"
           else
@@ -305,11 +305,17 @@ module Statement
           else
             url = "https://#{domain}/public/index.cfm/press-releases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
           end
+        elsif domain == 'www.heller.senate.gov'
+          if not month
+            url = "https://#{domain}/public/index.cfm/pressreleases"
+          else
+            url = "https://#{domain}/public/index.cfm/pressreleases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
+          end
         elsif domain == 'www.shelby.senate.gov'
           if not month
-            url = "http://www.shelby.senate.gov/public/index.cfm/newsreleases"
+            url = "https://www.shelby.senate.gov/public/index.cfm/newsreleases"
           else
-            url = "http://www.shelby.senate.gov/public/index.cfm/newsreleases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
+            url = "https://www.shelby.senate.gov/public/index.cfm/newsreleases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
           end
         elsif domain == 'www.moran.senate.gov'
           if not month
@@ -325,9 +331,9 @@ module Statement
           end
         else
           if not month
-            url = "http://#{domain}/public/index.cfm/press-releases"
+            url = "https://#{domain}/public/index.cfm/press-releases"
           else
-            url = "http://#{domain}/public/index.cfm/press-releases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
+            url = "https://#{domain}/public/index.cfm/press-releases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
           end
         end
         doc = Statement::Scraper.open_html(url)
