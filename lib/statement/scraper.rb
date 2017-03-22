@@ -1133,17 +1133,17 @@ module Statement
     def self.senate_drupal(urls=[], page=0)
       if urls.empty?
         urls = [
-          "http://www.durbin.senate.gov/newsroom/press-releases",
+          "https://www.durbin.senate.gov/newsroom/press-releases",
           "https://www.capito.senate.gov/news/press-releases",
-          "http://www.perdue.senate.gov/news/press-releases",
+          "https://www.perdue.senate.gov/news/press-releases",
           "https://www.daines.senate.gov/news/press-releases",
           "https://www.gardner.senate.gov/newsroom/press-releases",
           "https://www.leahy.senate.gov/press/releases",
           "https://www.paul.senate.gov/news/press",
           "https://www.hoeven.senate.gov/news/news-releases",
           "https://www.murkowski.senate.gov/press/press-releases",
-          "http://www.stabenow.senate.gov/news",
-          "https://www.shaheen.senate.gov/news/press", # fix dates
+          "https://www.stabenow.senate.gov/news",
+          "https://www.shaheen.senate.gov/news/press",
           "https://www.lankford.senate.gov/news/press-releases",
         ]
       end
