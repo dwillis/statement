@@ -311,11 +311,17 @@ module Statement
           else
             url = "http://www.shelby.senate.gov/public/index.cfm/newsreleases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
           end
-        elsif domain == 'www.barrasso.senate.gov' or domain == 'www.moran.senate.gov'
+        elsif domain == 'www.moran.senate.gov'
           if not month
             url = "http://#{domain}/public/index.cfm/news-releases"
           else
             url = "http://#{domain}/public/index.cfm/news-releases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
+          end
+        elsif domain == 'www.barrasso.senate.gov'
+          if not month
+            url = "https://#{domain}/public/index.cfm/news-releases"
+          else
+            url = "https://#{domain}/public/index.cfm/news-releases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
           end
         else
           if not month
