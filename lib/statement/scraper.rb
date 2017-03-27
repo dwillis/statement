@@ -56,7 +56,7 @@ module Statement
       results = [capuano, cold_fusion(year, nil), klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan,
         document_query([], page=1), document_query([], page=2), crapo, boxer, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new,
         inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden, chaffetz,
-        schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds, connolly, 
+        schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds, connolly,
         poe(year=year, month=0), bennet(page=1), keating, drupal, durbin(page=1), gillibrand, senate_drupal].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
@@ -811,7 +811,7 @@ module Statement
       doc = open_html(url)
       return if doc.nil?
       doc.xpath("//div[@class='middlecopy']//li").each do |row|
-        results << { :source => url, :url => "https://connolly.house.gov" + row.children[1]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.children[3].text.strip), :domain => domain }
+        results << { :source => url, :url => "https://connolly.house.gov/" + row.children[1]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.children[3].text.strip), :domain => domain }
       end
       results
     end
