@@ -811,7 +811,7 @@ module Statement
       doc = open_html(url)
       return if doc.nil?
       doc.xpath("//div[@class='middlecopy']//li").each do |row|
-        results << { :source => url, :url => "https://connolly.house.gov/" + row.children[1]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.children[3].text.strip), :domain => domain }
+        results << { :source => url, :url => "https://connolly.house.gov/news/" + row.children[1]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.children[3].text.strip), :domain => domain }
       end
       results
     end
