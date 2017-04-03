@@ -649,6 +649,7 @@ module Statement
       doc = open_html(url)
       return if doc.nil?
       doc.css('table tr')[1..-1].each do |row|
+        next if row.children[3].nil?
         results << { :source => url, :url => row.children[3].children[1]['href'].strip, :title => row.children[3].children[1].text.strip, :date => Date.parse(row.children[1].children[1]['datetime']), :domain => 'www.cardin.senate.gov'}
       end
       results
