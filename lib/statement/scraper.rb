@@ -305,9 +305,9 @@ module Statement
       domains.each do |domain|
         if domain == 'www.risch.senate.gov'
           if not month
-            url = "http://#{domain}/public/index.cfm/pressreleases"
+            url = "https://#{domain}/public/index.cfm/pressreleases"
           else
-            url = "http://#{domain}/public/index.cfm/pressreleases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
+            url = "https://#{domain}/public/index.cfm/pressreleases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
           end
         elsif domain == 'www.tillis.senate.gov' or domain == 'www.feinstein.senate.gov' or domain == 'www.ronjohnson.senate.gov' or domain == 'www.lee.senate.gov' or domain == 'www.wicker.senate.gov'
           if not month
@@ -329,15 +329,15 @@ module Statement
           end
         elsif domain == 'www.moran.senate.gov'
           if not month
-            url = "http://#{domain}/public/index.cfm/news-releases"
+            url = "https://#{domain}/public/index.cfm/newsroom"
           else
-            url = "http://#{domain}/public/index.cfm/news-releases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
+            url = "https://#{domain}/public/index.cfm/news-releases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
           end
         elsif domain == 'www.ernst.senate.gov'
           if not month
-            url = "http://#{domain}/public/index.cfm/press-releases"
+            url = "https://#{domain}/public/index.cfm/press-releases"
           else
-            url = "http://#{domain}/public/index.cfm/press-releases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
+            url = "https://#{domain}/public/index.cfm/press-releases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
           end
         elsif domain == 'www.barrasso.senate.gov'
           if not month
