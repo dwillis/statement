@@ -1102,7 +1102,8 @@ module Statement
             "https://bordallo.house.gov/media-center/press-releases",
             "https://radewagen.house.gov/media-center/press-releases",
             "https://delauro.house.gov/media-center/press-releases",
-            "https://gabbard.house.gov/news"
+            "https://gabbard.house.gov/news",
+            "https://dankildee.house.gov/media/press-releases"
         ]
       end
 
