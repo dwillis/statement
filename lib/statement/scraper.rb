@@ -41,7 +41,7 @@ module Statement
     end
 
     def self.member_methods
-      [:capuano, :cold_fusion, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins,
+      [:capuano, :cold_fusion, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers,
       :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly,
       :welch, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :chaffetz, :garypeters,
       :poe, :grassley, :bennet, :keating, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis, :rounds, :sullivan]
@@ -53,7 +53,7 @@ module Statement
 
     def self.member_scrapers
       year = current_year
-      results = [capuano, cold_fusion(year, nil), klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan,
+      results = [capuano, cold_fusion(year, nil), klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan, halrogers,
         document_query([], page=1), document_query([], page=2), crapo, boxer, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new,
         inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden, chaffetz,
         schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds, connolly,
@@ -282,6 +282,17 @@ module Statement
       json = JSON.load(open(url).read)
       json['posts'].each do |post|
         results << { source: "https://marchant.house.gov/newsroom/?terms=", url: post['guid'], title: post['post_title'], date: Date.parse(post['post_modified']), domain: 'marchant.house.gov' }
+      end
+      results
+    end
+
+    def self.halrogers
+      results = []
+      url = "https://halrogers.house.gov/press-releases"
+      doc = open_html(url)
+      return if doc.nil?
+      doc.xpath("//table[@class='table recordList']//tr")[1..-1].each do |row|
+        results << { :source => url, :url => "https://halrogers.house.gov"+row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.parse(row.children[1].text), :domain => "halrogers.house.gov" }
       end
       results
     end
@@ -1105,7 +1116,8 @@ module Statement
             "https://delauro.house.gov/media-center/press-releases",
             "https://gabbard.house.gov/news",
             "https://dankildee.house.gov/media/press-releases",
-            "https://walberg.house.gov/media/press-releases"
+            "https://walberg.house.gov/media/press-releases",
+            "https://mast.house.gov/press-releases"
         ]
       end
 
@@ -1210,10 +1222,15 @@ module Statement
             title = row.text.strip
             release_url = "#{uri.scheme}://#{domain + row.css('a').first['href']}"
             raw_date = row.previous.previous.text
+            if url == 'https://www.tomudall.senate.gov/news/press-releases'
+              date = Date.parse(raw_date)
+            else
+              date = begin Date.strptime(raw_date, "%m.%d.%y") rescue nil end
+            end
             results << { :source => source_url,
                          :url => release_url,
                          :title => title,
-                         :date => begin Date.strptime(raw_date, "%m.%d.%y") rescue nil end,
+                         :date => date,
                          :domain => domain }
         end
       end
