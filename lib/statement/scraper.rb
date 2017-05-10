@@ -898,7 +898,8 @@ module Statement
           {'stephaniemurphy.house.gov' => 27},
           {'denham.house.gov' => 27},
           {'gottheimer.house.gov' => 27},
-          {'watsoncoleman.house.gov' => 27}
+          {'watsoncoleman.house.gov' => 27},
+          {'mcgovern.house.gov' => 2472}
         ]
       end
       domains.each do |domain|
@@ -1103,7 +1104,8 @@ module Statement
             "https://radewagen.house.gov/media-center/press-releases",
             "https://delauro.house.gov/media-center/press-releases",
             "https://gabbard.house.gov/news",
-            "https://dankildee.house.gov/media/press-releases"
+            "https://dankildee.house.gov/media/press-releases",
+            "https://walberg.house.gov/media/press-releases"
         ]
       end
 
