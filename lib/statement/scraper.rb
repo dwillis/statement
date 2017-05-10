@@ -42,8 +42,8 @@ module Statement
 
     def self.member_methods
       [:capuano, :cold_fusion, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers,
-      :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly,
-      :welch, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :chaffetz, :garypeters,
+      :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly, :mast,
+      :welch, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :chaffetz, :garypeters, :webster,
       :poe, :grassley, :bennet, :keating, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis, :rounds, :sullivan]
     end
 
@@ -55,7 +55,7 @@ module Statement
       year = current_year
       results = [capuano, cold_fusion(year, nil), klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan, halrogers,
         document_query([], page=1), document_query([], page=2), crapo, boxer, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new,
-        inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden, chaffetz,
+        inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden, chaffetz, webster, mast,
         schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds, connolly,
         poe(year=year, month=0), bennet(page=1), keating, drupal, durbin(page=1), gillibrand, senate_drupal].flatten
       results = results.compact
@@ -293,6 +293,30 @@ module Statement
       return if doc.nil?
       doc.xpath("//table[@class='table recordList']//tr")[1..-1].each do |row|
         results << { :source => url, :url => "https://halrogers.house.gov"+row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.parse(row.children[1].text), :domain => "halrogers.house.gov" }
+      end
+      results
+    end
+
+    def self.webster
+      results = []
+      url = "https://webster.house.gov/press-releases"
+      doc = open_html(url)
+      return if doc.nil?
+      doc.xpath("//table[@class='table recordList']//tr")[1..-1].each do |row|
+        next if row.children[1].text == 'Date'
+        results << { :source => url, :url => "https://webster.house.gov"+row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.parse(row.children[1].text), :domain => "webster.house.gov" }
+      end
+      results
+    end
+
+    def self.mast
+      results = []
+      url = "https://mast.house.gov/press-releases"
+      doc = open_html(url)
+      return if doc.nil?
+      doc.xpath("//table[@class='table recordList']//tr")[1..-1].each do |row|
+        next if row.children[1].text == 'Date'
+        results << { :source => url, :url => "https://mast.house.gov"+row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.parse(row.children[1].text), :domain => "mast.house.gov" }
       end
       results
     end
@@ -910,7 +934,8 @@ module Statement
           {'denham.house.gov' => 27},
           {'gottheimer.house.gov' => 27},
           {'watsoncoleman.house.gov' => 27},
-          {'mcgovern.house.gov' => 2472}
+          {'mcgovern.house.gov' => 2472},
+          {'kihuen.house.gov' => 27}
         ]
       end
       domains.each do |domain|
