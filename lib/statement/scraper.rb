@@ -1142,7 +1142,7 @@ module Statement
             "https://gabbard.house.gov/news",
             "https://dankildee.house.gov/media/press-releases",
             "https://walberg.house.gov/media/press-releases",
-            "https://mast.house.gov/press-releases"
+            "https://smucker.house.gov/media/press-releases"
         ]
       end
 
