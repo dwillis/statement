@@ -1142,7 +1142,8 @@ module Statement
             "https://gabbard.house.gov/news",
             "https://dankildee.house.gov/media/press-releases",
             "https://walberg.house.gov/media/press-releases",
-            "https://smucker.house.gov/media/press-releases"
+            "https://smucker.house.gov/media/press-releases",
+            "https://correa.house.gov/media"
         ]
       end
 
