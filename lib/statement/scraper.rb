@@ -324,7 +324,7 @@ module Statement
     def self.cold_fusion(year=current_year, month=nil, skip_domains=[])
       results = []
       year = current_year if not year
-      domains = ['www.feinstein.senate.gov','www.ronjohnson.senate.gov','www.risch.senate.gov', 'www.lee.senate.gov', 'www.barrasso.senate.gov', 'www.heitkamp.senate.gov', 'www.shelby.senate.gov', 'www.tillis.senate.gov', 'www.moran.senate.gov', 'www.heller.senate.gov', 'www.ernst.senate.gov', 'www.mcconnell.senate.gov', 'www.wicker.senate.gov']
+      domains = ['www.feinstein.senate.gov','www.ronjohnson.senate.gov','www.risch.senate.gov', 'www.lee.senate.gov', 'www.barrasso.senate.gov', 'www.heitkamp.senate.gov', 'www.shelby.senate.gov', 'www.tillis.senate.gov', 'www.moran.senate.gov', 'www.heller.senate.gov', 'www.ernst.senate.gov', 'www.mcconnell.senate.gov', 'www.wicker.senate.gov', 'www.enzi.senate.gov']
       domains = domains - skip_domains if skip_domains
       domains.each do |domain|
         if domain == 'www.risch.senate.gov'
@@ -351,19 +351,13 @@ module Statement
           else
             url = "https://www.shelby.senate.gov/public/index.cfm/newsreleases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
           end
-        elsif domain == 'www.moran.senate.gov'
-          if not month
-            url = "https://#{domain}/public/index.cfm/newsroom"
-          else
-            url = "https://#{domain}/public/index.cfm/news-releases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
-          end
         elsif domain == 'www.ernst.senate.gov'
           if not month
             url = "https://#{domain}/public/index.cfm/press-releases"
           else
             url = "https://#{domain}/public/index.cfm/press-releases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
           end
-        elsif domain == 'www.barrasso.senate.gov'
+        elsif domain == 'www.barrasso.senate.gov' or domain == 'www.enzi.senate.gov' or domain == 'www.moran.senate.gov'
           if not month
             url = "https://#{domain}/public/index.cfm/news-releases"
           else
@@ -528,24 +522,24 @@ module Statement
 
     def self.burr(page=1)
       results = []
-      url = "http://www.burr.senate.gov/press/releases?PageNum_rs=#{page}&"
+      url = "https://www.burr.senate.gov/press/releases?PageNum_rs=#{page}&"
       doc = open_html(url)
       return if doc.nil?
       rows = doc.css("#press").first.css('h2')
       rows.each do |row|
-        results << { :source => url, :url => "http://www.burr.senate.gov" + row.children.first['href'], :title => row.children.last.text.strip, :date => Date.strptime(row.previous.previous.text, "%m.%d.%y"), :domain => "burr.senate.gov" }
+        results << { :source => url, :url => "https://www.burr.senate.gov" + row.children.first['href'], :title => row.children.last.text.strip, :date => Date.strptime(row.previous.previous.text, "%m.%d.%y"), :domain => "burr.senate.gov" }
       end
       results
     end
 
     def self.cassidy(page=1)
       results = []
-      url = "http://www.cassidy.senate.gov/newsroom/press-releases?PageNum_rs=#{page}&"
+      url = "https://www.cassidy.senate.gov/newsroom/press-releases?PageNum_rs=#{page}&"
       doc = open_html(url)
       return if doc.nil?
       rows = doc.css("#press").first.css('h2')
       rows.each do |row|
-        results << { :source => url, :url => "http://www.cassidy.senate.gov" + row.children.first['href'], :title => row.children.last.text.strip, :date => Date.strptime(row.previous.previous.text, "%m.%d.%y"), :domain => "www.cassidy.senate.gov" }
+        results << { :source => url, :url => "https://www.cassidy.senate.gov" + row.children.first['href'], :title => row.children.last.text.strip, :date => Date.strptime(row.previous.previous.text, "%m.%d.%y"), :domain => "www.cassidy.senate.gov" }
       end
       results
     end
@@ -563,7 +557,7 @@ module Statement
 
     def self.crapo
       results = []
-      base_url = "http://www.crapo.senate.gov/media/newsreleases/"
+      base_url = "https://www.crapo.senate.gov/media/newsreleases/"
       url = base_url + "release_all.cfm"
       doc = open_html(url)
       return if doc.nil?
@@ -935,7 +929,8 @@ module Statement
           {'gottheimer.house.gov' => 27},
           {'watsoncoleman.house.gov' => 27},
           {'mcgovern.house.gov' => 2472},
-          {'kihuen.house.gov' => 27}
+          {'kihuen.house.gov' => 27},
+          {'crawford.house.gov' => 2080}
         ]
       end
       domains.each do |domain|
@@ -1143,7 +1138,8 @@ module Statement
             "https://dankildee.house.gov/media/press-releases",
             "https://walberg.house.gov/media/press-releases",
             "https://smucker.house.gov/media/press-releases",
-            "https://correa.house.gov/media"
+            "https://correa.house.gov/media",
+            "https://speier.house.gov/media-center/press-releases"
         ]
       end
 
@@ -1231,6 +1227,7 @@ module Statement
           "https://www.stabenow.senate.gov/news",
           "https://www.shaheen.senate.gov/news/press",
           "https://www.lankford.senate.gov/news/press-releases",
+          "https://www.tomudall.senate.gov/news/press-releases"
         ]
       end
 
