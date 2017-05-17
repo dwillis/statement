@@ -41,7 +41,7 @@ module Statement
     end
 
     def self.member_methods
-      [:capuano, :cold_fusion, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers,
+      [:capuano, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers,
       :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly, :mast,
       :welch, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :chaffetz, :garypeters, :webster,
       :poe, :grassley, :bennet, :keating, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis, :rounds, :sullivan]
@@ -53,7 +53,7 @@ module Statement
 
     def self.member_scrapers
       year = current_year
-      results = [capuano, cold_fusion(year, nil), klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan, halrogers,
+      results = [capuano, klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan, halrogers,
         document_query([], page=1), document_query([], page=2), crapo, boxer, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new,
         inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden, chaffetz, webster, mast,
         schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds, connolly,
@@ -63,7 +63,7 @@ module Statement
     end
 
     def self.backfill_from_scrapers
-      results = [cold_fusion(2015, 0), cold_fusion(2014, 0), cold_fusion(2013, 0), billnelson(year=2012), document_query(page=3), cardin(page=2), cornyn(page=1),
+      results = [billnelson(year=2012), document_query(page=3), cardin(page=2), cornyn(page=1),
         document_query(page=4), grassley(page=1), grassley(page=2), grassley(page=3), burr(page=2), burr(page=3), burr(page=4), cantwell(page=2),
         clark(year=2013), kilmer(page=2), kilmer(page=3), heinrich(page=2), kind(page=1), walorski(page=2),
         cassidy(page=2), cassidy(page=3), gillibrand(page=2), chaffetz(page=2), chaffetz(page=3), issa(page=1), issa(page=2),
@@ -324,40 +324,22 @@ module Statement
     def self.cold_fusion(year=current_year, month=nil, skip_domains=[])
       results = []
       year = current_year if not year
-      domains = ['www.feinstein.senate.gov','www.ronjohnson.senate.gov','www.risch.senate.gov', 'www.lee.senate.gov', 'www.barrasso.senate.gov', 'www.heitkamp.senate.gov', 'www.shelby.senate.gov', 'www.tillis.senate.gov', 'www.moran.senate.gov', 'www.heller.senate.gov', 'www.ernst.senate.gov', 'www.mcconnell.senate.gov', 'www.wicker.senate.gov', 'www.enzi.senate.gov']
+      domains = ['www.wicker.senate.gov', 'www.enzi.senate.gov']
       domains = domains - skip_domains if skip_domains
       domains.each do |domain|
-        if domain == 'www.risch.senate.gov'
-          if not month
-            url = "https://#{domain}/public/index.cfm/pressreleases"
-          else
-            url = "https://#{domain}/public/index.cfm/pressreleases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
-          end
-        elsif domain == 'www.tillis.senate.gov' or domain == 'www.feinstein.senate.gov' or domain == 'www.ronjohnson.senate.gov' or domain == 'www.lee.senate.gov' or domain == 'www.wicker.senate.gov'
+        if domain == 'www.wicker.senate.gov'
           if not month
             url = "https://#{domain}/public/index.cfm/press-releases"
           else
             url = "https://#{domain}/public/index.cfm/press-releases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
           end
-        elsif domain == 'www.heller.senate.gov' or domain == 'www.mcconnell.senate.gov'
+        elsif domain == 'www.mcconnell.senate.gov'
           if not month
             url = "https://#{domain}/public/index.cfm/pressreleases"
           else
             url = "https://#{domain}/public/index.cfm/pressreleases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
           end
-        elsif domain == 'www.shelby.senate.gov'
-          if not month
-            url = "https://www.shelby.senate.gov/public/index.cfm/newsreleases"
-          else
-            url = "https://www.shelby.senate.gov/public/index.cfm/newsreleases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
-          end
-        elsif domain == 'www.ernst.senate.gov'
-          if not month
-            url = "https://#{domain}/public/index.cfm/press-releases"
-          else
-            url = "https://#{domain}/public/index.cfm/press-releases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
-          end
-        elsif domain == 'www.barrasso.senate.gov' or domain == 'www.enzi.senate.gov' or domain == 'www.moran.senate.gov'
+        elsif domain == 'www.enzi.senate.gov'
           if not month
             url = "https://#{domain}/public/index.cfm/news-releases"
           else
