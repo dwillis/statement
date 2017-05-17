@@ -41,7 +41,7 @@ module Statement
     end
 
     def self.member_methods
-      [:capuano, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers,
+      [:capuano, :klobuchar, :billnelson, :crapo, :boxer, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :strange,
       :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly, :mast,
       :welch, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :chaffetz, :garypeters, :webster,
       :poe, :grassley, :bennet, :keating, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis, :rounds, :sullivan]
@@ -53,7 +53,7 @@ module Statement
 
     def self.member_scrapers
       year = current_year
-      results = [capuano, klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan, halrogers,
+      results = [capuano, klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan, halrogers, strange,
         document_query([], page=1), document_query([], page=2), crapo, boxer, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new,
         inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden, chaffetz, webster, mast,
         schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds, connolly,
@@ -544,7 +544,7 @@ module Statement
       doc = open_html(url)
       return if doc.nil?
       doc.xpath("//tr").each do |row|
-        results << { :source => url, :url => base_url + row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.parse(row.children[1].text.strip.gsub('-','/')), :domain => "crapo.senate.gov" }
+        results << { :source => url, :url => base_url + row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.parse(row.children[1].text.strip.gsub('-','/')), :domain => "www.crapo.senate.gov" }
       end
       results
     end
@@ -556,7 +556,7 @@ module Statement
       return if doc.nil?
       doc.xpath("//tr")[2..-1].each do |row|
         next if row.text.strip[0..3] == "Date"
-        results << { :source => url, :url => row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.strptime(row.children[1].text.strip, "%m/%d/%y"), :domain => "fischer.senate.gov" }
+        results << { :source => url, :url => row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.strptime(row.children[1].text.strip, "%m/%d/%y"), :domain => "www.fischer.senate.gov" }
       end
       results
     end
@@ -567,7 +567,18 @@ module Statement
       doc = open_html(url)
       return if doc.nil?
       doc.xpath("//div[@class='views-field views-field-field-release-date']").each do |row|
-        results << { :source => url, :url => "http://www.grassley.senate.gov" + row.next.next.children[1].children[0]['href'], :title => row.next.next.text.strip, :date => Date.parse(row.text.strip), :domain => "grassley.senate.gov" }
+        results << { :source => url, :url => "http://www.grassley.senate.gov" + row.next.next.children[1].children[0]['href'], :title => row.next.next.text.strip, :date => Date.parse(row.text.strip), :domain => "www.grassley.senate.gov" }
+      end
+      results
+    end
+
+    def self.strange(page=0)
+      results = []
+      url = "https://www.strange.senate.gov/press-releases?page=#{page}"
+      doc = open_html(url)
+      return if doc.nil?
+      doc.xpath("//div[@class='field field-name-title field-type-ds field-label-hidden']").each do |row|
+        results << { :source => url, :url => "http://www.strange.senate.gov" + row.children.children.children.children.first['href'], :title => row.children.children.children.children.text, :date => Date.parse(row.next.text), :domain => "www.strange.senate.gov" }
       end
       results
     end
@@ -1209,7 +1220,7 @@ module Statement
           "https://www.stabenow.senate.gov/news",
           "https://www.shaheen.senate.gov/news/press",
           "https://www.lankford.senate.gov/news/press-releases",
-          "https://www.tomudall.senate.gov/news/press-releases"
+          "https://www.tomudall.senate.gov/news/press-releases",
         ]
       end
 
