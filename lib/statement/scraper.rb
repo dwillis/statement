@@ -924,17 +924,18 @@ module Statement
           {'watsoncoleman.house.gov' => 27},
           {'mcgovern.house.gov' => 2472},
           {'kihuen.house.gov' => 27},
-          {'crawford.house.gov' => 2080}
+          {'crawford.house.gov' => 2080},
+          {'estes.house.gov' => 27}
         ]
       end
       domains.each do |domain|
-        doc = Statement::Scraper.open_html("http://"+domain.keys.first+"/news/documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}")
+        doc = Statement::Scraper.open_html("https://"+domain.keys.first+"/news/documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}")
         return if doc.nil?
         doc.xpath("//div[@class='middlecopy']//li").each do |row|
           if domain.keys.first == 'wenstrup.house.gov'
-            results << { :source => "http://"+domain.keys.first+"/news/"+"documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}", :url => "http://"+domain.keys.first+ row.children[1]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.children[3].text.strip), :domain => domain.keys.first }
+            results << { :source => "https://"+domain.keys.first+"/news/"+"documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}", :url => "http://"+domain.keys.first+ row.children[1]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.children[3].text.strip), :domain => domain.keys.first }
           else
-            results << { :source => "http://"+domain.keys.first+"/news/"+"documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}", :url => "http://"+domain.keys.first+"/news/" + row.children[1]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.children[3].text.strip), :domain => domain.keys.first }
+            results << { :source => "https://"+domain.keys.first+"/news/"+"documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}", :url => "http://"+domain.keys.first+"/news/" + row.children[1]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.children[3].text.strip), :domain => domain.keys.first }
           end
         end
       end
