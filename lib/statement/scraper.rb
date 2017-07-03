@@ -1087,16 +1087,16 @@ module Statement
     def self.drupal(urls=[], page=0)
       if urls.empty?
         urls = [
-            "http://sherman.house.gov/media-center/press-releases",
+            "https://sherman.house.gov/media-center/press-releases",
             "http://mccaul.house.gov/media-center/press-releases",
             "https://ellison.house.gov/media-center/press-releases",
-            "http://mcnerney.house.gov/media-center/press-releases",
+            "https://mcnerney.house.gov/media-center/press-releases",
             "http://sanford.house.gov/media-center/press-releases",
-            "http://butterfield.house.gov/media-center/press-releases",
+            "https://butterfield.house.gov/media-center/press-releases",
             "http://walz.house.gov/media-center/press-releases",
             "https://pingree.house.gov/media-center/press-releases",
             "http://wilson.house.gov/media-center/press-releases",
-            "https://bilirakis.house.gov/press-releases",
+            "https://bilirakis.house.gov/media/press-releases",
             "https://quigley.house.gov/media-center/press-releases",
             "https://sewell.house.gov/media-center/press-releases",
             "https://buchanan.house.gov/media-center/press-releases",
@@ -1141,6 +1141,7 @@ module Statement
       results = []
 
       urls.each do |url|
+        puts url
         uri = URI(url)
         source_url = "#{url}?page=#{page}"
 
