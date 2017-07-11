@@ -42,7 +42,7 @@ module Statement
 
     def self.member_methods
       [:capuano, :klobuchar, :billnelson, :crapo, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :strange, :shaheen,
-      :inhofe, :document_query, :fischer, :clark, :barton, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly, :mast,
+      :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly, :mast,
       :welch, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :garypeters, :webster,
       :poe, :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis, :rounds, :sullivan]
     end
@@ -55,7 +55,7 @@ module Statement
       year = current_year
       results = [capuano, klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan, halrogers, strange, shaheen,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new,
-        inhofe(year=year), fischer, clark(year=year), barton, welch, trentkelly, barbaralee, cardin, wyden, webster, mast,
+        inhofe(year=year), fischer, clark(year=year), welch, trentkelly, barbaralee, cardin, wyden, webster, mast,
         schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds, connolly,
         poe(year=year, month=0), bennet(page=1), drupal, durbin(page=1), gillibrand, senate_drupal].flatten
       results = results.compact
@@ -736,18 +736,6 @@ module Statement
       results
     end
 
-    def self.barton
-      results = []
-      domain = 'joebarton.house.gov'
-      url = "https://joebarton.house.gov/press-releasescolumns/"
-      doc = open_html(url)
-      return if doc.nil?
-      (doc/:h3)[0..-3].each do |row|
-        results << { :source => url, :url => "https://joebarton.house.gov/"+row.children[1]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.next.next.text), :domain => domain}
-      end
-      results
-    end
-
     def self.walorski(page=nil)
       results = []
       url = "http://walorski.house.gov/news/"
@@ -894,7 +882,8 @@ module Statement
           {'mcgovern.house.gov' => 2472},
           {'kihuen.house.gov' => 27},
           {'crawford.house.gov' => 2080},
-          {'estes.house.gov' => 27}
+          {'estes.house.gov' => 27},
+          {'joebarton.house.gov' => 1952}
         ]
       end
       domains.each do |domain|
