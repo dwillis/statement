@@ -43,7 +43,7 @@ module Statement
     def self.member_methods
       [:capuano, :klobuchar, :billnelson, :crapo, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :strange, :shaheen,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly, :mast,
-      :welch, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :garypeters, :webster,
+      :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :garypeters, :webster,
       :poe, :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis, :rounds, :sullivan]
     end
 
@@ -394,7 +394,7 @@ module Statement
       results
     end
 
-    def self.poe(year, month=0)
+    def self.poe(year=current_year, month=0)
       results = []
       url = "http://poe.house.gov/press-releases?MonthDisplay=#{month}&YearDisplay=#{year}"
       doc = open_html(url)
@@ -773,18 +773,6 @@ module Statement
       results
     end
 
-    def self.mcclintock
-      results = []
-      domain = 'mcclintock.house.gov'
-      url = "http://mcclintock.house.gov/press-all.shtml"
-      doc = open_html(url)
-      return if doc.nil?
-      doc.css("ul li").first(152).each do |row|
-        results << { :source => url, :url => row.children[0].children[1]['href'], :title => row.children[0].children[1].text.strip, :date => Date.parse(row.children[0].children[0].text), :domain => domain}
-      end
-      results
-    end
-
     def self.trentkelly(page=1)
       results = []
       domain = 'trentkelly.house.gov'
@@ -1159,9 +1147,7 @@ module Statement
           "https://www.harris.senate.gov/press-releases",
           "https://www.vanhollen.senate.gov/press-releases",
           "https://www.young.senate.gov/press-releases",
-          "https://www.cortezmasto.senate.gov/press-releases",
           "https://www.duckworth.senate.gov/press-releases",
-          "https://www.hassan.senate.gov/press-releases",
           "https://www.kennedy.senate.gov/press-releases"
         ]
       end
