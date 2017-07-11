@@ -540,12 +540,15 @@ module Statement
 
     def self.crapo
       results = []
-      base_url = "https://www.crapo.senate.gov/media/newsreleases/"
-      url = base_url + "release_all.cfm"
+      url = "https://www.crapo.senate.gov/media/newsreleases/"
       doc = open_html(url)
       return if doc.nil?
-      doc.xpath("//tr").each do |row|
-        results << { :source => url, :url => base_url + row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.parse(row.children[1].text.strip.gsub('-','/')), :domain => "www.crapo.senate.gov" }
+      doc.css("#newscontent h2").each do |row|
+          results << { :source => url,
+                       :url => "https://www.crapo.senate.gov/" + row.css('a').first['href'],
+                       :title => row.text.strip,
+                       :date => Date.parse(row.previous.previous.text),
+                       :domain => 'www.crapo.senate.gov' }
       end
       results
     end
