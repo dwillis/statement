@@ -42,7 +42,7 @@ module Statement
 
     def self.member_methods
       [:capuano, :klobuchar, :billnelson, :crapo, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :strange, :shaheen,
-      :inhofe, :document_query, :fischer, :clark, :edwards, :barton, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly, :mast,
+      :inhofe, :document_query, :fischer, :clark, :barton, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly, :mast,
       :welch, :mcclintock, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :garypeters, :webster,
       :poe, :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis, :rounds, :sullivan]
     end
@@ -55,7 +55,7 @@ module Statement
       year = current_year
       results = [capuano, klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan, halrogers, strange, shaheen,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new,
-        inhofe(year=year), fischer, clark(year=year), edwards, barton, welch, trentkelly, barbaralee, cardin, wyden, webster, mast,
+        inhofe(year=year), fischer, clark(year=year), barton, welch, trentkelly, barbaralee, cardin, wyden, webster, mast,
         schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds, connolly,
         poe(year=year, month=0), bennet(page=1), drupal, durbin(page=1), gillibrand, senate_drupal].flatten
       results = results.compact
@@ -729,19 +729,6 @@ module Statement
       (doc/:tr)[1..-1].each do |row|
         next if row.children[1].text.strip == 'Date'
         results << { :source => url, :date => Date.parse(row.children[1].text), :title => row.children[3].children.text, :url => row.children[3].children[0]['href'], :domain => domain}
-      end
-      results
-    end
-
-    def self.edwards
-      results = []
-      domain = 'donnaedwards.house.gov'
-      url = "http://donnaedwards.house.gov/index.php?option=com_content&view=category&id=10&Itemid=18"
-      doc = open_html(url)
-      return if doc.nil?
-      table = (doc/:table)[4]
-      (table/:tr).each do |row|
-        results << { :source => url, :url => "http://donnaedwards.house.gov/"+row.children.children[1]['href'], :title => row.children.children[1].text.strip, :date => Date.parse(row.children.children[3].text.strip), :domain => domain}
       end
       results
     end
