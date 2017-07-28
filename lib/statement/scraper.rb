@@ -1213,6 +1213,7 @@ module Statement
           "https://www.stabenow.senate.gov/news",
           "https://www.lankford.senate.gov/news/press-releases",
           "https://www.tomudall.senate.gov/news/press-releases",
+          "https://www.republicanleader.senate.gov/newsroom/press-releases"
         ]
       end
 
@@ -1232,6 +1233,10 @@ module Statement
             raw_date = row.previous.previous.text
             if url == 'https://www.tomudall.senate.gov/news/press-releases'
               date = Date.parse(raw_date)
+            elsif url == 'https://www.republicanleader.senate.gov/newsroom/press-releases'
+              domain = 'mcconnell.senate.gov'
+              date = Date.parse(row.previous.previous.text.gsub('.','/'))
+              release_url = release_url.gsub('mcconnell.senate.gov','www.republicanleader.senate.gov')
             else
               date = begin Date.strptime(raw_date, "%m.%d.%y") rescue nil end
             end
