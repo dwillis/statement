@@ -1037,14 +1037,14 @@ module Statement
       if urls.empty?
         urls = [
             "https://sherman.house.gov/media-center/press-releases",
-            "http://mccaul.house.gov/media-center/press-releases",
+            "https://mccaul.house.gov/media-center/press-releases",
             "https://ellison.house.gov/media-center/press-releases",
             "https://mcnerney.house.gov/media-center/press-releases",
-            "http://sanford.house.gov/media-center/press-releases",
+            "https://sanford.house.gov/media-center/press-releases",
             "https://butterfield.house.gov/media-center/press-releases",
-            "http://walz.house.gov/media-center/press-releases",
+            "https://walz.house.gov/media-center/press-releases",
             "https://pingree.house.gov/media-center/press-releases",
-            "http://wilson.house.gov/media-center/press-releases",
+            "https://wilson.house.gov/media-center/press-releases",
             "https://bilirakis.house.gov/media/press-releases",
             "https://quigley.house.gov/media-center/press-releases",
             "https://sewell.house.gov/media-center/press-releases",
@@ -1082,7 +1082,7 @@ module Statement
             "https://dankildee.house.gov/media/press-releases",
             "https://walberg.house.gov/media/press-releases",
             "https://smucker.house.gov/media/press-releases",
-            "https://correa.house.gov/media",
+            "https://correa.house.gov/media/press-releases",
             "https://speier.house.gov/media-center/press-releases",
         ]
       end
