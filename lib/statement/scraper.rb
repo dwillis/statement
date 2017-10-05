@@ -873,7 +873,8 @@ module Statement
           {'estes.house.gov' => 27},
           {'joebarton.house.gov' => 1952},
           {'coffman.house.gov' => 27},
-          {'messer.house.gov' => 27}
+          {'messer.house.gov' => 27},
+          {'norman.house.gov' => 27}
         ]
       end
       domains.each do |domain|
@@ -1086,8 +1087,8 @@ module Statement
             "https://correa.house.gov/media/press-releases",
             "https://speier.house.gov/media-center/press-releases",
             "https://handel.house.gov/media/press-releases",
-            "https://norman.house.gov/media/press-releases",
-            "https://peteking.house.gov/media-center/statements"
+            "https://peteking.house.gov/media-center/statements",
+            "https://gomez.house.gov/media/press-releases"
         ]
       end
 
