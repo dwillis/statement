@@ -1088,7 +1088,8 @@ module Statement
             "https://speier.house.gov/media-center/press-releases",
             "https://handel.house.gov/media/press-releases",
             "https://peteking.house.gov/media-center/statements",
-            "https://gomez.house.gov/media/press-releases"
+            "https://gomez.house.gov/media/press-releases",
+            "https://gianforte.house.gov/media-center/press-releases"
         ]
       end
 
