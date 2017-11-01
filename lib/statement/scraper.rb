@@ -874,7 +874,8 @@ module Statement
           {'joebarton.house.gov' => 1952},
           {'coffman.house.gov' => 27},
           {'messer.house.gov' => 27},
-          {'norman.house.gov' => 27}
+          {'norman.house.gov' => 27},
+          {'matsui.house.gov' => 27}
         ]
       end
       domains.each do |domain|
