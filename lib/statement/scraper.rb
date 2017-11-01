@@ -875,7 +875,16 @@ module Statement
           {'coffman.house.gov' => 27},
           {'messer.house.gov' => 27},
           {'norman.house.gov' => 27},
-          {'matsui.house.gov' => 27}
+          {'matsui.house.gov' => 27},
+          {'carbajal.house.gov' => 27},
+          {'budd.house.gov' => 27},
+          {'delbene.house.gov' => 27},
+          {'blum.house.gov' => 27},
+          {'gosar.house.gov' => 27},
+          {'tenney.house.gov' => 27},
+          {'wassermanschultz.house.gov' => 27},
+          {'weber.house.gov' => 27},
+          {'plaskett.house.gov' => 27}
         ]
       end
       domains.each do |domain|
