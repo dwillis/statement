@@ -1161,7 +1161,7 @@ module Statement
 
     def self.manchin(page=1)
       results = []
-      url = "https://www.manchin.senate.gov/news/press-releases?PageNum_rs=#{page}"
+      url = "https://www.manchin.senate.gov/newsroom/press-releases?PageNum_rs=#{page}"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css("#newscontent h2")[1..-1].each do |row|
