@@ -41,8 +41,8 @@ module Statement
     end
 
     def self.member_methods
-      [:capuano, :klobuchar, :billnelson, :crapo, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :strange, :shaheen,
-      :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly, :mast, :hassan,
+      [:capuano, :klobuchar, :billnelson, :crapo, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :strange, :shaheen, :manchin,
+      :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly, :mast, :hassan, :timscott,
       :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :garypeters, :webster, :cortezmasto,
       :poe, :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis, :rounds, :sullivan]
     end
@@ -53,9 +53,9 @@ module Statement
 
     def self.member_scrapers
       year = current_year
-      results = [capuano, klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan, halrogers, strange, shaheen,
+      results = [capuano, klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan, halrogers, strange, shaheen, timscott,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new,
-        inhofe(year=year), fischer, clark(year=year), welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto,
+        inhofe(year=year), fischer, clark(year=year), welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin,
         schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds, connolly,
         poe(year=year, month=0), bennet(page=1), drupal, durbin(page=1), gillibrand, senate_drupal].flatten
       results = results.compact
@@ -63,9 +63,9 @@ module Statement
     end
 
     def self.backfill_from_scrapers
-      results = [billnelson(year=2012), document_query(page=3), cardin(page=2), cornyn(page=1),
+      results = [billnelson(year=2012), document_query(page=3), cardin(page=2), cornyn(page=1), timscott(page=2), timscott(page=3),
         document_query(page=4), grassley(page=1), grassley(page=2), grassley(page=3), burr(page=2), burr(page=3), burr(page=4), cantwell(page=2),
-        clark(year=2013), kilmer(page=2), kilmer(page=3), heinrich(page=2), kind(page=1), walorski(page=2),
+        clark(year=2013), kilmer(page=2), kilmer(page=3), heinrich(page=2), kind(page=1), walorski(page=2), manchin(page=2), manchin(page=3),
         cassidy(page=2), cassidy(page=3), gillibrand(page=2), issa(page=1), issa(page=2),
         olson(year=2013), schumer(page=2), schumer(page=3), poe(year=2015, month=2), ellison(page=1), ellison(page=2), lowey(page=1), wyden(page=2),
         lowey(page=2), lowey(page=3), poe(year=2015, month=1), mcmorris(page=2), mcmorris(page=3), schiff(page=2), schiff(page=3),
@@ -884,7 +884,8 @@ module Statement
           {'tenney.house.gov' => 27},
           {'wassermanschultz.house.gov' => 27},
           {'weber.house.gov' => 27},
-          {'plaskett.house.gov' => 27}
+          {'plaskett.house.gov' => 27},
+          {'gomez.house.gov' => 27}
         ]
       end
       domains.each do |domain|
@@ -1098,8 +1099,8 @@ module Statement
             "https://speier.house.gov/media-center/press-releases",
             "https://handel.house.gov/media/press-releases",
             "https://peteking.house.gov/media-center/statements",
-            "https://gomez.house.gov/media/press-releases",
-            "https://gianforte.house.gov/media-center/press-releases"
+            "https://gianforte.house.gov/media-center/press-releases",
+            "https://price.house.gov/newsroom/press-releases"
         ]
       end
 
@@ -1154,6 +1155,36 @@ module Statement
                      :title => row.text.strip,
                      :date => Date.parse(row.previous.previous.text),
                      :domain => 'www.hassan.senate.gov' }
+      end
+      results
+    end
+
+    def self.manchin(page=1)
+      results = []
+      url = "https://www.manchin.senate.gov/news/press-releases?PageNum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("#newscontent h2")[1..-1].each do |row|
+        results << { :source => url,
+                     :url => "https://www.manchin.senate.gov" + row.css('a').first['href'],
+                     :title => row.text.strip,
+                     :date => Date.parse(row.previous.previous.text),
+                     :domain => 'www.manchin.senate.gov' }
+      end
+      results
+    end
+
+    def self.timscott(page=1)
+      results = []
+      url = "https://www.scott.senate.gov/media-center/press-releases?PageNum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("#newscontent h2")[1..-1].each do |row|
+        results << { :source => url,
+                     :url => "https://www.scott.senate.gov" + row.css('a').first['href'],
+                     :title => row.text.strip,
+                     :date => Date.parse(row.next.next.text),
+                     :domain => 'www.scott.senate.gov' }
       end
       results
     end
