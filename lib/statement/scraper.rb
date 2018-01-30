@@ -1100,7 +1100,8 @@ module Statement
             "https://handel.house.gov/media/press-releases",
             "https://peteking.house.gov/media-center/statements",
             "https://gianforte.house.gov/media-center/press-releases",
-            "https://price.house.gov/newsroom/press-releases"
+            "https://price.house.gov/newsroom/press-releases",
+            "https://curtis.house.gov/media/press-releases"
         ]
       end
 
