@@ -44,7 +44,7 @@ module Statement
       [:capuano, :klobuchar, :billnelson, :crapo, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :strange, :shaheen, :manchin,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly, :mast, :hassan, :timscott,
       :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :garypeters, :webster, :cortezmasto, :paul,
-      :poe, :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis, :rounds, :sullivan]
+      :poe, :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis, :rounds, :sullivan, :kennedy, :duckworth, :senate_drupal_newscontent]
     end
 
     def self.committee_methods
@@ -57,7 +57,7 @@ module Statement
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new,
         inhofe(year=year), fischer, clark(year=year), welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin,
         schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds, connolly, paul,
-        poe(year=year, month=0), bennet(page=1), drupal, durbin(page=1), gillibrand, senate_drupal].flatten
+        poe(year=year, month=0), bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -612,6 +612,18 @@ module Statement
       results
     end
 
+    def self.kennedy(page=1)
+      results = []
+      url = "https://www.kennedy.senate.gov/public/press-releases?page=#{page}"
+      doc = open_html(url)
+      return if doc.nil?
+      doc.xpath("//table[@class='table recordList']//tr")[1..-1].each do |row|
+        next if row.children[3].text.strip == 'Title'
+        results << { :source => url, :url => "https://www.kennedy.senate.gov"+row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.parse(row.children[1].text), :domain => "halrogers.house.gov" }
+      end
+      results
+    end
+
     def self.durbin(page=1)
       results = []
       url = "https://www.durbin.senate.gov/newsroom/press-releases?PageNum_rs=#{page}&"
@@ -1130,6 +1142,46 @@ module Statement
       results
     end
 
+    def self.senate_drupal_newscontent(urls=[], page=1)
+      results = []
+      if urls.empty?
+        urls = [
+          "https://www.young.senate.gov/newsroom/press-releases"
+        ]
+      end
+      urls.each do |url|
+        uri = URI(url)
+        source_url = "#{url}?PageNum_rs=#{page}"
+
+        domain =  URI.parse(source_url).host
+        doc = open_html(source_url)
+        return if doc.nil?
+        doc.css('#newscontent h2').each do |row|
+          results << { :source => url,
+                       :url => "https://#{domain}" + row.css('a').first['href'],
+                       :title => row.text.strip,
+                       :date => Date.parse(row.previous.previous.text),
+                       :domain => domain }
+        end
+      end
+      results
+    end
+
+    def self.duckworth(page=1)
+      results = []
+      url = "https://www.duckworth.senate.gov/news/press-releases?PageNum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css('#newscontent h2').each do |row|
+        results << { :source => url,
+                     :url => "https://www.duckworth.senate.gov/" + row.css('a').first['href'],
+                     :title => row.text.strip,
+                     :date => Date.parse(row.previous.previous.text),
+                     :domain => 'www.duckworth.senate.gov' }
+      end
+      results
+    end
+
     def self.cortezmasto(page=1)
       results = []
       url = "https://www.cortezmasto.senate.gov/news/press-releases?PageNum_rs=#{page}"
@@ -1241,9 +1293,6 @@ module Statement
       if urls.empty?
         urls = [
           "https://www.vanhollen.senate.gov/press-releases",
-#          "https://www.young.senate.gov/press-releases",
-#          "https://www.duckworth.senate.gov/press-releases",
-#          "https://www.kennedy.senate.gov/press-releases",
           "https://www.smith.senate.gov/press-releases"
         ]
       end
