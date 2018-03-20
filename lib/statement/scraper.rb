@@ -1240,11 +1240,12 @@ module Statement
     def self.senate_drupal_new(urls=[], page=0)
       if urls.empty?
         urls = [
-          "https://www.harris.senate.gov/press-releases",
+#          "https://www.harris.senate.gov/press-releases",
           "https://www.vanhollen.senate.gov/press-releases",
-          "https://www.young.senate.gov/press-releases",
-          "https://www.duckworth.senate.gov/press-releases",
-          "https://www.kennedy.senate.gov/press-releases"
+#          "https://www.young.senate.gov/press-releases",
+#          "https://www.duckworth.senate.gov/press-releases",
+#          "https://www.kennedy.senate.gov/press-releases",
+          "https://www.smith.senate.gov/press-releases"
         ]
       end
       results = []
@@ -1254,7 +1255,7 @@ module Statement
 
         domain =  URI.parse(source_url).host
         doc = Statement::Scraper.open_html(source_url)
-        return if doc.nil?
+        if doc.nil?
         doc.css('.views-row').each do |row|
           results << {:source => url, :url => "https://#{domain}" + row.css('h2 a').first['href'], :title => row.css('h2').text.strip, :date => Date.parse(row.css(".field-name-post-date").text), :domain => domain}
         end
