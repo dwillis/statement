@@ -1056,6 +1056,17 @@ module Statement
       results
     end
 
+    def self.handel(page=0)
+      results = []
+      domain = 'handel.house.gov'
+      url = "https://handel.house.gov/media/press-releases?page=#{page}"
+      doc = open_html(url)
+      doc.css(".region-content .views-row").each do |row|
+        results << {:source => url, :url => 'https://handel.house.gov' + row.css('h3').first.children.first['href'], :title => row.css('h3').first.children.first.text.strip, :date => Date.parse(row.css(".views-field .field-content")[1].text), :domain => domain }
+      end
+      results
+    end
+
     def self.keating
       results = []
       domain = "keating.house.gov"
@@ -1119,7 +1130,6 @@ module Statement
             "https://walberg.house.gov/media/press-releases",
             "https://smucker.house.gov/media/press-releases",
             "https://speier.house.gov/media-center/press-releases",
-            "https://handel.house.gov/media/press-releases",
             "https://peteking.house.gov/media-center/statements",
             "https://gianforte.house.gov/media-center/press-releases",
             "https://price.house.gov/newsroom/press-releases",
