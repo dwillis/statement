@@ -909,7 +909,8 @@ module Statement
           {'wassermanschultz.house.gov' => 27},
           {'weber.house.gov' => 27},
           {'plaskett.house.gov' => 27},
-          {'gomez.house.gov' => 27}
+          {'gomez.house.gov' => 27},
+          {'gwenmoore.house.gov' => 27}
         ]
       end
       domains.each do |domain|
