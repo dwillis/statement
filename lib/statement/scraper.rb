@@ -43,7 +43,7 @@ module Statement
     def self.member_methods
       [:capuano, :klobuchar, :billnelson, :crapo, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :strange, :shaheen, :manchin,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly, :mast, :hassan, :timscott, :handel,
-      :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :garypeters, :webster, :cortezmasto, :paul, :banks,
+      :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :garypeters, :webster, :cortezmasto, :paul, :banks, :harris,
       :poe, :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis, :rounds, :sullivan, :kennedy, :duckworth, :senate_drupal_newscontent]
     end
 
@@ -56,7 +56,7 @@ module Statement
       results = [capuano, klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan, halrogers, strange, shaheen, timscott,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new,
         inhofe(year=year), fischer, clark(year=year), welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, handel,
-        schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds, connolly, paul, banks,
+        schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds, connolly, paul, banks, harris,
         poe(year=year, month=0), bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
@@ -1293,6 +1293,21 @@ module Statement
       results
     end
 
+    def self.harris(page=1)
+      results = []
+      url = "https://www.harris.senate.gov/news/press-releases?PageNum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("#newscontent h2").each do |row|
+          results << { :source => url,
+                       :url => "https://www.harris.senate.gov/" + row.css('a').first['href'],
+                       :title => row.text.strip,
+                       :date => Date.parse(row.previous.previous.text),
+                       :domain => 'www.harris.senate.gov' }
+      end
+      results
+    end
+
     def self.barbaralee
       results = []
       url = "https://lee.house.gov/news/press-releases"
@@ -1346,7 +1361,6 @@ module Statement
           "https://www.lankford.senate.gov/news/press-releases",
           "https://www.tomudall.senate.gov/news/press-releases",
           "https://www.republicanleader.senate.gov/newsroom/press-releases",
-          "https://www.harris.senate.gov/news/press-releases"
         ]
       end
 
@@ -1364,7 +1378,7 @@ module Statement
             title = row.text.strip
             release_url = "#{uri.scheme}://#{domain + row.css('a').first['href']}"
             raw_date = row.previous.previous.text
-            if domain == 'www.tomudall.senate.gov' or domain == 'www.harris.senate.gov'
+            if domain == 'www.tomudall.senate.gov'
               date = Date.parse(raw_date)
             elsif url == 'https://www.republicanleader.senate.gov/newsroom/press-releases'
               domain = 'mcconnell.senate.gov'
