@@ -1106,7 +1106,6 @@ module Statement
             "https://dankildee.house.gov/media/press-releases",
             "https://walberg.house.gov/media/press-releases",
             "https://smucker.house.gov/media/press-releases",
-            "https://correa.house.gov/media/press-releases",
             "https://speier.house.gov/media-center/press-releases",
             "https://handel.house.gov/media/press-releases",
             "https://peteking.house.gov/media-center/statements",
