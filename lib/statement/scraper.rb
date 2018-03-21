@@ -538,10 +538,10 @@ module Statement
       results
     end
 
-    def self.crapo
+    def self.crapo(page=1)
       results = []
-      url = "https://www.crapo.senate.gov/media/newsreleases/"
-      doc = open_html(url)
+      url = "https://www.crapo.senate.gov/media/newsreleases/?PageNum_rs=#{page}&"
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css("#newscontent h2").each do |row|
           results << { :source => url,
@@ -1093,7 +1093,6 @@ module Statement
             "https://khanna.house.gov/media/press-releases",
             "https://panetta.house.gov/media/press-releases",
             "https://demings.house.gov/media/press-releases",
-            "https://banks.house.gov/media/press-releases",
             "https://mitchell.house.gov/media/press-releases",
             "https://schneider.house.gov/media/press-releases",
             "https://louise.house.gov/media-center/press-releases",
@@ -1120,6 +1119,7 @@ module Statement
       results = []
 
       urls.each do |url|
+        puts url
         uri = URI(url)
         source_url = "#{url}?page=#{page}"
 
