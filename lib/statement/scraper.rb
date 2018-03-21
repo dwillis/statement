@@ -907,7 +907,7 @@ module Statement
           {'crawford.house.gov' => 2080},
           {'estes.house.gov' => 27},
           {'joebarton.house.gov' => 1952},
-          {'coffman.house.gov' => 27},
+          {'coffman.house.gov' => 1951},
           {'messer.house.gov' => 27},
           {'norman.house.gov' => 27},
           {'matsui.house.gov' => 27},
