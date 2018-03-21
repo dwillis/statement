@@ -41,10 +41,11 @@ module Statement
     end
 
     def self.member_methods
-      [:capuano, :klobuchar, :billnelson, :crapo, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :strange, :shaheen, :manchin, :bwcoleman,
-      :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly, :mast, :hassan, :timscott, :handel, :robbishop,
-      :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :garypeters, :webster, :cortezmasto, :paul, :banks, :harris, :tomrice,
-      :poe, :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis, :rounds, :sullivan, :kennedy, :duckworth, :senate_drupal_newscontent]
+      [:capuano, :klobuchar, :billnelson, :crapo, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :strange,
+      :wenstrup, :robbishop, :tomrice, :bwcoleman, :handel, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul,
+      :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly, :mast, :hassan,
+      :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :garypeters, :webster, :cortezmasto,
+      :poe, :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis, :rounds, :sullivan, :kennedy, :duckworth]
     end
 
     def self.committee_methods
@@ -53,7 +54,7 @@ module Statement
 
     def self.member_scrapers
       year = current_year
-      results = [capuano, klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan, halrogers, strange, shaheen, timscott,
+      results = [capuano, klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan, halrogers, strange, shaheen, timscott, wenstrup,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman,
         inhofe(year=year), fischer, clark(year=year), welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, handel, robbishop,
         schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds, connolly, paul, banks, harris, tomrice,
@@ -862,7 +863,6 @@ module Statement
       if domains.empty?
         domains = [
           {"thornberry.house.gov" => 1776},
-          {"wenstrup.house.gov" => 2491},
           {"palazzo.house.gov" => 2519},
           {"roe.house.gov" => 1532},
           {"perry.house.gov" => 2607},
@@ -921,16 +921,15 @@ module Statement
           {'weber.house.gov' => 27},
           {'plaskett.house.gov' => 27},
           {'gomez.house.gov' => 27},
-          {'gwenmoore.house.gov' => 27}
+          {'gwenmoore.house.gov' => 27},
+          {'reed.house.gov' => 27}
         ]
       end
       domains.each do |domain|
         doc = Statement::Scraper.open_html("https://"+domain.keys.first+"/news/documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}")
         return if doc.nil?
         doc.xpath("//div[@class='middlecopy']//li").each do |row|
-          if domain.keys.first == 'wenstrup.house.gov'
-            results << { :source => "https://"+domain.keys.first+"/news/"+"documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}", :url => "https://"+domain.keys.first+ row.children[1]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.children[3].text.strip), :domain => domain.keys.first }
-          elsif domain.keys.first == 'loudermilk.house.gov'
+          if domain.keys.first == 'loudermilk.house.gov'
             results << { :source => "https://"+domain.keys.first+"/news/"+"documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}", :url => "https://"+domain.keys.first+"/news/" + row.children[1].css('a').first['href'], :title => row.children[1].css('b').first.text, :date => Date.parse(row.children[1].css('b').last.text), :domain => domain.keys.first }
           else
             results << { :source => "https://"+domain.keys.first+"/news/"+"documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}", :url => "https://"+domain.keys.first+"/news/" + row.children[1]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.children[3].text.strip), :domain => domain.keys.first }
@@ -947,6 +946,18 @@ module Statement
       return if doc.nil?
       doc.xpath("//ul[@class='UnorderedNewsList']//a").each do |row|
         results << {:source => url, :url => 'https://watsoncoleman.house.gov/newsroom/' + row['href'], :title => row.css('li').children[1].text.strip, :date => Date.parse(row.css('li').children[3].text.strip), :domain => 'watsoncoleman.house.gov' }
+      end
+      results
+    end
+
+    def self.wenstrup(page=1)
+      results = []
+      url = "https://wenstrup.house.gov/updates/documentquery.aspx?DocumentTypeID=2491&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.xpath("//ul[@class='UnorderedNewsList']//article").each do |row|
+        article_url = 'https://wenstrup.house.gov/updates/' + row.css("h2 a").first['href'].gsub('/news/','')
+        results << {:source => url, :url => article_url, :title => row.css("h2").text.strip, :date => Date.parse(row.css('time').first['datetime']), :domain => 'wenstrup.house.gov' }
       end
       results
     end
