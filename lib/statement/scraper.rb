@@ -42,7 +42,7 @@ module Statement
 
     def self.member_methods
       [:capuano, :klobuchar, :billnelson, :crapo, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :strange, :shaheen, :manchin, :bwcoleman,
-      :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly, :mast, :hassan, :timscott, :handel,
+      :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly, :mast, :hassan, :timscott, :handel, :robbishop,
       :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :garypeters, :webster, :cortezmasto, :paul, :banks, :harris,
       :poe, :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis, :rounds, :sullivan, :kennedy, :duckworth, :senate_drupal_newscontent]
     end
@@ -55,7 +55,7 @@ module Statement
       year = current_year
       results = [capuano, klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan, halrogers, strange, shaheen, timscott,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman,
-        inhofe(year=year), fischer, clark(year=year), welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, handel,
+        inhofe(year=year), fischer, clark(year=year), welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, handel, robbishop,
         schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds, connolly, paul, banks, harris,
         poe(year=year, month=0), bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal].flatten
       results = results.compact
@@ -996,6 +996,18 @@ module Statement
       return if doc.nil?
       doc.css(".view-content .views-row").first(10).each do |row|
         results << {:source => url, :url => 'https://lowey.house.gov' + row.css('h3').first.children.first['href'], :title => row.css('h3').first.children.first.text.strip, :date => Date.parse(row.css(".views-field .field-content")[1].text), :domain => domain }
+      end
+      results
+    end
+
+    def self.robbishop(page=0)
+      results = []
+      domain = "robbishop.house.gov"
+      url = "https://robbishop.house.gov/media/press-releases?page=#{page}"
+      doc = open_html(url)
+      return if doc.nil?
+      doc.css(".view-content .views-row").first(10).each do |row|
+        results << {:source => url, :url => 'https://robbishop.house.gov' + row.css('h3').first.children.first['href'], :title => row.css('h3').first.children.first.text.strip, :date => Date.parse(row.css(".views-field .field-content")[1].text), :domain => domain }
       end
       results
     end
