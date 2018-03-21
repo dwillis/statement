@@ -1300,7 +1300,7 @@ module Statement
       return if doc.nil?
       doc.css("#newscontent h2").each do |row|
           results << { :source => url,
-                       :url => "https://www.harris.senate.gov/" + row.css('a').first['href'],
+                       :url => "https://www.harris.senate.gov" + row.css('a').first['href'],
                        :title => row.text.strip,
                        :date => Date.parse(row.previous.previous.text),
                        :domain => 'www.harris.senate.gov' }
