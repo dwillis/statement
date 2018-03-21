@@ -41,7 +41,7 @@ module Statement
     end
 
     def self.member_methods
-      [:capuano, :klobuchar, :billnelson, :crapo, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :strange, :shaheen, :manchin,
+      [:capuano, :klobuchar, :billnelson, :crapo, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :strange, :shaheen, :manchin, :bwcoleman,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly, :mast, :hassan, :timscott, :handel,
       :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :garypeters, :webster, :cortezmasto, :paul, :banks, :harris,
       :poe, :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis, :rounds, :sullivan, :kennedy, :duckworth, :senate_drupal_newscontent]
@@ -54,7 +54,7 @@ module Statement
     def self.member_scrapers
       year = current_year
       results = [capuano, klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan, halrogers, strange, shaheen, timscott,
-        document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new,
+        document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman,
         inhofe(year=year), fischer, clark(year=year), welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, handel,
         schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds, connolly, paul, banks, harris,
         poe(year=year, month=0), bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal].flatten
@@ -890,7 +890,6 @@ module Statement
           {'stephaniemurphy.house.gov' => 27},
           {'denham.house.gov' => 27},
           {'gottheimer.house.gov' => 27},
-          {'watsoncoleman.house.gov' => 27},
           {'mcgovern.house.gov' => 2472},
           {'kihuen.house.gov' => 27},
           {'crawford.house.gov' => 2080},
@@ -927,6 +926,17 @@ module Statement
         end
       end
       results.flatten
+    end
+
+    def self.bwcoleman(page=1)
+      results = []
+      url = "https://watsoncoleman.house.gov/newsroom/documentquery.aspx?DocumentTypeID=27&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.xpath("//ul[@class='UnorderedNewsList']//a").each do |row|
+        results << {:source => url, :url => 'https://watsoncoleman.house.gov/newsroom/' + row['href'], :title => row.css('li').children[1].text.strip, :date => Date.parse(row.css('li').children[3].text.strip), :domain => 'watsoncoleman.house.gov' }
+      end
+      results
     end
 
     def self.schumer(page=1)
