@@ -1364,7 +1364,7 @@ module Statement
             title = row.text.strip
             release_url = "#{uri.scheme}://#{domain + row.css('a').first['href']}"
             raw_date = row.previous.previous.text
-            if url == 'https://www.tomudall.senate.gov/news/press-releases'
+            if domain == 'www.tomudall.senate.gov' or domain == 'www.harris.senate.gov'
               date = Date.parse(raw_date)
             elsif url == 'https://www.republicanleader.senate.gov/newsroom/press-releases'
               domain = 'mcconnell.senate.gov'
