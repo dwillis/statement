@@ -553,9 +553,9 @@ module Statement
       results
     end
 
-    def self.fischer(year=current_year)
+    def self.fischer(page=1)
       results = []
-      url = "https://www.fischer.senate.gov/public/index.cfm/press-releases?MonthDisplay=0&YearDisplay=#{year}"
+      url = "https://www.fischer.senate.gov/public/index.cfm/press-releases?page=#{page}"
       doc = open_html(url)
       return if doc.nil?
       doc.xpath("//tr")[2..-1].each do |row|
