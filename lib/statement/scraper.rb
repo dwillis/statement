@@ -926,7 +926,8 @@ module Statement
           {'mikebishop.house.gov' => 27},
           {'susandavis.house.gov' => 1782},
           {'meadows.house.gov' => 27},
-          {'jasonsmith.house.gov' => 27}
+          {'jasonsmith.house.gov' => 27},
+          {'mckinley.house.gov' => 27}
         ]
       end
       domains.each do |domain|
