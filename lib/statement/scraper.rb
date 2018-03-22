@@ -41,7 +41,7 @@ module Statement
     end
 
     def self.member_methods
-      [:capuano, :klobuchar, :billnelson, :crapo, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :strange,
+      [:capuano, :klobuchar, :billnelson, :crapo, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :strange, :bucshon,
       :wenstrup, :robbishop, :tomrice, :bwcoleman, :handel, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly, :mast, :hassan,
       :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :garypeters, :webster, :cortezmasto,
@@ -54,7 +54,7 @@ module Statement
 
     def self.member_scrapers
       year = current_year
-      results = [capuano, klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan, halrogers, strange, shaheen, timscott, wenstrup,
+      results = [capuano, klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan, halrogers, strange, shaheen, timscott, wenstrup, bucshon,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman,
         inhofe(year=year), fischer, clark(year=year), welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, handel, robbishop,
         schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds, connolly, paul, banks, harris, tomrice,
@@ -923,7 +923,10 @@ module Statement
           {'gomez.house.gov' => 27},
           {'gwenmoore.house.gov' => 27},
           {'reed.house.gov' => 27},
-          {'mikebishop.house.gov' => 27}
+          {'mikebishop.house.gov' => 27},
+          {'susandavis.house.gov' => 1782},
+          {'meadows.house.gov' => 27},
+          {'jasonsmith.house.gov' => 27}
         ]
       end
       domains.each do |domain|
@@ -938,6 +941,17 @@ module Statement
         end
       end
       results.flatten
+    end
+
+    def self.bucshon(page=1)
+      results = []
+      url = "https://bucshon.house.gov/news/documentquery.aspx?DocumentTypeID=27&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.xpath("//article").each do |row|
+        results << {:source => url, :url => "https://bucshon.house.gov" + row.css("h3 a").first['href'], :title => row.css("h3").text.strip, :date => Date.parse(row.css('time').first['datetime']), :domain => 'bucshon.house.gov' }
+      end
+      results
     end
 
     def self.bwcoleman(page=1)
