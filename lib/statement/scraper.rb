@@ -1020,9 +1020,12 @@ module Statement
       url = "https://www.wyden.senate.gov/news/press-releases?PageNum_rs=#{page}&"
       doc = open_html(url)
       return if doc.nil?
-      doc.css('table.listing tr').each do |row|
-        next if row['class'] == 'divider'
-        results << { :source => url, :url => row.children[3].children[0]['href'].strip, :title => row.children[3].children[0].text.strip, :date => Date.parse(row.children[1].children[0]['datetime']), :domain => 'www.wyden.senate.gov'}
+      doc.css('#newscontent h2').each do |row|
+        results << { :source => url,
+                     :url => "https://www.wyden.senate.gov/" + row.css('a').first['href'],
+                     :title => row.text.strip,
+                     :date => Date.parse(row.previous.previous.text),
+                     :domain => 'www.wyden.senate.gov' }
       end
       results
     end
