@@ -1343,7 +1343,7 @@ module Statement
       url = "https://www.scott.senate.gov/media-center/press-releases?PageNum_rs=#{page}"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.css("#newscontent h2")[1..-1].each do |row|
+      doc.css("#newscontent h2")[0..-1].each do |row|
         results << { :source => url,
                      :url => "https://www.scott.senate.gov" + row.css('a').first['href'],
                      :title => row.text.strip,
