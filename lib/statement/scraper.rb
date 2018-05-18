@@ -1418,7 +1418,6 @@ module Statement
     def self.senate_drupal_new(urls=[], page=0)
       if urls.empty?
         urls = [
-          "https://www.vanhollen.senate.gov/press-releases",
           "https://www.smith.senate.gov/press-releases"
         ]
       end
@@ -1451,6 +1450,7 @@ module Statement
           "https://www.lankford.senate.gov/news/press-releases",
           "https://www.tomudall.senate.gov/news/press-releases",
           "https://www.republicanleader.senate.gov/newsroom/press-releases",
+          "https://www.vanhollen.senate.gov/news/press-releases"
         ]
       end
 
