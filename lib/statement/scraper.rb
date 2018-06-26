@@ -44,8 +44,8 @@ module Statement
       [:capuano, :klobuchar, :billnelson, :crapo, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :strange, :bucshon,
       :wenstrup, :robbishop, :tomrice, :bwcoleman, :handel, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :calvert,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly, :mast, :hassan, :yarmuth,
-      :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :garypeters, :webster, :cortezmasto,
-      :poe, :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis, :rounds, :sullivan, :kennedy, :duckworth]
+      :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith,
+      :poe, :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis, :rounds, :sullivan, :kennedy, :duckworth, :dougjones]
     end
 
     def self.committee_methods
@@ -55,9 +55,9 @@ module Statement
     def self.member_scrapers
       year = current_year
       results = [capuano, klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan, halrogers, strange, shaheen, timscott, wenstrup, bucshon,
-        document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, calvert,
+        document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, calvert, dougjones,
         inhofe(year=year), fischer, clark(year=year), welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, handel, robbishop, yarmuth,
-        schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds, connolly, paul, banks, harris, tomrice,
+        schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds, connolly, paul, banks, harris, tomrice, hydesmith,
         poe(year=year, month=0), bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
@@ -453,30 +453,6 @@ module Statement
         next if row.css('th').first && row.css('th').first.text == 'Date'
         results << { :source => url, :url => "https://desantis.house.gov" + row.css('td')[1].children.first['href'], :title => row.css('td')[1].children.text.strip, :date => Date.parse(row.css('td')[0].text), :domain => "desantis.house.gov" }
       end
-      results
-    end
-
-    def self.patrick_meehan(page = 0)
-      # This is a Drupal page and it uses the View plugin, but unlike the other
-      # Drupal pages, it does not make use of .views-field-created, and instead, the
-      # only Month-Year is given (03 Feb).
-      page_url = "https://meehan.house.gov/media-center/press-releases?page=#{page}"
-      doc = open_html(page_url)
-      return if doc.nil?
-      results = doc.search('.view-congress-press-releases .views-row').inject([]) do |arr, article|
-        title = article.search('.views-field-title a')[0]
-        article_url = URI.join(page_url, title['href'])
-        raise "Date still needs to be parsed; thanks a lot Drupal"
-        article_datestr = title.previous_element.text
-        arr << {
-          :source => page_url,
-          :url => article_url.to_s,
-          :domain => article_url.host,
-          :title => title.text,
-          :date => Date.strptime(article_datestr, 'SOMETHING')
-        }
-      end
-
       results
     end
 
@@ -940,7 +916,9 @@ module Statement
           {'susandavis.house.gov' => 1782},
           {'meadows.house.gov' => 27},
           {'jasonsmith.house.gov' => 27},
-          {'mckinley.house.gov' => 27}
+          {'mckinley.house.gov' => 27},
+          {'russell.house.gov' => 27},
+          {'pittenger.house.gov' => 27}
         ]
       end
       domains.each do |domain|
@@ -1187,7 +1165,6 @@ module Statement
             "https://quigley.house.gov/media-center/press-releases",
             "https://sewell.house.gov/media-center/press-releases",
             "https://buchanan.house.gov/media-center/press-releases",
-            "https://meehan.house.gov/media-center/press-releases",
             "https://olson.house.gov/media-center/press-releases",
             "https://louise.house.gov/media-center/press-releases",
             "https://waters.house.gov/media-center/press-releases",
@@ -1223,7 +1200,9 @@ module Statement
             "https://peteking.house.gov/media-center/statements",
             "https://gianforte.house.gov/media-center/press-releases",
             "https://price.house.gov/newsroom/press-releases",
-            "https://curtis.house.gov/media/press-releases"
+            "https://curtis.house.gov/media/press-releases",
+            "https://lofgren.house.gov/media/press-releases",
+            "https://lesko.house.gov/media"
         ]
       end
 
@@ -1368,6 +1347,36 @@ module Statement
       results
     end
 
+    def self.hydesmith(page=0)
+      results = []
+      url = "https://www.hydesmith.senate.gov/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".views-row").each do |row|
+          results << { :source => url,
+                       :url => "https://www.hydesmith.senate.gov" + row.css('a').first['href'],
+                       :title => row.css('h2').text.strip,
+                       :date => Date.parse(row.children[1].children[2].text),
+                       :domain => 'www.hydesmith.senate.gov' }
+      end
+      results
+    end
+
+    def self.dougjones(page=0)
+      results = []
+      url = "https://www.jones.senate.gov/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".views-row").each do |row|
+          results << { :source => url,
+                       :url => "https://www.jones.senate.gov" + row.css('a').first['href'],
+                       :title => row.css('h2').text.strip,
+                       :date => Date.parse(row.children[1].children[2].text),
+                       :domain => 'www.jones.senate.gov' }
+      end
+      results
+    end
+
     def self.shaheen(page=1)
       results = []
       url = "https://www.shaheen.senate.gov/news/press?PageNum_rs=#{page}"
@@ -1450,8 +1459,8 @@ module Statement
           "https://www.lankford.senate.gov/news/press-releases",
           "https://www.tomudall.senate.gov/news/press-releases",
           "https://www.republicanleader.senate.gov/newsroom/press-releases",
-          "https://www.vanhollen.senate.gov/news/press-releases",
-          "https://www.warren.senate.gov/newsroom/press-releases"
+          "https://www.vanhollen.senate.gov/news/press-releases"
+#          "https://www.warren.senate.gov/newsroom/press-releases"
         ]
       end
 
