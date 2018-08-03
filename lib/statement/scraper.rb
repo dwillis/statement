@@ -860,7 +860,6 @@ module Statement
           {"kevinbrady.house.gov" => 2657},
           {"loudermilk.house.gov" => 27},
           {"babin.house.gov" => 27},
-          {"bridenstine.house.gov" => 2412},
           {"allen.house.gov" => 27},
           {"holding.house.gov" => 27},
           {"davidscott.house.gov" => 377},
