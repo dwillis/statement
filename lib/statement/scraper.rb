@@ -499,6 +499,7 @@ module Statement
       return if doc.nil?
       rows = doc.css('table tr')[1..-1]
       rows.each do |row|
+        next if row.css('a').empty?
         results << { :source => url, :url => "https://www.king.senate.gov" + row.css('a')[0]['href'], :title => row.css('a')[0].text.strip, :date => Date.strptime(row.children[1].text.strip, "%m/%d/%y"), :domain => "www.king.senate.gov" }
       end
       results
