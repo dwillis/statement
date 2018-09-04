@@ -45,7 +45,7 @@ module Statement
       :wenstrup, :robbishop, :tomrice, :bwcoleman, :handel, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :calvert,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly, :mast, :hassan, :yarmuth,
       :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith,
-      :poe, :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis, :rounds, :sullivan, :kennedy, :duckworth, :dougjones]
+      :poe, :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis, :rounds, :sullivan, :kennedy, :duckworth, :dougjones, :angusking]
     end
 
     def self.committee_methods
@@ -54,7 +54,7 @@ module Statement
 
     def self.member_scrapers
       year = current_year
-      results = [capuano, klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan, halrogers, strange, shaheen, timscott, wenstrup, bucshon,
+      results = [capuano, klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan, halrogers, strange, shaheen, timscott, wenstrup, bucshon, angusking,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, calvert, dougjones,
         inhofe(year=year), fischer, clark(year=year), welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, handel, robbishop, yarmuth,
         schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds, connolly, paul, banks, harris, tomrice, hydesmith,
@@ -488,6 +488,18 @@ module Statement
       rows = doc.css("#press").first.css('h2')
       rows.each do |row|
         results << { :source => url, :url => "http://takano.house.gov" + row.children.first['href'], :title => row.children.last.text.strip, :date => Date.strptime(row.previous.previous.text, "%m.%d.%y"), :domain => "takano.house.gov" }
+      end
+      results
+    end
+
+    def self.angusking(page=1)
+      results = []
+      url = "https://www.king.senate.gov/newsroom/press-releases/table?pagenum_rs=#{page}"
+      doc = open_html(url)
+      return if doc.nil?
+      rows = doc.css('table tr')[1..-1]
+      rows.each do |row|
+        results << { :source => url, :url => "https://www.king.senate.gov" + row.css('a')[0]['href'], :title => row.css('a')[0].text.strip, :date => Date.strptime(row.children[1].text.strip, "%m/%d/%y"), :domain => "www.king.senate.gov" }
       end
       results
     end
