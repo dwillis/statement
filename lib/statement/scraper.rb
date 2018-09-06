@@ -1178,7 +1178,6 @@ module Statement
             "https://sewell.house.gov/media-center/press-releases",
             "https://buchanan.house.gov/media-center/press-releases",
             "https://olson.house.gov/media-center/press-releases",
-            "https://louise.house.gov/media-center/press-releases",
             "https://waters.house.gov/media-center/press-releases",
             "https://walden.house.gov/media-center/press-releases",
             "https://brooks.house.gov/media-center/news-releases",
