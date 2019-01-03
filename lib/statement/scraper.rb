@@ -41,11 +41,11 @@ module Statement
     end
 
     def self.member_methods
-      [:capuano, :klobuchar, :billnelson, :crapo, :burr, :ellison, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :strange, :bucshon,
-      :wenstrup, :robbishop, :tomrice, :bwcoleman, :handel, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :calvert,
-      :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :issa, :connolly, :mast, :hassan, :yarmuth,
+      [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :bucshon,
+      :wenstrup, :robbishop, :tomrice, :bwcoleman, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :calvert,
+      :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :connolly, :mast, :hassan, :yarmuth,
       :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :sinema, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith,
-      :poe, :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :desantis, :rounds, :sullivan, :kennedy, :duckworth, :dougjones, :angusking]
+      :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :dougjones, :angusking]
     end
 
     def self.committee_methods
@@ -54,21 +54,21 @@ module Statement
 
     def self.member_scrapers
       year = current_year
-      results = [capuano, klobuchar(year), billnelson(page=0), ellison, kilmer, lacyclay, desantis, sullivan, halrogers, strange, shaheen, timscott, wenstrup, bucshon, angusking,
+      results = [klobuchar(year), kilmer, lacyclay, sullivan, halrogers, shaheen, timscott, wenstrup, bucshon, angusking,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, calvert, dougjones,
-        inhofe(year=year), fischer, clark(year=year), welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, handel, robbishop, yarmuth,
+        inhofe(year=year), fischer, clark(year=year), welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, robbishop, yarmuth,
         schumer, lowey, mcmorris, schiff, takano, heinrich, sinema, walorski, jenkins, marchant, issa, garypeters, rounds, connolly, paul, banks, harris, tomrice, hydesmith,
-        poe(year=year, month=0), bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal].flatten
+        bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
 
     def self.backfill_from_scrapers
-      results = [billnelson(year=2012), document_query(page=3), cardin(page=2), cornyn(page=1), timscott(page=2), timscott(page=3),
+      results = [document_query(page=3), cardin(page=2), cornyn(page=1), timscott(page=2), timscott(page=3),
         document_query(page=4), grassley(page=1), grassley(page=2), grassley(page=3), burr(page=2), burr(page=3), burr(page=4), cantwell(page=2),
         clark(year=2013), kilmer(page=2), kilmer(page=3), heinrich(page=2), kind(page=1), walorski(page=2), manchin(page=2), manchin(page=3),
         cassidy(page=2), cassidy(page=3), gillibrand(page=2), issa(page=1), issa(page=2), paul(page=1), paul(page=2), banks(page=2),
-        olson(year=2013), schumer(page=2), schumer(page=3), poe(year=2015, month=2), ellison(page=1), ellison(page=2), lowey(page=1), wyden(page=2),
+        olson(year=2013), schumer(page=2), schumer(page=3), poe(year=2015, month=2), lowey(page=1), wyden(page=2),
         lowey(page=2), lowey(page=3), poe(year=2015, month=1), mcmorris(page=2), mcmorris(page=3), schiff(page=2), schiff(page=3),
         takano(page=2), takano(page=3)].flatten
       Utils.remove_generic_urls!(results)
@@ -885,52 +885,36 @@ module Statement
           {"kinzinger.house.gov" => 2665},
           {"frankel.house.gov" => 27},
           {"conaway.house.gov" => 1279},
-          {'culberson.house.gov' => 2573},
           {'chabot.house.gov' => 2508},
-          {'brat.house.gov' => 27},
-          {'knight.house.gov' => 27},
-          {'goodlatte.house.gov' => 27},
           {'hice.house.gov' => 27},
-          {'curbelo.house.gov' => 27},
           {'tonko.house.gov' => 27},
           {'perlmutter.house.gov' => 27},
           {'francisrooney.house.gov' => 27},
           {'crist.house.gov' => 27},
-          {'faso.house.gov' => 27},
           {'bergman.house.gov' => 27},
           {'jasonlewis.house.gov' => 27},
-          {'kihuen.house.gov' => 27},
           {'stephaniemurphy.house.gov' => 27},
-          {'denham.house.gov' => 27},
           {'gottheimer.house.gov' => 27},
           {'mcgovern.house.gov' => 2472},
-          {'kihuen.house.gov' => 27},
           {'crawford.house.gov' => 2080},
           {'estes.house.gov' => 27},
-          {'joebarton.house.gov' => 1952},
-          {'coffman.house.gov' => 1951},
           {'messer.house.gov' => 27},
           {'norman.house.gov' => 27},
           {'matsui.house.gov' => 27},
           {'carbajal.house.gov' => 27},
           {'budd.house.gov' => 27},
           {'delbene.house.gov' => 27},
-          {'blum.house.gov' => 27},
           {'gosar.house.gov' => 27},
-          {'tenney.house.gov' => 27},
           {'wassermanschultz.house.gov' => 27},
           {'weber.house.gov' => 27},
           {'plaskett.house.gov' => 27},
           {'gomez.house.gov' => 27},
           {'gwenmoore.house.gov' => 27},
           {'reed.house.gov' => 27},
-          {'mikebishop.house.gov' => 27},
           {'susandavis.house.gov' => 1782},
           {'meadows.house.gov' => 27},
           {'jasonsmith.house.gov' => 27},
           {'mckinley.house.gov' => 27},
-          {'russell.house.gov' => 27},
-          {'pittenger.house.gov' => 27},
           {'hill.house.gov' => 27}
         ]
       end
@@ -1167,11 +1151,8 @@ module Statement
         urls = [
             "https://sherman.house.gov/media-center/press-releases",
             "https://mccaul.house.gov/media-center/press-releases",
-            "https://ellison.house.gov/media-center/press-releases",
             "https://mcnerney.house.gov/media-center/press-releases",
-            "https://sanford.house.gov/media-center/press-releases",
             "https://butterfield.house.gov/media-center/press-releases",
-            "https://walz.house.gov/media-center/press-releases",
             "https://pingree.house.gov/media-center/press-releases",
             "https://wilson.house.gov/media-center/press-releases",
             "https://bilirakis.house.gov/media/press-releases",
@@ -1184,12 +1165,11 @@ module Statement
             "https://brooks.house.gov/media-center/news-releases",
             "https://swalwell.house.gov/media-center/press-releases",
             "https://lujangrisham.house.gov/media-center/press-releases",
-#            "https://keating.house.gov/media-center/press-releases",
+            "https://keating.house.gov/media-center/press-releases",
             "https://blumenauer.house.gov/media-center/press-releases",
             "https://larson.house.gov/media-center/press-releases",
             "https://doggett.house.gov/media-center/press-releases",
             "https://kaptur.house.gov/media-center/press-releases",
-            "https://esty.house.gov/media-center/press-releases",
             "https://neal.house.gov/media-center/press-releases",
             "https://vela.house.gov/media-center/press-releases",
             "https://khanna.house.gov/media/press-releases",
@@ -1197,7 +1177,6 @@ module Statement
             "https://demings.house.gov/media/press-releases",
             "https://mitchell.house.gov/media/press-releases",
             "https://schneider.house.gov/media/press-releases",
-            "https://louise.house.gov/media-center/press-releases",
             "https://schweikert.house.gov/media-center/press-releases",
             "https://benniethompson.house.gov/media/press-releases",
             "https://austinscott.house.gov/media-center/press-releases",
@@ -1472,7 +1451,6 @@ module Statement
           "https://www.tomudall.senate.gov/news/press-releases",
           "https://www.republicanleader.senate.gov/newsroom/press-releases",
           "https://www.vanhollen.senate.gov/news/press-releases"
-#          "https://www.warren.senate.gov/newsroom/press-releases"
         ]
       end
 
