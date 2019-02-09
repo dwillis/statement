@@ -41,7 +41,7 @@ module Statement
     end
 
     def self.member_methods
-      [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :bucshon,
+      [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :bucshon, :document_query_new,
       :wenstrup, :robbishop, :tomrice, :bwcoleman, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :calvert,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :connolly, :mast, :hassan, :yarmuth,
       :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith,
@@ -54,7 +54,7 @@ module Statement
 
     def self.member_scrapers
       year = current_year
-      results = [klobuchar(year), kilmer, lacyclay, sullivan, halrogers, shaheen, timscott, wenstrup, bucshon, angusking,
+      results = [klobuchar(year), kilmer, lacyclay, sullivan, halrogers, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, calvert, dougjones,
         inhofe(year=year), fischer, clark(year=year), welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, robbishop, yarmuth,
         schumer, lowey, mcmorris, schiff, takano, heinrich, walorski, jenkins, marchant, garypeters, rounds, connolly, paul, banks, harris, tomrice, hydesmith,
@@ -932,6 +932,34 @@ module Statement
       results.flatten
     end
 
+    def self.document_query_new(domains=[], page=1)
+      results = []
+      if domains.empty?
+        domains = [
+          {'trahan.house.gov' => 27},
+          {'vantaylor.house.gov' => 27},
+          {'spanberger.house.gov' => 27},
+          {'shalala.house.gov' => 27},
+          {'maxrose.house.gov' => 27},
+          {'houlahan.house.gov' => 27},
+          {'hern.house.gov' => 27},
+          {'markgreen.house.gov' => 27},
+          {'chuygarcia.house.gov' => 27},
+          {'fletcher.house.gov' => 27},
+          {'crenshaw.house.gov' => 27}
+        ]
+      end
+      domains.each do |domain|
+        source_url = "https://"+domain.keys.first+"/news/documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}"
+        doc = Statement::Scraper.open_html(source_url)
+        return if doc.nil?
+        doc.xpath("//article").each do |row|
+          results << { :source => source_url, :url => "https://"+domain.keys.first+"/news/" + row.css("h3 a").first['href'], :title => row.css("h3").text.strip, :date => Date.parse(row.css('time').last.text), :domain => domain.keys.first }
+        end
+      end
+      results
+    end
+
     def self.bucshon(page=1)
       results = []
       url = "https://bucshon.house.gov/news/documentquery.aspx?DocumentTypeID=27&Page=#{page}"
@@ -1164,13 +1192,12 @@ module Statement
             "https://walden.house.gov/media-center/press-releases",
             "https://brooks.house.gov/media-center/news-releases",
             "https://swalwell.house.gov/media-center/press-releases",
-            "https://lujangrisham.house.gov/media-center/press-releases",
             "https://keating.house.gov/media-center/press-releases",
             "https://blumenauer.house.gov/media-center/press-releases",
             "https://larson.house.gov/media-center/press-releases",
             "https://doggett.house.gov/media-center/press-releases",
             "https://kaptur.house.gov/media-center/press-releases",
-            "https://neal.house.gov/media-center/press-releases",
+            "https://neal.house.gov/press-releases",
             "https://vela.house.gov/media-center/press-releases",
             "https://khanna.house.gov/media/press-releases",
             "https://panetta.house.gov/media/press-releases",
@@ -1180,7 +1207,6 @@ module Statement
             "https://schweikert.house.gov/media-center/press-releases",
             "https://benniethompson.house.gov/media/press-releases",
             "https://austinscott.house.gov/media-center/press-releases",
-            "https://bordallo.house.gov/media-center/press-releases",
             "https://radewagen.house.gov/media-center/press-releases",
             "https://delauro.house.gov/media-center/press-releases",
             "https://gabbard.house.gov/news",
@@ -1191,9 +1217,89 @@ module Statement
             "https://peteking.house.gov/media-center/statements",
             "https://gianforte.house.gov/media-center/press-releases",
             "https://price.house.gov/newsroom/press-releases",
-            "https://curtis.house.gov/media/press-releases",
             "https://lofgren.house.gov/media/press-releases",
-            "https://lesko.house.gov/media"
+            "https://lesko.house.gov/media",
+            "https://watkins.house.gov/media/press-releases",
+            "https://vandrew.house.gov/media/press-releases",
+            "https://allred.house.gov/media/press-releases",
+            "https://armstrong.house.gov/media/press-releases",
+            "https://axne.house.gov/media/press-releases",
+            "https://baird.house.gov/media/press-releases",
+            "https://brindisi.house.gov/media/press-releases",
+            "https://burchett.house.gov/media/press-releases",
+            "https://casten.house.gov/media/press-releases",
+            "https://cline.house.gov/media/press-releases",
+            "https://craig.house.gov/media/press-releases",
+            "https://crow.house.gov/media/press-releases",
+            "https://cunningham.house.gov/media/press-releases",
+            "https://cisneros.house.gov/media/press-releases",
+            "https://cox.house.gov/media/press-releases",
+            "https://davids.house.gov/media/press-releases",
+            "https://delgado.house.gov/media/press-releases",
+            "https://dean.house.gov/media/press-releases",
+            "https://escobar.house.gov/media/press-releases",
+            "https://finkenauer.house.gov/media/press-releases",
+            "https://fulcher.house.gov/media/press-releases",
+            "https://sylviagarcia.house.gov/media/press-releases",
+            "https://anthonygonzalez.house.gov/media/press-releases",
+            "https://gooden.house.gov/media/press-releases",
+            "https://guest.house.gov/media/press-releases",
+            "https://golden.house.gov/media/press-releases",
+            "https://haaland.house.gov/media/press-releases",
+            "https://hayes.house.gov/media/press-releases",
+            "https://horn.house.gov/media/press-releases",
+            "https://katiehill.house.gov/media/press-releases",
+            "https://hagedorn.house.gov/media/press-releases",
+            "https://harder.house.gov/media/press-releases",
+            "https://dustyjohnson.house.gov/media/press-releases",
+            "https://johnjoyce.house.gov/media/press-releases",
+            "https://kim.house.gov/media/press-releases",
+            "https://susielee.house.gov/media/press-releases",
+            "https://luria.house.gov/media/press-releases",
+            "https://andylevin.house.gov/media/press-releases",
+            "https://mikelevin.house.gov/media/press-releases",
+            "https://malinowski.house.gov/media/press-releases",
+            "https://meuser.house.gov/media/press-releases",
+            "https://miller.house.gov/media/press-releases",
+            "https://morelle.house.gov/media/press-releases",
+            "https://mucarsel-powell.house.gov/media/press-releases",
+            "https://mcbath.house.gov/media/press-releases",
+            "https://mcadams.house.gov/media/press-releases",
+            "https://neguse.house.gov/media/press-releases",
+            "https://ocasio-cortez.house.gov/media/press-releases",
+            "https://omar.house.gov/media/press-releases",
+            "https://pappas.house.gov/media/press-releases",
+            "https://pence.house.gov/media/press-releases",
+            "https://phillips.house.gov/media/press-releases",
+            "https://pressley.house.gov/media/press-releases",
+            "https://porter.house.gov/media/press-releases",
+            "https://reschenthaler.house.gov/media/press-releases",
+            "https://riggleman.house.gov/media/press-releases",
+            "https://johnrose.house.gov/media/press-releases",
+            "https://roy.house.gov/media/press-releases",
+            "https://rouda.house.gov/media/press-releases",
+            "https://sannicolas.house.gov/media/press-releases",
+            "https://scanlon.house.gov/media/press-releases",
+            "https://sherrill.house.gov/media/press-releases",
+            "https://slotkin.house.gov/media/press-releases",
+            "https://spano.house.gov/media/press-releases",
+            "https://stanton.house.gov/media/press-releases",
+            "https://stauber.house.gov/media/press-releases",
+            "https://steil.house.gov/media/press-releases",
+            "https://steube.house.gov/media/press-releases",
+            "https://stevens.house.gov/media/press-releases",
+            "https://schrier.house.gov/media/press-releases",
+            "https://timmons.house.gov/media/press-releases",
+            "https://tlaib.house.gov/media/press-releases",
+            "https://trone.house.gov/media/press-releases",
+            "https://torressmall.house.gov/media/press-releases",
+            "https://underwood.house.gov/media/press-releases",
+            "https://vandrew.house.gov/media/press-releases",
+            "https://waltz.house.gov/media/press-releases",
+            "https://watkins.house.gov/media/press-releases",
+            "https://wexton.house.gov/media/press-releases",
+            "https://wild.house.gov/media/press-releases",
+            "https://wright.house.gov/media/press-releases"
         ]
       end
 
@@ -1418,7 +1524,8 @@ module Statement
     def self.senate_drupal_new(urls=[], page=0)
       if urls.empty?
         urls = [
-          "https://www.smith.senate.gov/press-releases"
+          "https://www.smith.senate.gov/press-releases",
+          "https://www.romney.senate.gov/press-releases"
         ]
       end
       results = []
@@ -1428,8 +1535,14 @@ module Statement
 
         domain =  URI.parse(source_url).host
         doc = Statement::Scraper.open_html(source_url)
-        doc.css('.views-row').each do |row|
-          results << {:source => url, :url => "https://#{domain}" + row.css('h2 a').first['href'], :title => row.css('h2').text.strip, :date => Date.parse(row.css(".field-name-post-date").text), :domain => domain}
+        if url == "https://www.romney.senate.gov/press-releases"
+          doc.css('.views-row').each do |row|
+            results << {:source => url, :url => "https://#{domain}" + row.css('h2 a').first['href'], :title => row.css('h2').text.strip, :date => Date.parse(row.css("time").text), :domain => domain}
+          end
+        else
+          doc.css('.views-row').each do |row|
+            results << {:source => url, :url => "https://#{domain}" + row.css('h2 a').first['href'], :title => row.css('h2').text.strip, :date => Date.parse(row.css(".field-name-post-date").text), :domain => domain}
+          end
         end
       end
       results
