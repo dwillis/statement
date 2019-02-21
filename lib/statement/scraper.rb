@@ -1525,7 +1525,13 @@ module Statement
       if urls.empty?
         urls = [
           "https://www.smith.senate.gov/press-releases",
-          "https://www.romney.senate.gov/press-releases"
+          "https://www.romney.senate.gov/press-releases",
+          "https://www.mcsally.senate.gov/press-releases",
+          "https://www.blackburn.senate.gov/press-releases",
+          "https://www.braun.senate.gov/press-releases",
+          "https://www.cramer.senate.gov/press-releases",
+          "https://www.rosen.senate.gov/press-releases",
+          "https://www.sinema.senate.gov/press-releases"
         ]
       end
       results = []
@@ -1535,13 +1541,15 @@ module Statement
 
         domain =  URI.parse(source_url).host
         doc = Statement::Scraper.open_html(source_url)
-        if url == "https://www.romney.senate.gov/press-releases"
+        if url == "https://www.smith.senate.gov/press-releases"
           doc.css('.views-row').each do |row|
-            results << {:source => url, :url => "https://#{domain}" + row.css('h2 a').first['href'], :title => row.css('h2').text.strip, :date => Date.parse(row.css("time").text), :domain => domain}
+            results << {:source => url, :url => "https://#{domain}" + row.css('h2 a').first['href'], :title => row.css('h2').text.strip, :date => Date.parse(row.css(".field-name-post-date").text), :domain => domain}
           end
         else
           doc.css('.views-row').each do |row|
-            results << {:source => url, :url => "https://#{domain}" + row.css('h2 a').first['href'], :title => row.css('h2').text.strip, :date => Date.parse(row.css(".field-name-post-date").text), :domain => domain}
+            if row.css('h2 a').size == 1
+              results << {:source => url, :url => "https://#{domain}" + row.css('h2 a').first['href'], :title => row.css('h2').text.strip, :date => Date.parse(row.css("time").text), :domain => domain}
+            end
           end
         end
       end
