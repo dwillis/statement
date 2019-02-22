@@ -917,7 +917,6 @@ module Statement
         ]
       end
       domains.each do |domain|
-        puts domain
         doc = Statement::Scraper.open_html("https://"+domain.keys.first+"/news/documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}")
         return if doc.nil?
         doc.xpath("//div[@class='middlecopy']//li").each do |row|
