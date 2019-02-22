@@ -1237,7 +1237,7 @@ module Statement
             "https://dean.house.gov/media/press-releases",
             "https://escobar.house.gov/media/press-releases",
             "https://finkenauer.house.gov/media/press-releases",
-            "https://fulcher.house.gov/media/press-releases",
+            "https://fulcher.house.gov/press-releases",
             "https://sylviagarcia.house.gov/media/press-releases",
             "https://anthonygonzalez.house.gov/media/press-releases",
             "https://gooden.house.gov/media/press-releases",
