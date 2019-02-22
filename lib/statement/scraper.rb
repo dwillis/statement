@@ -913,12 +913,13 @@ module Statement
           {'reed.house.gov' => 27},
           {'susandavis.house.gov' => 1782},
           {'meadows.house.gov' => 27},
-          {'jasonsmith.house.gov' => 27},
+          {'jasonsmith.house.gov' => "1951:27"},
           {'mckinley.house.gov' => 27},
           {'hill.house.gov' => 27}
         ]
       end
       domains.each do |domain|
+        puts domain
         doc = Statement::Scraper.open_html("https://"+domain.keys.first+"/news/documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}")
         return if doc.nil?
         doc.xpath("//div[@class='middlecopy']//li").each do |row|
