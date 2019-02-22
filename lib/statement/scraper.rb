@@ -419,18 +419,6 @@ module Statement
       results
     end
 
-    def self.poe(year=current_year, month=0)
-      results = []
-      url = "http://poe.house.gov/press-releases?MonthDisplay=#{month}&YearDisplay=#{year}"
-      doc = open_html(url)
-      return if doc.nil?
-      doc.xpath("//tr")[1..-1].each do |row|
-        next if row.children[3].children[0].text.strip == 'Title'
-        results << { :source => url, :url => "http://poe.house.gov" + row.children[3].children[0]['href'], :title => row.children[3].children[0].text.strip, :date => Date.strptime(row.children[1].text, "%m/%d/%y"), :domain => "poe.house.gov" }
-      end
-      results
-    end
-
     def self.lujan
       results = []
       base_url = 'https://lujan.house.gov/'
@@ -443,63 +431,38 @@ module Statement
       results
     end
 
-    #fixme
-    def self.billnelson(page=0)
-      results = []
-      url = "https://www.billnelson.senate.gov/newsroom/press-releases?page=#{page}"
-      doc = open_html(url)
-      return if doc.nil?
-      dates = doc.xpath("//div[@class='date-box']").map{|d| Date.parse(d.children.map{|x| x.text.strip}.join(" "))}
-      (doc/:h3).each_with_index do |row, index|
-        results << { :source => url, :url => "http://www.billnelson.senate.gov" + row.children.first['href'], :title => row.children.first.text.strip, :date => dates[index], :domain => "billnelson.senate.gov" }
-      end
-      results
-    end
-
-    def self.desantis(year=current_year, month=0)
-      results = []
-      url = "https://desantis.house.gov/press-releases?MonthDisplay=#{month}&YearDisplay=#{year}"
-      doc = open_html(url)
-      return if doc.nil?
-      doc.css('tr')[1..-1].each do |row|
-        next if row.css('th').first && row.css('th').first.text == 'Date'
-        results << { :source => url, :url => "https://desantis.house.gov" + row.css('td')[1].children.first['href'], :title => row.css('td')[1].children.text.strip, :date => Date.parse(row.css('td')[0].text), :domain => "desantis.house.gov" }
-      end
-      results
-    end
-
     def self.schiff(page=1)
       results = []
-      url = "http://schiff.house.gov/news/press-releases?PageNum_rs=#{page}&"
+      url = "https://schiff.house.gov/news/press-releases?PageNum_rs=#{page}&"
       doc = open_html(url)
       return if doc.nil?
       rows = doc.css("#press").first.css('h2')
       rows.each do |row|
-        results << { :source => url, :url => "http://schiff.house.gov" + row.children.first['href'], :title => row.children.last.text.strip, :date => Date.strptime(row.previous.previous.text, "%m.%d.%y"), :domain => "schiff.house.gov" }
+        results << { :source => url, :url => "https://schiff.house.gov" + row.children.first['href'], :title => row.children.last.text.strip, :date => Date.strptime(row.previous.previous.text, "%m.%d.%y"), :domain => "schiff.house.gov" }
       end
       results
     end
 
     def self.kilmer(page=1)
       results = []
-      url = "http://kilmer.house.gov/news/press-releases?PageNum_rs=#{page}&"
+      url = "https://kilmer.house.gov/news/press-releases?PageNum_rs=#{page}&"
       doc = open_html(url)
       return if doc.nil?
       rows = doc.css("#press").first.css('h2')
       rows.each do |row|
-        results << { :source => url, :url => "http://kilmer.house.gov" + row.children.first['href'], :title => row.children.last.text.strip, :date => Date.strptime(row.previous.previous.text, "%m.%d.%y"), :domain => "kilmer.house.gov" }
+        results << { :source => url, :url => "https://kilmer.house.gov" + row.children.first['href'], :title => row.children.last.text.strip, :date => Date.strptime(row.previous.previous.text, "%m.%d.%y"), :domain => "kilmer.house.gov" }
       end
       results
     end
 
     def self.takano(page=1)
       results = []
-      url = "http://takano.house.gov/newsroom/press-releases?PageNum_rs=#{page}"
+      url = "https://takano.house.gov/newsroom/press-releases?PageNum_rs=#{page}"
       doc = open_html(url)
       return if doc.nil?
       rows = doc.css("#press").first.css('h2')
       rows.each do |row|
-        results << { :source => url, :url => "http://takano.house.gov" + row.children.first['href'], :title => row.children.last.text.strip, :date => Date.strptime(row.previous.previous.text, "%m.%d.%y"), :domain => "takano.house.gov" }
+        results << { :source => url, :url => "https://takano.house.gov" + row.children.first['href'], :title => row.children.last.text.strip, :date => Date.strptime(row.previous.previous.text, "%m.%d.%y"), :domain => "takano.house.gov" }
       end
       results
     end
@@ -585,18 +548,7 @@ module Statement
       doc = open_html(url)
       return if doc.nil?
       doc.xpath("//div[@class='views-field views-field-field-release-date']").each do |row|
-        results << { :source => url, :url => "http://www.grassley.senate.gov" + row.next.next.children[1].children[0]['href'], :title => row.next.next.text.strip, :date => Date.parse(row.text.strip), :domain => "www.grassley.senate.gov" }
-      end
-      results
-    end
-
-    def self.strange(page=0)
-      results = []
-      url = "https://www.strange.senate.gov/press-releases?page=#{page}"
-      doc = open_html(url)
-      return if doc.nil?
-      doc.xpath("//div[@class='field field-name-title field-type-ds field-label-hidden']").each do |row|
-        results << { :source => url, :url => "http://www.strange.senate.gov" + row.children.children.children.children.first['href'], :title => row.children.children.children.children.text, :date => Date.parse(row.next.text), :domain => "www.strange.senate.gov" }
+        results << { :source => url, :url => "https://www.grassley.senate.gov" + row.next.next.children[1].children[0]['href'], :title => row.next.next.text.strip, :date => Date.parse(row.text.strip), :domain => "www.grassley.senate.gov" }
       end
       results
     end
@@ -608,20 +560,6 @@ module Statement
       return if doc.nil?
       doc.xpath("//div[@class='views-field views-field-created datebar']").each do |row|
         results << { :source => url, :url => "https://ellison.house.gov" + row.next.next.children[1].children[0]['href'], :title => row.next.next.text.strip, :date => Date.parse(row.text.strip), :domain => "ellison.house.gov" }
-      end
-      results
-    end
-
-    # deprecated
-    def self.donnelly(year=current_year)
-      results = []
-      url = "http://www.donnelly.senate.gov/newsroom/"
-      domain = "www.donnelly.senate.gov"
-      doc = open_html(url+"press?year=#{year}")
-      return if doc.nil?
-      doc.xpath("//tr")[1..-1].each do |row|
-        next if row.text.strip.size < 30
-        results << { :source => url, :url => "http://www.donnelly.senate.gov"+row.children[3].children[1]['href'].strip, :title => row.children[3].text.strip, :date => Date.strptime(row.children[1].text, "%m/%d/%y"), :domain => domain}
       end
       results
     end
@@ -739,7 +677,7 @@ module Statement
     def self.clark(year=current_year)
       results = []
       domain = 'katherineclark.house.gov'
-      url = "http://katherineclark.house.gov/index.cfm/press-releases?MonthDisplay=0&YearDisplay=#{year}"
+      url = "https://katherineclark.house.gov/press-releases?MonthDisplay=0&YearDisplay=#{year}"
       doc = open_html(url)
       return if doc.nil?
       (doc/:tr)[1..-1].each do |row|
@@ -749,22 +687,9 @@ module Statement
       results
     end
 
-    def self.sessions(year=current_year)
-      results = []
-      domain = 'sessions.senate.gov'
-      url = "http://www.sessions.senate.gov/public/index.cfm/news-releases?YearDisplay=#{year}"
-      doc = open_html(url)
-      return if doc.nil?
-      (doc/:tr)[1..-1].each do |row|
-        next if row.children[1].text.strip == 'Date'
-        results << { :source => url, :date => Date.parse(row.children[1].text), :title => row.children[3].children.text, :url => row.children[3].children[0]['href'], :domain => domain}
-      end
-      results
-    end
-
     def self.walorski(page=nil)
       results = []
-      url = "http://walorski.house.gov/news/"
+      url = "https://walorski.house.gov/news/"
       url = url + "page/#{page}" if page
       doc = open_html(url)
       return if doc.nil?
@@ -856,18 +781,6 @@ module Statement
       return if doc.nil?
       (doc/:h3).each do |row|
         results << {:source => url, :url => 'https://olson.house.gov' + row.children[1]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.next.next.text), :domain => domain }
-      end
-      results
-    end
-
-    def self.jenkins
-      results = []
-      domain = 'lynnjenkins.house.gov'
-      url = 'https://lynnjenkins.house.gov/press-releases/'
-      doc = open_html(url)
-      return if doc.nil?
-      doc.css('li[@class="article"]').each do |row|
-        results << {source: url, url: 'https://lynnjenkins.house.gov' + row.children[3].children[1]['href'], title: row.children[3].text.strip, date: Date.parse(row.children[5].text), domain: domain }
       end
       results
     end
@@ -1144,28 +1057,6 @@ module Statement
       return if doc.nil?
       (doc/:ul)[13].search(:li).each do |row|
         results << {:source => url, :url => 'https://boustany.house.gov' + row.children.search(:a)[0]['href'], :title => row.children.search(:a)[0].text, :date => Date.parse(row.children[5].text), :domain => domain }
-      end
-      results
-    end
-
-    def self.issa(page=0)
-      results = []
-      domain = 'issa.house.gov'
-      url = "https://issa.house.gov/news-room/press-releases?page=#{page}"
-      doc = open_html(url)
-      doc.css(".view-content .views-row").first(4).each do |row|
-        results << {:source => url, :url => 'https://issa.house.gov' + row.css('h3').first.children.first['href'], :title => row.css('h3').first.children.first.text.strip, :date => Date.parse(row.css(".views-field .field-content")[3].text), :domain => domain }
-      end
-      results
-    end
-
-    def self.handel(page=0)
-      results = []
-      domain = 'handel.house.gov'
-      url = "https://handel.house.gov/media/press-releases?page=#{page}"
-      doc = open_html(url)
-      doc.css(".region-content .views-row").each do |row|
-        results << {:source => url, :url => 'https://handel.house.gov' + row.css('h3').first.children.first['href'], :title => row.css('h3').first.children.first.text.strip, :date => Date.parse(row.css(".views-field .field-content")[1].text), :domain => domain }
       end
       results
     end
