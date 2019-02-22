@@ -41,7 +41,7 @@ module Statement
     end
 
     def self.member_methods
-      [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :bucshon, :document_query_new,
+      [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :bucshon, :document_query_new, :fulcher,
       :wenstrup, :robbishop, :tomrice, :bwcoleman, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :calvert,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :connolly, :mast, :hassan, :yarmuth,
       :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith,
@@ -54,7 +54,7 @@ module Statement
 
     def self.member_scrapers
       year = current_year
-      results = [klobuchar(year), kilmer, lacyclay, sullivan, halrogers, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new,
+      results = [klobuchar(year), kilmer, lacyclay, sullivan, halrogers, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, fulcher,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, calvert, dougjones,
         inhofe(year=year), fischer, clark(year=year), welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, robbishop, yarmuth,
         schumer, lowey, mcmorris, schiff, takano, heinrich, walorski, jenkins, marchant, garypeters, rounds, connolly, paul, banks, harris, tomrice, hydesmith,
@@ -295,6 +295,18 @@ module Statement
       doc.xpath("//table[@class='table recordList']//tr")[1..-1].each do |row|
         next if row.children[3].text.strip == 'Title'
         results << { :source => url, :url => "https://halrogers.house.gov"+row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.parse(row.children[1].text), :domain => "halrogers.house.gov" }
+      end
+      results
+    end
+
+    def self.fulcher
+      results = []
+      url = "https://fulcher.house.gov/press-releases"
+      doc = open_html(url)
+      return if doc.nil?
+      doc.xpath("//table[@class='table recordList']//tr")[1..-1].each do |row|
+        next if row.children[3].text.strip == 'Title'
+        results << { :source => url, :url => "https://fulcher.house.gov"+row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.parse(row.children[1].text), :domain => "fulcher.house.gov" }
       end
       results
     end
@@ -1237,7 +1249,6 @@ module Statement
             "https://dean.house.gov/media/press-releases",
             "https://escobar.house.gov/media/press-releases",
             "https://finkenauer.house.gov/media/press-releases",
-            "https://fulcher.house.gov/press-releases",
             "https://sylviagarcia.house.gov/media/press-releases",
             "https://anthonygonzalez.house.gov/media/press-releases",
             "https://gooden.house.gov/media/press-releases",
