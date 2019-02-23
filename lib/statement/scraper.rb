@@ -981,6 +981,18 @@ module Statement
       results
     end
 
+    def self.aderholt(page=0)
+      results = []
+      domain = "aderholt.house.gov"
+      url = "https://aderholt.house.gov/media-center/press-releases?page=#{page}"
+      doc = open_html(url)
+      return if doc.nil?
+      doc.css(".view-content .views-row").first(10).each do |row|
+        results << {:source => url, :url => 'https://aderholt.house.gov' + row.css('h3').first.children.first['href'], :title => row.css('h3').first.children.first.text.strip, :date => Date.parse(row.css(".views-field .field-content")[1].text), :domain => domain }
+      end
+      results
+    end
+
     def self.lowey(page=0)
       results = []
       domain = "lowey.house.gov"
