@@ -652,15 +652,15 @@ module Statement
       results
     end
 
-    def self.clark(year=current_year)
+    def self.clark(page=1)
       results = []
       domain = 'katherineclark.house.gov'
-      url = "https://katherineclark.house.gov/press-releases?MonthDisplay=0&YearDisplay=#{year}"
+      url = "https://katherineclark.house.gov/press-releases?page=#{page}"
       doc = open_html(url)
       return if doc.nil?
       (doc/:tr)[1..-1].each do |row|
         next if row.children[1].text.strip == 'Date'
-        results << { :source => url, :date => Date.parse(row.children[1].text.strip), :title => row.children[3].children.text, :url => row.children[3].children[0]['href'], :domain => domain}
+        results << { :source => url, :date => Date.parse(row.children[1].text.strip), :title => row.children[3].children.text, :url => "https://katherineclark.house.gov" + row.children[3].children[0]['href'], :domain => domain}
       end
       results
     end
