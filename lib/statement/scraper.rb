@@ -249,17 +249,6 @@ module Statement
 
     ## special cases for members without RSS feeds
 
-    def self.sinema
-      results = []
-      url = "https://sinema.house.gov/latest-news/"
-      doc = open_html(url)
-      return if doc.nil?
-      doc.xpath("//li[@class='article']").each do |row|
-        results << { source: url, url: "https://sinema.house.gov"+row.children[3].children[1]['href'], title: row.children[3].children[1].text.strip, date: Date.parse(row.children[5].text), domain: 'sinema.house.gov' }
-      end
-      results
-    end
-
     def self.capuano
       results = []
       base_url = "http://capuano.house.gov/news/date.shtml"
@@ -553,17 +542,6 @@ module Statement
       results
     end
 
-    def self.ellison(page=0)
-      results = []
-      url = "https://ellison.house.gov/media-center/press-releases?page=#{page}"
-      doc = open_html(url)
-      return if doc.nil?
-      doc.xpath("//div[@class='views-field views-field-created datebar']").each do |row|
-        results << { :source => url, :url => "https://ellison.house.gov" + row.next.next.children[1].children[0]['href'], :title => row.next.next.text.strip, :date => Date.parse(row.text.strip), :domain => "ellison.house.gov" }
-      end
-      results
-    end
-
     def self.kennedy(page=1)
       results = []
       url = "https://www.kennedy.senate.gov/public/press-releases?page=#{page}"
@@ -659,16 +637,16 @@ module Statement
       results
     end
 
-    def self.inhofe(year=current_year)
+    def self.inhofe(page=1)
       results = []
-      url = "https://www.inhofe.senate.gov/newsroom/press-releases?year=#{year}"
+      url = "https://www.inhofe.senate.gov/newsroom/press-releases?PageNum_rs=#{page}"
       domain = "www.inhofe.senate.gov"
       doc = open_html(url)
       return if doc.nil?
       if doc.xpath("//tr")[1..-1]
         doc.xpath("//tr")[1..-1].each do |row|
           next if row.text.strip.size < 30
-          results << { :source => url, :url => row.children[3].children[0]['href'].strip, :title => row.children[3].text, :date => Date.strptime(row.children[1].text, "%m/%d/%y"), :domain => domain}
+          results << { :source => url, :url => row.children[3].children[0]['href'].strip, :title => row.children[3].text.strip, :date => Date.strptime(row.children[1].text, "%m/%d/%y"), :domain => domain}
         end
       end
       results
