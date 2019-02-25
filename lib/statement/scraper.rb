@@ -1449,6 +1449,7 @@ module Statement
                        :date => date,
                        :domain => 'www.gardner.senate.gov' }
       end
+      results
     end
 
     def self.senate_drupal_new(urls=[], page=0)
