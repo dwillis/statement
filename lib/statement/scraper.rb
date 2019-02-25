@@ -287,9 +287,9 @@ module Statement
       results
     end
 
-    def self.halrogers
+    def self.halrogers(page=1)
       results = []
-      url = "https://halrogers.house.gov/press-releases"
+      url = "https://halrogers.house.gov/press-releases?page=#{page}"
       doc = open_html(url)
       return if doc.nil?
       doc.xpath("//table[@class='table recordList']//tr")[1..-1].each do |row|
