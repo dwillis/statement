@@ -41,7 +41,7 @@ module Statement
     end
 
     def self.member_methods
-      [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :bucshon, :document_query_new, :fulcher,
+      [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :bucshon, :document_query_new, :fulcher, :gardner,
       :wenstrup, :robbishop, :tomrice, :bwcoleman, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :calvert,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :connolly, :mast, :hassan, :yarmuth,
       :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith,
@@ -54,7 +54,7 @@ module Statement
 
     def self.member_scrapers
       year = current_year
-      results = [klobuchar(year), kilmer, lacyclay, sullivan, halrogers, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, fulcher,
+      results = [klobuchar(year), kilmer, lacyclay, sullivan, halrogers, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, fulcher, gardner,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, calvert, dougjones,
         inhofe(year=year), fischer, clark(year=year), welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, robbishop, yarmuth,
         schumer, lowey, mcmorris, schiff, takano, heinrich, walorski, jenkins, marchant, garypeters, rounds, connolly, paul, banks, harris, tomrice, hydesmith,
@@ -1433,6 +1433,24 @@ module Statement
       results
     end
 
+    def self.gardner(page=1)
+      results = []
+      url = "https://www.gardner.senate.gov/newsroom/press-releases?PageNum_rs=#{page}"
+      doc = open_html(url)
+      return if doc.nil?
+      doc.css("#newscontent h2").each do |row|
+          title = row.text.strip
+          release_url = row.css('a').first['href'].strip
+          raw_date = row.previous.previous.text
+          date = begin Date.strptime(raw_date, "%m.%d.%y") rescue nil end
+          results << { :source => url,
+                       :url => release_url,
+                       :title => title,
+                       :date => date,
+                       :domain => 'www.gardner.senate.gov' }
+      end
+    end
+
     def self.senate_drupal_new(urls=[], page=0)
       if urls.empty?
         urls = [
@@ -1475,7 +1493,6 @@ module Statement
           "https://www.capito.senate.gov/news/press-releases",
           "https://www.perdue.senate.gov/news/press-releases",
           "https://www.daines.senate.gov/news/press-releases",
-          "https://www.gardner.senate.gov/newsroom/press-releases",
           "https://www.leahy.senate.gov/press/releases",
           "https://www.hoeven.senate.gov/news/news-releases",
           "https://www.murkowski.senate.gov/press/press-releases",
