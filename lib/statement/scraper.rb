@@ -1491,7 +1491,7 @@ module Statement
 
       urls.each do |url|
         uri = URI(url)
-        source_url = "#{url}?page=#{page}"
+        source_url = "#{url}?PageNum_rs=#{page}"
 
         domain =  URI.parse(source_url).host
         doc = Statement::Scraper.open_html(source_url)
