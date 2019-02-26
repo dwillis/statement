@@ -678,10 +678,10 @@ module Statement
       results
     end
 
-    def self.welch
+    def self.welch(page=1)
       results = []
       domain = 'welch.house.gov'
-      url = "https://welch.house.gov/media-center/press-releases"
+      url = "https://welch.house.gov/media-center/press-releases?page=#{page}"
       doc = open_html(url)
       return if doc.nil?
       doc.css("#region-content .views-row").each do |row|
