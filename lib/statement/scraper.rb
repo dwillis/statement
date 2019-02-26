@@ -690,14 +690,14 @@ module Statement
       results
     end
 
-    def self.costa
+    def self.costa(page=1)
       results = []
       domain = 'costa.house.gov'
-      url = "https://costa.house.gov/index.php/newsroom30/press-releases12"
+      url = "https://costa.house.gov/media-center/press-releases?page=#{page}"
       doc = open_html(url)
       return if doc.nil?
-      doc.xpath("//div[@class='nspArt']").each do |row|
-        results << { :source => url, :url => "https://costa.house.gov" + row.children[0].children[1].children[0]['href'], :title => row.children[0].children[1].children[0].text.strip, :date => Date.parse(row.children[0].children[0].text), :domain => domain}
+      doc.css("#region-content .views-row").each do |row|
+        results << { :source => url, :url => "https://costa.house.gov"+row.css("h3 a").attr('href').value, :title => row.css("h3 a").text, :date => Date.parse(row.css(".views-field-created").text.strip), :domain => domain}
       end
       results
     end
