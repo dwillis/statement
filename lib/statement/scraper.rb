@@ -911,11 +911,11 @@ module Statement
     def self.bennet(page=1)
       results = []
       domain = 'www.bennet.senate.gov'
-      url = "https://www.bennet.senate.gov/?p=releases&pg=#{page}"
+      url = "https://www.bennet.senate.gov/public/index.cfm/press-releases?page=#{page}"
       doc = open_html(url)
       return if doc.nil?
-      (doc/:h2).each do |row|
-        results << {:source => url, :url => 'https://www.bennet.senate.gov' + row.children.first['href'], :title => row.text.strip, :date => Date.parse(row.previous.previous.text), :domain => domain }
+      (doc/:article).each do |row|
+        results << {:source => url, :url => 'https://www.bennet.senate.gov' + row['data-href'], :title => row.children[3].children[1].children[1].text.strip, :date => Date.parse(row.search('.date').text), :domain => domain }
       end
       results
     end
