@@ -667,7 +667,7 @@ module Statement
 
     def self.walorski(page=nil)
       results = []
-      url = "https://walorski.house.gov/news/"
+      url = "https://walorski.house.gov/news/press-releases/"
       url = url + "page/#{page}" if page
       doc = open_html(url)
       return if doc.nil?
