@@ -1394,9 +1394,9 @@ module Statement
       results
     end
 
-    def self.barbaralee
+    def self.barbaralee(page=1)
       results = []
-      url = "https://lee.house.gov/news/press-releases"
+      url = "https://lee.house.gov/news/press-releases?PageNum_rs=#{page}"
       doc = open_html(url)
       return if doc.nil?
       doc.css("#newscontent h2").each do |row|
