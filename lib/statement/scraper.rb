@@ -41,7 +41,7 @@ module Statement
     end
 
     def self.member_methods
-      [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :jenkins, :halrogers, :bucshon, :document_query_new, :fulcher, :gardner,
+      [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :halrogers, :bucshon, :document_query_new, :fulcher, :gardner, :costa,
       :wenstrup, :robbishop, :tomrice, :bwcoleman, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :calvert,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :connolly, :mast, :hassan, :yarmuth,
       :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith,
@@ -53,11 +53,10 @@ module Statement
     end
 
     def self.member_scrapers
-      year = current_year
       results = [klobuchar(year), kilmer, lacyclay, sullivan, halrogers, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, fulcher, gardner,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, calvert, dougjones,
-        inhofe, fischer, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, robbishop, yarmuth,
-        schumer, lowey, mcmorris, schiff, takano, heinrich, walorski, jenkins, marchant, garypeters, rounds, connolly, paul, banks, harris, tomrice, hydesmith,
+        inhofe, fischer, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, robbishop, yarmuth, costa,
+        schumer, lowey, mcmorris, schiff, takano, heinrich, walorski, marchant, garypeters, rounds, connolly, paul, banks, harris, tomrice, hydesmith,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
@@ -67,9 +66,9 @@ module Statement
       results = [document_query(page=3), cardin(page=2), cornyn(page=1), timscott(page=2), timscott(page=3),
         document_query(page=4), grassley(page=1), grassley(page=2), grassley(page=3), burr(page=2), burr(page=3), burr(page=4), cantwell(page=2),
         clark(year=2013), kilmer(page=2), kilmer(page=3), heinrich(page=2), kind(page=1), walorski(page=2), manchin(page=2), manchin(page=3),
-        cassidy(page=2), cassidy(page=3), gillibrand(page=2), issa(page=1), issa(page=2), paul(page=1), paul(page=2), banks(page=2),
+        cassidy(page=2), cassidy(page=3), gillibrand(page=2), paul(page=1), paul(page=2), banks(page=2),
         olson(year=2013), schumer(page=2), schumer(page=3), poe(year=2015, month=2), lowey(page=1), wyden(page=2),
-        lowey(page=2), lowey(page=3), poe(year=2015, month=1), mcmorris(page=2), mcmorris(page=3), schiff(page=2), schiff(page=3),
+        lowey(page=2), lowey(page=3), mcmorris(page=2), mcmorris(page=3), schiff(page=2), schiff(page=3),
         takano(page=2), takano(page=3)].flatten
       Utils.remove_generic_urls!(results)
     end
