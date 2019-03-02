@@ -53,6 +53,7 @@ module Statement
     end
 
     def self.member_scrapers
+      year = Date.today.year
       results = [klobuchar(year), kilmer, lacyclay, sullivan, halrogers, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, fulcher, gardner,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, calvert, dougjones,
         inhofe, fischer, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, robbishop, yarmuth, costa,
