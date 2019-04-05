@@ -1349,16 +1349,16 @@ module Statement
       results
     end
 
-    def self.dougjones(page=0)
+    def self.dougjones(page=1)
       results = []
-      url = "https://www.jones.senate.gov/press-releases?page=#{page}"
+      url = "https://www.jones.senate.gov/newsroom/press-releases?pagenum_rs=#{page}"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.css(".views-row").each do |row|
+      doc.css(".data-browser h2").each do |row|
           results << { :source => url,
                        :url => "https://www.jones.senate.gov" + row.css('a').first['href'],
-                       :title => row.css('h2').text.strip,
-                       :date => Date.parse(row.children[1].children[2].text),
+                       :title => row.css('a').text.strip,
+                       :date => Date.parse(row.next.next.text),
                        :domain => 'www.jones.senate.gov' }
       end
       results
