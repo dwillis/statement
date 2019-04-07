@@ -1447,18 +1447,11 @@ module Statement
       urls.each do |url|
         uri = URI(url)
         source_url = "#{url}?page=#{page}"
-
         domain =  URI.parse(source_url).host
         doc = Statement::Scraper.open_html(source_url)
-        if url == "https://www.smith.senate.gov/press-releases"
-          doc.css('.views-row').each do |row|
-            results << {:source => url, :url => "https://#{domain}" + row.css('h2 a').first['href'], :title => row.css('h2').text.strip, :date => Date.parse(row.css(".field-name-post-date").text), :domain => domain}
-          end
-        else
-          doc.css('.views-row').each do |row|
-            if row.css('h2 a').size == 1
-              results << {:source => url, :url => "https://#{domain}" + row.css('h2 a').first['href'], :title => row.css('h2').text.strip, :date => Date.parse(row.css("time").text), :domain => domain}
-            end
+        doc.css('.views-row').each do |row|
+          if row.css('h2 a').size == 1
+            results << {:source => url, :url => "https://#{domain}" + row.css('h2 a').first['href'], :title => row.css('h2').text.strip, :date => Date.parse(row.css("time").text), :domain => domain}
           end
         end
       end
