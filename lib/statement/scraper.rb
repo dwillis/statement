@@ -49,7 +49,9 @@ module Statement
     end
 
     def self.committee_methods
-      [:senate_approps_majority, :senate_approps_minority, :senate_banking, :senate_hsag_majority, :senate_hsag_minority, :senate_indian, :senate_aging, :senate_smallbiz_minority, :senate_intel, :house_energy_minority, :house_homeland_security_minority, :house_judiciary_majority, :house_rules_majority, :house_ways_means_majority]
+      [:senate_approps_majority, :senate_approps_minority, :senate_banking, :senate_hsag_majority, :senate_hsag_minority, :senate_indian, :senate_aging,
+      :senate_smallbiz_minority, :senate_intel, :house_energy_minority, :house_homeland_security_minority, :house_judiciary_majority, :house_rules_majority,
+      :house_ways_means_majority, :senate_ag_majority, :senate_ag_minority]
     end
 
     def self.member_scrapers
@@ -84,88 +86,518 @@ module Statement
 
     ## special cases for committees without RSS feeds
 
-    def self.senate_approps_majority
+    def self.senate_approps_majority(page=1)
       results = []
-      url = "http://www.appropriations.senate.gov/news.cfm"
-      doc = open_html(url)
+      url = "https://www.appropriations.senate.gov/news/majority?PageNum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.xpath("//div[@class='newsDateUnderlined']").each do |date|
-        date.next.next.children.reject{|c| c.text.strip.empty?}.each do |row|
-          results << { :source => url, :url => url + row.children[0]['href'], :title => row.text, :date => Date.parse(date.text), :domain => "http://www.appropriations.senate.gov/", :party => 'majority' }
-        end
+      doc.css("#newscontent h2").each do |row|
+          title = row.text.strip
+          release_url = "https://www.appropriations.senate.gov" + row.css('a').first['href'].strip
+          raw_date = row.previous.previous.text
+          date = begin Date.strptime(raw_date, "%m.%d.%y") rescue nil end
+          results << { :source => url,
+                       :url => release_url,
+                       :title => title,
+                       :date => date,
+                       :domain => 'www.appropriations.senate.gov',
+                       :party => "majority" }
       end
       results
     end
 
-    def self.senate_approps_minority
+    def self.senate_approps_minority(page=1)
       results = []
-      url = "http://www.appropriations.senate.gov/republican.cfm"
-      doc = open_html(url)
+      url = "https://www.appropriations.senate.gov/news/minority?PageNum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.xpath("//div[@class='newsDateUnderlined']").each do |date|
-        date.next.next.children.reject{|c| c.text.strip.empty?}.each do |row|
-          results << { :source => url, :url => url + row.children[0]['href'], :title => row.text, :date => Date.parse(date.text), :domain => "http://www.appropriations.senate.gov/", :party => 'minority' }
-        end
+      doc.css("#newscontent h2").each do |row|
+          title = row.text.strip
+          release_url = "https://www.appropriations.senate.gov" + row.css('a').first['href'].strip
+          raw_date = row.previous.previous.text
+          date = begin Date.strptime(raw_date, "%m.%d.%y") rescue nil end
+          results << { :source => url,
+                       :url => release_url,
+                       :title => title,
+                       :date => date,
+                       :domain => 'www.appropriations.senate.gov',
+                       :party => "minority" }
       end
       results
     end
 
-    def self.senate_banking(year=current_year)
+    def self.senate_banking_majority(page=1)
       results = []
-      url = "http://www.banking.senate.gov/public/index.cfm?FuseAction=Newsroom.PressReleases&ContentRecordType_id=b94acc28-404a-4fc6-b143-a9e15bf92da4&Region_id=&Issue_id=&MonthDisplay=0&YearDisplay=#{year}"
-      doc = open_html(url)
+      url = "https://www.banking.senate.gov/newsroom/majority-press-releases?PageNum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.xpath("//tr").each do |row|
-        results << { :source => url, :url => "http://www.banking.senate.gov/public/" + row.children[2].children[1]['href'], :title => row.children[2].text.strip, :date => Date.parse(row.children[0].text.strip+", #{year}"), :domain => "http://www.banking.senate.gov/", :party => 'majority' }
+      doc.css("#browser_table tr").each do |row|
+        next if row.attributes['class']&.value == 'divider'
+        title = row.children[3].text.strip
+        release_url = row.children[3].css('a')[0]['href'].strip
+        raw_date = row.children[1].text.strip
+        date = begin Date.strptime(raw_date, "%m/%d/%y") rescue nil end
+        results << { :source => url,
+                     :url => release_url,
+                     :title => title,
+                     :date => date,
+                     :domain => 'www.banking.senate.gov',
+                     :party => "majority" }
       end
       results
     end
 
-    def self.senate_hsag_majority(year=current_year)
+    def self.senate_banking_minority(page=1)
       results = []
-      url = "http://www.hsgac.senate.gov/media/majority-media?year=#{year}"
-      doc = open_html(url)
+      url = "https://www.banking.senate.gov/newsroom/minority-press-releases?PageNum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.xpath("//tr").each do |row|
-        next if row.text.strip.size < 30
-        results << { :source => url, :url => row.children[2].children[0]['href'].strip, :title => row.children[2].children[0].text, :date => Date.parse(row.children[0].text), :domain => "http://www.hsgac.senate.gov/", :party => 'majority' }
+      doc.css("#browser_table tr").each do |row|
+        next if row.attributes['class']&.value == 'divider'
+        title = row.children[3].text.strip
+        release_url = row.children[3].css('a')[0]['href'].strip
+        raw_date = row.children[1].text.strip
+        date = begin Date.strptime(raw_date, "%m/%d/%y") rescue nil end
+        results << { :source => url,
+                     :url => release_url,
+                     :title => title,
+                     :date => date,
+                     :domain => 'www.banking.senate.gov',
+                     :party => "minority" }
       end
       results
     end
 
-    def self.senate_hsag_minority(year=current_year)
+    def self.senate_hsag_majority(page=1)
       results = []
-      url = "http://www.hsgac.senate.gov/media/minority-media?year=#{year}"
-      doc = open_html(url)
+      url = "https://www.hsgac.senate.gov/media/majority-media?PageNum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.xpath("//tr").each do |row|
-        next if row.text.strip.size < 30
-        results << { :source => url, :url => row.children[2].children[0]['href'].strip, :title => row.children[2].children[0].text, :date => Date.parse(row.children[0].text), :domain => "http://www.hsgac.senate.gov/", :party => 'minority' }
+      doc.css("#listing tr").each do |row|
+        next if row.attributes['class']&.value == 'divider'
+        title = row.children[3].text.strip
+        release_url = row.children[3].css('a')[0]['href'].strip
+        raw_date = row.children[1].text.strip
+        date = begin Date.strptime(raw_date, "%m/%d/%y") rescue nil end
+        results << { :source => url,
+                     :url => release_url.gsub("http:","https:"),
+                     :title => title,
+                     :date => date,
+                     :domain => 'www.hsgac.senate.gov',
+                     :party => "majority" }
       end
       results
     end
 
-    def self.senate_indian
+    def self.senate_hsag_minority(page=1)
       results = []
-      url = "http://www.indian.senate.gov/news/index.cfm"
-      doc = open_html(url)
+      url = "https://www.hsgac.senate.gov/media/minority-media?PageNum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.xpath("//h3").each do |row|
-        results << { :source => url, :url => "http://www.indian.senate.gov"+row.children[0]['href'], :title => row.children[0].text, :date => Date.parse(row.previous.previous.text), :domain => "http://www.indian.senate.gov/", :party => 'majority' }
+      doc.css("#listing tr").each do |row|
+        next if row.attributes['class']&.value == 'divider'
+        title = row.children[3].text.strip
+        release_url = row.children[3].css('a')[0]['href'].strip
+        raw_date = row.children[1].text.strip
+        date = begin Date.strptime(raw_date, "%m/%d/%y") rescue nil end
+        results << { :source => url,
+                     :url => release_url.gsub("http:","https:"),
+                     :title => title,
+                     :date => date,
+                     :domain => 'www.hsgac.senate.gov',
+                     :party => "minority" }
       end
       results
     end
 
-    def self.senate_aging
+    def self.senate_indian_republican(page=0)
       results = []
-      url = "http://www.aging.senate.gov/pressroom.cfm?maxrows=100&startrow=1&&type=1"
-      doc = open_html(url)
+      url = "https://www.indian.senate.gov/newsroom/republican-news?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.xpath("//tr")[6..104].each do |row|
-        results << { :source => url, :url => "http://www.aging.senate.gov/"+row.children[2].children[0]['href'], :title => row.children[2].text.strip, :date => Date.parse(row.children[0].text), :domain => "http://www.aging.senate.gov/" }
+      doc.xpath("//div[@class='col-md-12']")[1..-1].each do |row|
+        results << { :source => url, :url => "https://www.indian.senate.gov" + row.css('a').first['href'], :title => row.css("h4").text.strip, :date => Date.parse(row.css('.date-display-single')[0].attributes['content'].value), :domain => "www.indian.senate.gov", :party => 'majority' }
       end
       results
     end
+
+    def self.senate_indian_democratic(page=0)
+      results = []
+      url = "https://www.indian.senate.gov/newsroom/democratic-news?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.xpath("//div[@class='col-md-12']")[1..-1].each do |row|
+        results << { :source => url, :url => "https://www.indian.senate.gov" + row.css('a').first['href'], :title => row.css("h4").text.strip, :date => Date.parse(row.css('.date-display-single')[0].attributes['content'].value), :domain => "www.indian.senate.gov", :party => 'minority' }
+      end
+      results
+    end
+
+    def self.senate_ag_majority(page=1)
+      results = []
+      url = "https://www.agriculture.senate.gov/newsroom/majority-news?PageNum_rs=#{page}"
+      doc = open_html(url)
+      return if doc.nil?
+      doc.css("#newscontent h2").each do |row|
+          title = row.text.strip
+          release_url = "https://www.agriculture.senate.gov" + row.css('a').first['href'].strip
+          raw_date = row.previous.previous.text
+          date = begin Date.strptime(raw_date, "%m.%d.%y") rescue nil end
+          results << { :source => url,
+                       :url => release_url,
+                       :title => title,
+                       :date => date,
+                       :domain => 'www.agriculture.senate.gov',
+                       :party => "majority" }
+      end
+      results
+    end
+
+    def self.senate_ag_minority(page=1)
+      results = []
+      url = "https://www.agriculture.senate.gov/newsroom/minority-news?PageNum_rs=#{page}"
+      doc = open_html(url)
+      return if doc.nil?
+      doc.css("#newscontent h2").each do |row|
+          title = row.text.strip
+          release_url = "https://www.agriculture.senate.gov" + row.css('a').first['href'].strip
+          raw_date = row.previous.previous.text
+          date = begin Date.strptime(raw_date, "%m.%d.%y") rescue nil end
+          results << { :source => url,
+                       :url => release_url,
+                       :title => title,
+                       :date => date,
+                       :domain => 'www.agriculture.senate.gov',
+                       :party => "minority" }
+      end
+      results
+    end
+
+    def self.senate_budget_majority(page=1)
+      results = []
+      url = "https://www.budget.senate.gov/chairman/newsroom/press?PageNum_rs=#{page}&type=press_release"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("#newscontent h2").each do |row|
+          title = row.text.strip
+          release_url = "https://www.budget.senate.gov" + row.css('a').first['href'].strip
+          raw_date = row.previous.previous.text
+          date = begin Date.strptime(raw_date, "%m.%d.%y") rescue nil end
+          results << { :source => url,
+                       :url => release_url,
+                       :title => title,
+                       :date => date,
+                       :domain => 'www.budget.senate.gov',
+                       :party => "majority" }
+      end
+      results
+    end
+
+    def self.senate_budget_minority(page=1)
+      results = []
+      url = "https://www.budget.senate.gov/ranking-member/newsroom/press?PageNum_rs=#{page}&type=press_release"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("#newscontent h2").each do |row|
+          title = row.text.strip
+          release_url = "https://www.budget.senate.gov" + row.css('a').first['href'].strip
+          raw_date = row.previous.previous.text
+          date = begin Date.strptime(raw_date, "%m.%d.%y") rescue nil end
+          results << { :source => url,
+                       :url => release_url,
+                       :title => title,
+                       :date => date,
+                       :domain => 'www.budget.senate.gov',
+                       :party => "minority" }
+      end
+      results
+    end
+
+    def self.senate_commerce_majority(year=Date.today.year)
+      results = []
+      url = "https://www.commerce.senate.gov/public/index.cfm/pressreleases?MonthDisplay=0&YearDisplay=#{year}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.xpath("//table[@class='table recordList']").css('tbody tr').each do |row|
+        title = row.css('td')[1].text.strip
+        release_url = "https://www.commerce.senate.gov" + row.css('a').first['href'].strip
+        raw_date = row.css('td').first.text
+        date = begin Date.strptime(raw_date, "%m/%d/%y") rescue nil end
+        results << { :source => url,
+                     :url => release_url,
+                     :title => title,
+                     :date => date,
+                     :domain => 'www.commerce.senate.gov',
+                     :party => "majority" }
+      end
+      results
+    end
+
+    def self.senate_commerce_minority(year=Date.today.year)
+      results = []
+      url = "https://www.commerce.senate.gov/public/index.cfm/minority-dems-press-releases?MonthDisplay=0&YearDisplay=#{year}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.xpath("//table[@class='table recordList']").css('tbody tr').each do |row|
+        title = row.css('td')[1].text.strip
+        release_url = "https://www.commerce.senate.gov" + row.css('a').first['href'].strip
+        raw_date = row.css('td').first.text
+        date = begin Date.strptime(raw_date, "%m/%d/%y") rescue nil end
+        results << { :source => url,
+                     :url => release_url,
+                     :title => title,
+                     :date => date,
+                     :domain => 'www.commerce.senate.gov',
+                     :party => "minority" }
+      end
+      results
+    end
+
+    def self.senate_epw_majority(year=Date.today.year)
+      results = []
+      url = "https://www.epw.senate.gov/public/index.cfm/news?MonthDisplay=0&YearDisplay=#{year}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.xpath("//table[@class='table recordList']").css('tbody tr').each do |row|
+        title = row.css('td')[1].text.strip
+        release_url = "https://www.epw.senate.gov" + row.css('a').first['href'].strip
+        raw_date = row.css('td').first.text
+        date = begin Date.strptime(raw_date, "%m/%d/%y") rescue nil end
+        results << { :source => url,
+                     :url => release_url,
+                     :title => title,
+                     :date => date,
+                     :domain => 'www.epw.senate.gov',
+                     :party => "majority" }
+      end
+      results
+    end
+
+    def self.senate_epw_minority(year=Date.today.year)
+      results = []
+      url = "https://www.epw.senate.gov/public/index.cfm/press-releases-democratic?MonthDisplay=0&YearDisplay=#{year}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.xpath("//table[@class='table recordList']").css('tbody tr').each do |row|
+        title = row.css('td')[1].text.strip
+        release_url = "https://www.epw.senate.gov" + row.css('a').first['href'].strip
+        raw_date = row.css('td').first.text
+        date = begin Date.strptime(raw_date, "%m/%d/%y") rescue nil end
+        results << { :source => url,
+                     :url => release_url,
+                     :title => title,
+                     :date => date,
+                     :domain => 'www.epw.senate.gov',
+                     :party => "minority" }
+      end
+      results
+    end
+
+    def self.senate_finance_majority(page=1)
+      results = []
+      url = "https://www.finance.senate.gov/chairmans-news?PageNum_rs=#{page}&type=press_release"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("#browser_table tr").each do |row|
+        next if row.attributes['class']&.value == 'divider'
+        title = row.children[3].text.strip
+        release_url = row.children[3].css('a')[0]['href'].strip
+        raw_date = row.children[1].text.strip
+        date = begin Date.strptime(raw_date, "%m/%d/%y") rescue nil end
+        results << { :source => url,
+                     :url => release_url,
+                     :title => title,
+                     :date => date,
+                     :domain => 'www.finance.senate.gov',
+                     :party => "majority" }
+      end
+      results
+    end
+
+    def self.senate_finance_minority(page=1)
+      results = []
+      url = "https://www.finance.senate.gov/ranking-members-news?PageNum_rs=#{page}&type=press_release"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("#browser_table tr").each do |row|
+        next if row.attributes['class']&.value == 'divider'
+        title = row.children[3].text.strip
+        release_url = row.children[3].css('a')[0]['href'].strip
+        raw_date = row.children[1].text.strip
+        date = begin Date.strptime(raw_date, "%m/%d/%y") rescue nil end
+        results << { :source => url,
+                     :url => release_url,
+                     :title => title,
+                     :date => date,
+                     :domain => 'www.finance.senate.gov',
+                     :party => "minority" }
+      end
+      results
+    end
+
+    def self.senate_foreign_relations_majority(page=1)
+      results = []
+      url = "https://www.foreign.senate.gov/press/chair?PageNum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("#browser_table tr").each do |row|
+        next if row.attributes['class']&.value == 'divider'
+        title = row.children[1].text.strip
+        release_url = row.children[1].css('a')[0]['href'].strip
+        raw_date = row.children[3].text.strip
+        date = begin Date.strptime(raw_date, "%m/%d/%y") rescue nil end
+        results << { :source => url,
+                     :url => release_url,
+                     :title => title,
+                     :date => date,
+                     :domain => 'www.foreign.senate.gov',
+                     :party => "majority" }
+      end
+      results
+    end
+
+    def self.senate_foreign_relations_minority(page=1)
+      results = []
+      url = "https://www.foreign.senate.gov/press/ranking?PageNum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("#browser_table tr").each do |row|
+        next if row.attributes['class']&.value == 'divider'
+        title = row.children[1].text.strip
+        release_url = row.children[1].css('a')[0]['href'].strip
+        raw_date = row.children[3].text.strip
+        date = begin Date.strptime(raw_date, "%m/%d/%y") rescue nil end
+        results << { :source => url,
+                     :url => release_url,
+                     :title => title,
+                     :date => date,
+                     :domain => 'www.foreign.senate.gov',
+                     :party => "minority" }
+      end
+      results
+    end
+
+    def self.senate_help_majority(page=1)
+      results = []
+      url = "https://www.help.senate.gov/chair/newsroom/press?PageNum_rs=#{page}&type=press_release"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("#newscontent h2").each do |row|
+          title = row.text.strip
+          release_url = "https://www.help.senate.gov" + row.css('a').first['href'].strip
+          raw_date = row.previous.previous.text
+          date = begin Date.strptime(raw_date, "%m.%d.%y") rescue nil end
+          results << { :source => url,
+                       :url => release_url,
+                       :title => title,
+                       :date => date,
+                       :domain => 'www.help.senate.gov',
+                       :party => "majority" }
+      end
+      results
+    end
+
+    def self.senate_help_minority(page=1)
+      results = []
+      url = "https://www.help.senate.gov/ranking/newsroom/press?PageNum_rs=#{page}&type=press_release"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("#newscontent h2").each do |row|
+          title = row.text.strip
+          release_url = "https://www.help.senate.gov" + row.css('a').first['href'].strip
+          raw_date = row.previous.previous.text
+          date = begin Date.strptime(raw_date, "%m.%d.%y") rescue nil end
+          results << { :source => url,
+                       :url => release_url,
+                       :title => title,
+                       :date => date,
+                       :domain => 'www.help.senate.gov',
+                       :party => "minority" }
+      end
+      results
+    end
+
+    def self.senate_judiciary_majority(page=1)
+      results = []
+      url = "https://www.judiciary.senate.gov/press/majority?PageNum_rs=#{page}&type=press_release"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("#browser_table tr").each do |row|
+        next if row.attributes['class']&.value == 'divider'
+        title = row.children[3].text.strip
+        release_url = row.children[3].css('a')[0]['href'].strip
+        raw_date = row.children[1].text.strip
+        date = begin Date.strptime(raw_date, "%m/%d/%y") rescue nil end
+        results << { :source => url,
+                     :url => release_url,
+                     :title => title,
+                     :date => date,
+                     :domain => 'www.judiciary.senate.gov',
+                     :party => "majority" }
+      end
+      results
+    end
+
+    def self.senate_judiciary_minority(page=1)
+      results = []
+      url = "https://www.judiciary.senate.gov/press/minority-press?PageNum_rs=#{page}&type=press_release"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("#browser_table tr").each do |row|
+        next if row.attributes['class']&.value == 'divider'
+        title = row.children[3].text.strip
+        release_url = row.children[3].css('a')[0]['href'].strip
+        raw_date = row.children[1].text.strip
+        date = begin Date.strptime(raw_date, "%m/%d/%y") rescue nil end
+        results << { :source => url,
+                     :url => release_url,
+                     :title => title,
+                     :date => date,
+                     :domain => 'www.judiciary.senate.gov',
+                     :party => "minority" }
+      end
+      results
+    end
+
+    def self.senate_rules_majority(page=1)
+      results = []
+      url = "https://www.rules.senate.gov/news/majority-news"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("#newscontent h2").each do |row|
+          title = row.text.strip
+          release_url = "https://www.rules.senate.gov" + row.css('a').first['href'].strip
+          raw_date = row.previous.previous.text
+          date = begin Date.parse(raw_date) rescue nil end
+          results << { :source => url,
+                       :url => release_url,
+                       :title => title,
+                       :date => date,
+                       :domain => 'www.rules.senate.gov',
+                       :party => "majority" }
+      end
+      results
+    end
+
+    def self.senate_rules_minority(page=1)
+      results = []
+      url = "https://www.rules.senate.gov/news/minority-news"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("#newscontent h2").each do |row|
+          title = row.text.strip
+          release_url = "https://www.rules.senate.gov" + row.css('a').first['href'].strip
+          raw_date = row.previous.previous.text
+          date = begin Date.parse(raw_date) rescue nil end
+          results << { :source => url,
+                       :url => release_url,
+                       :title => title,
+                       :date => date,
+                       :domain => 'www.rules.senate.gov',
+                       :party => "minority" }
+      end
+      results
+    end
+
 
     def self.senate_smallbiz_minority
       results = []
