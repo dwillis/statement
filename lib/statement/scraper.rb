@@ -598,25 +598,37 @@ module Statement
       results
     end
 
-
-    def self.senate_smallbiz_minority
+    def self.senate_intel(page=0)
       results = []
-      url = "http://www.sbc.senate.gov/public/index.cfm?p=RepublicanPressRoom"
-      doc = open_html(url)
+      url = "https://www.intelligence.senate.gov/press?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.xpath("//ul[@class='recordList']").each do |row|
-        results << { :source => url, :url => row.children[0].children[2].children[0]['href'], :title => row.children[0].children[2].children[0].text, :date => Date.parse(row.children[0].children[0].text), :domain => "http://www.sbc.senate.gov/", :party => 'minority' }
+      doc.css(".view-content .views-row").each do |row|
+        results << { :source => url, :url => "https://www.intelligence.senate.gov"+row.children[3].css('a').first['href'], :title => row.children[3].text.strip, :date => Date.strptime(row.children[1].text.strip, "%m/%d/%Y"), :domain => "www.intelligence.senate.gov", party: nil }
       end
       results
     end
 
-    def self.senate_intel(congress=114, start_year=2015, end_year=2016)
+    def self.senate_smallbiz_majority(page=1)
       results = []
-      url = "http://www.intelligence.senate.gov/press/releases.cfm?congress=#{congress}&y1=#{start_year}&y2=#{end_year}"
-      doc = open_html(url)
+      url = "https://www.sbc.senate.gov/public/index.cfm/republicanpressreleases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.xpath("//tr[@valign='top']")[7..-1].each do |row|
-        results << { :source => url, :url => "http://www.intelligence.senate.gov/press/"+row.children[2].children[0]['href'], :title => row.children[2].children[0].text.strip, :date => Date.parse(row.children[0].text), :domain => "http://www.intelligence.senate.gov/" }
+      doc.xpath("//table[@class='table recordList']").css('tr')[1..-1].each do |row|
+        next if row.children[1].text.strip == 'Date'
+        results << { :source => url, :url => "https://www.sbc.senate.gov/"+row.children[3].css('a').first['href'], :title => row.children[3].text.strip, :date => Date.strptime(row.children[1].text.strip, "%m/%d/%y"), :domain => "www.sbc.senate.gov", :party => 'majority' }
+      end
+      results
+    end
+
+    def self.senate_smallbiz_minority(page=1)
+      results = []
+      url = "https://www.sbc.senate.gov/public/index.cfm/democraticpressreleases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.xpath("//table[@class='table recordList']").css('tr')[1..-1].each do |row|
+        next if row.children[1].text.strip == 'Date'
+        results << { :source => url, :url => "https://www.sbc.senate.gov/"+row.children[3].css('a').first['href'], :title => row.children[3].text.strip, :date => Date.strptime(row.children[1].text.strip, "%m/%d/%y"), :domain => "www.sbc.senate.gov", :party => 'minority' }
       end
       results
     end
