@@ -54,7 +54,7 @@ module Statement
       :senate_commerce_majority, :senate_commerce_minority, :senate_epw_majority, :senate_epw_minority, :senate_finance_majority, :senate_finance_minority,
       :senate_foreign_relations_majority, :senate_foreign_relations_minority, :senate_help_majority, :senate_help_minority, :senate_judiciary_majority,
       :senate_judiciary_minority, :senate_rules_majority, :senate_rules_minority, :senate_aging, :senate_smallbiz_majority, :senate_smallbiz_minority, :senate_intel,
-      :house_energy_minority, :house_homeland_security_minority, :house_judiciary_majority, :house_rules_majority, :house_ways_means_majority]
+      :house_ag_majority, :house_ag_minority, :house_energy_minority, :house_homeland_security_minority, :house_judiciary_majority, :house_rules_majority, :house_ways_means_majority]
     end
 
     def self.member_scrapers
@@ -636,13 +636,93 @@ module Statement
       results
     end
 
-    def self.house_energy_minority
+    ## House committees
+
+    def self.house_ag_majority(page=1)
       results = []
-      url = "http://democrats.energycommerce.house.gov/index.php?q=news-releases"
-      doc = open_html(url)
+      url = "https://agriculture.house.gov/news/documentquery.aspx?DocumentTypeID=27&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.xpath("//div[@class='views-field-title']").each do |row|
-        results << { :source => url, :url => "http://democrats.energycommerce.house.gov"+row.children[1].children[0]['href'], :title => row.children[1].children[0].text, :date => Date.parse(row.next.next.text.strip), :domain => "http://energycommerce.house.gov/", :party => 'minority' }
+      doc.css("article").each do |row|
+        results << { :source => url, :url => "https://agriculture.house.gov/news/"+row.css("h3 a").first['href'], :title => row.css('h3').first.text.strip, :date => Date.parse(row.css('time').text), :domain => "agriculture.house.gov", :party => 'majority' }
+      end
+      results
+    end
+
+    def self.house_ag_minority(page=1)
+      results = []
+      url = "https://republicans-agriculture.house.gov/news/documentquery.aspx?DocumentTypeID=27&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.xpath("//div[@class='middlecopy']//li").each do |row|
+        results << { :source => url, :url => "https://republicans-agriculture.house.gov" + row.children[1]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.children[3].text.strip), :domain => 'agriculture.house.gov', :party => "minority" }
+      end
+      results
+    end
+
+    def self.house_approps_minority(page=1)
+      results = []
+      url = "https://republicans-appropriations.house.gov/news/documentquery.aspx?DocumentTypeID=2151&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.xpath("//ul[@class='UnorderedNewsList']//li").each do |row|
+        results << { :source => url, :url => "https://republicans-appropriations.house.gov/news/" + row.css('a').first['href'], :title => row.css('h2').text.strip, :date => Date.parse(row.css('b').text.strip), :domain => 'appropriations.house.gov', :party => "minority" }
+      end
+      results
+    end
+
+    def self.house_armedservices_majority(page=1)
+      results = []
+      url = "https://armedservices.house.gov/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.xpath("//table[@class='table recordList']//tr")[1..-1].each do |row|
+        next if row.children[3].text.strip == 'Title'
+        results << { :source => url, :url => "https://armedservices.house.gov"+row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.parse(row.children[1].text), :domain => "armedservices.house.gov", :party => "majority" }
+      end
+      results
+    end
+
+    def self.house_armedservices_minority(page=0)
+      results = []
+      url = "https://republicans-armedservices.house.gov/news/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".view-content .views-row").each do |row|
+        results << { :source => url, :url => "https://republicans-armedservices.house.gov"+row.css('a').first['href'], :title => row.css('a').first.text, :date => Date.parse(row.children[3].text.strip), :domain => "armedservices.house.gov", party: 'minority' }
+      end
+      results
+    end
+
+    def self.house_education_majority(page=1)
+      results = []
+      url = "https://edlabor.house.gov/media/press-releases?PageNum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("#press h2").each do |row|
+        results << { :source => url, :url => "https://edlabor.house.gov"+row.css('a').first['href'], :title => row.css('a').text, :date => Date.strptime(row.next.next.css('strong').text.strip, "%m.%d.%y"), :domain => "edlabor.house.gov", party: 'majority' }
+      end
+      results
+    end
+
+    def self.house_energy_majority(page=0)
+      results = []
+      url = "https://energycommerce.house.gov/newsroom/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".view-content .views-row").each do |row|
+        results << { :source => url, :url => "https://energycommerce.house"+row.css('a').first['href'], :title => row.css('a').first.text, :date => Date.parse(row.css(".views-field-created").text.strip), :domain => "energycommerce.house.gov", party: 'majority' }
+      end
+      results
+    end
+
+    def self.house_ethics
+      results = []
+      url = "https://ethics.house.gov/media-center"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css('.list-item')[1..-1].each do |row|
+        results << { :source => url, :url => "https://ethics.house.gov"+row.css('a').first['href'], :title => row.css('h4').text, :date => Date.parse(row.css(".date").text), :domain => "ethics.house.gov", :party => nil }
       end
       results
     end
