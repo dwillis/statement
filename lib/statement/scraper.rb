@@ -49,9 +49,12 @@ module Statement
     end
 
     def self.committee_methods
-      [:senate_approps_majority, :senate_approps_minority, :senate_banking, :senate_hsag_majority, :senate_hsag_minority, :senate_indian, :senate_aging,
-      :senate_smallbiz_minority, :senate_intel, :house_energy_minority, :house_homeland_security_minority, :house_judiciary_majority, :house_rules_majority,
-      :house_ways_means_majority, :senate_ag_majority, :senate_ag_minority]
+      [:senate_approps_majority, :senate_approps_minority, :senate_banking_majority, :senate_banking_minority, :senate_hsag_majority, :senate_hsag_minority,
+      :senate_indian_republican, :senate_indian_democratic, :senate_ag_majority, :senate_ag_minority, :senate_budget_majority, :senate_budget_minority,
+      :senate_commerce_majority, :senate_commerce_minority, :senate_epw_majority, :senate_epw_minority, :senate_finance_majority, :senate_finance_minority,
+      :senate_foreign_relations_majority, :senate_foreign_relations_minority, :senate_help_majority, :senate_help_minority, :senate_judiciary_majority,
+      :senate_judiciary_minority, :senate_rules_majority, :senate_rules_minority, :senate_aging, :senate_smallbiz_majority, :senate_smallbiz_minority, :senate_intel,
+      :house_energy_minority, :house_homeland_security_minority, :house_judiciary_majority, :house_rules_majority, :house_ways_means_majority]
     end
 
     def self.member_scrapers
