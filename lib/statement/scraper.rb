@@ -727,49 +727,212 @@ module Statement
       results
     end
 
-    def self.house_homeland_security_minority
+    def self.house_financial_services_majority(page=1)
       results = []
-      url = "http://chsdemocrats.house.gov/press/index.asp?subsection=1"
-      doc = open_html(url)
+      url = "https://financialservices.house.gov/news/documentquery.aspx?DocumentTypeID=2636&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.xpath("//li[@class='article']").each do |row|
-        results << { :source => url, :url => "http://chsdemocrats.house.gov"+row.children[1]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.children[3].text), :domain => "http://chsdemocrats.house.gov/", :party => 'minority' }
+      doc.css("article").each do |row|
+        results << { :source => url, :url => "https://financialservices.house.gov/news/"+row.css('a').first['href'], :title => row.css('h3').text.strip, :date => Date.parse(row.css('time').text), :domain => "financialservices.house.gov", :party => 'majority' }
       end
       results
     end
 
-    def self.house_judiciary_majority
+    def self.house_financial_services_minority(page=1)
       results = []
-      url = "http://judiciary.house.gov/news/press2013.html"
-      doc = open_html(url)
+      url = "https://republicans-financialservices.house.gov/news/documentquery.aspx?DocumentTypeID=2092&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.xpath("//p")[3..60].each do |row|
-        next if row.text.size < 30
-        results << { :source => url, :url => row.children[5]['href'], :title => row.children[0].text, :date => Date.parse(row.children[1].text.strip), :domain => "http://judiciary.house.gov/", :party => 'majority' }
-      end
-      results
-    end
-
-    def self.house_rules_majority
-      results = []
-      url = "http://www.rules.house.gov/News/Default.aspx"
-      doc = open_html(url)
-      return if doc.nil?
-      doc.xpath("//tr")[1..-2].each do |row|
-        next if row.text.strip.size < 30
-        results << { :source => url, :url => "http://www.rules.house.gov/News/"+row.children[0].children[1].children[0]['href'], :title => row.children[0].children[1].children[0].text, :date => Date.parse(row.children[2].children[1].text.strip), :domain => "http://www.rules.house.gov/", :party => 'majority' }
-      end
-      results
-    end
-
-    def self.house_ways_means_majority
-      results = []
-      url = "http://waysandmeans.house.gov/news/documentquery.aspx?DocumentTypeID=1496"
-      doc = open_html(url)
-      return if doc.nil?
-      doc.xpath("//ul[@class='UnorderedNewsList']").children.each do |row|
+      doc.css('ul.UnorderedNewsList li').each do |row|
         next if row.text.strip.size < 10
-        results << { :source => url, :url => "http://waysandmeans.house.gov"+row.children[1].children[1]['href'], :title => row.children[1].children[1].text, :date => Date.parse(row.children[3].children[0].text.strip), :domain => "http://waysandmeans.house.gov/", :party => 'majority' }
+        results << { :source => url, :url => "https://republicans-financialservices.house.gov"+row.css('a').first['href'], :title => row.css('a').first.text.strip, :date => Date.parse(row.css('b').text.strip), :domain => "financialservices.house.gov", :party => 'minority' }
+      end
+      results
+    end
+
+    def self.house_foreign_affairs_majority(page=1)
+      results = []
+      url = "https://foreignaffairs.house.gov/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css('.recordList tr')[1..-1].each do |row|
+        results << { :source => url, :url => "https://foreignaffairs.house.gov"+row.css('a').first['href'], :title => row.css('a').text.strip, :date => Date.strptime(row.css('.recordListDate').text, '%m/%d/%y'), :domain => "foreignaffairs.house.gov", :party => 'majority' }
+      end
+      results
+    end
+
+    def self.house_homeland_security_majority(page=0)
+      results = []
+      url = "https://homeland.house.gov/news/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".view-content .views-row").each do |row|
+        results << { :source => url, :url => "https://homeland.house.gov"+row.css('a').first['href'], :title => row.css('h3').text.strip, :date => Date.parse(row.css('.views-field-created').text.strip), :domain => "homeland.house.gov", :party => 'majority' }
+      end
+      results
+    end
+
+    def self.house_administration_majority(page=0)
+      results = []
+      url = "https://cha.house.gov/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".list-item").each do |row|
+        results << { :source => url, :url => "https://cha.house.gov"+row.css('a').first['href'], :title => row.css('a').text.strip, :date => Date.parse(row.css(".date").text), :domain => "cha.house.gov", :party => 'majority' }
+      end
+      results
+    end
+
+    def self.house_administration_minority(page=0)
+      results = []
+      url = "https://republicans-cha.house.gov/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".list-item").each do |row|
+        results << { :source => url, :url => "https://cha.house.gov"+row.css('a').first['href'], :title => row.css('a').text.strip, :date => Date.parse(row.css(".date").text), :domain => "cha.house.gov", :party => 'minority' }
+      end
+      results
+    end
+
+    def self.house_judiciary_minority(page=1)
+      results = []
+      url = "https://republicans-judiciary.house.gov/press-releases/page/#{page}/"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css('article').each do |row|
+        results << { :source => url, :url => row.css('a').first['href'], :title => row.css('h3').text, :date => Date.parse(row.css('.date').text), :domain => "judiciary.house.gov", :party => 'minority' }
+      end
+      results
+    end
+
+    def self.house_resources_majority(page=1)
+      results = []
+      url = "https://naturalresources.house.gov/media/press-releases?PageNum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("#press h2").each do |row|
+        results << { :source => url, :url => "https://naturalresources.house.gov"+row.css('a').first['href'], :title => row.css('a').text.strip, :date => Date.strptime(row.previous.previous.text, '%m.%d.%y'), :domain => "naturalresources.house.gov", :party => 'majority' }
+      end
+      results
+    end
+
+    def self.house_science_majority(page=1)
+      results = []
+      url = "https://science.house.gov/news/press-releases?PageNum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("#press h3").each do |row|
+        results << { :source => url, :url => "https://science.house.gov"+row.css('a').first['href'], :title => row.css('a').text.strip, :date => Date.parse(row.previous.previous.text), :domain => "science.house.gov", :party => 'majority' }
+      end
+      results
+    end
+
+    def self.house_science_minority(page=0)
+      results = []
+      url = "https://republicans-science.house.gov/news/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".view-content .views-row").each do |row|
+        results << { :source => url, :url => "https://republicans-science.house.gov"+row.css('a').first['href'], :title => row.css('a').text.strip, :date => Date.parse(row.css(".views-field-created").text.strip), :domain => "science.house.gov", :party => 'minority' }
+      end
+      results
+    end
+
+    def self.house_smallbiz_majority(page=1)
+      results = []
+      url = "https://smallbusiness.house.gov/news/documentquery.aspx?DocumentTypeID=27&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("article").each do |row|
+        results << { :source => url, :url => "https://smallbusiness.house.gov/news/"+row.css('a').first['href'], :title => row.css('a').first.text.strip, :date => Date.parse(row.css('time').text), :domain => "smallbusiness.house.gov", :party => 'majority' }
+      end
+      results
+    end
+
+    def self.house_smallbiz_minority(page=1)
+      results = []
+      url = "https://republicans-smallbusiness.house.gov/news/documentquery.aspx?DocumentTypeID=1684&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.xpath("//ul[@class='UnorderedNewsList']//li").each do |row|
+        results << { :source => url, :url => "https://republicans-smallbusiness.house.gov/news/"+row.css('a').first['href'], :title => row.css('a').first.text.strip, :date => Date.parse(row.children[3].text.strip), :domain => "smallbusiness.house.gov", :party => 'minority' }
+      end
+      results
+    end
+
+    def self.house_transportation_majority(page=1)
+      results = []
+      url = "https://transportation.house.gov/news/press-releases?PageNum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("#press h2").each do |row|
+        results << { :source => url, :url => "https://transportation.house.gov"+row.css('a').first['href'], :title => row.css('a').text, :date => Date.parse(row.next.next.text), :domain => "transportation.house.gov", party: 'majority' }
+      end
+      results
+    end
+
+    def self.house_transportation_minority(page=1)
+      results = []
+      url = "https://republicans-transportation.house.gov/news/documentquery.aspx?DocumentTypeID=2545&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.xpath("//ul[@class='UnorderedNewsList']//li").each do |row|
+        results << { :source => url, :url => "https://republicans-transportation.house.gov/news/"+row.css('a').first['href'], :title => row.css('a').first.text.strip, :date => Date.parse(row.children[3].text.strip), :domain => "smallbusiness.house.gov", :party => 'minority' }
+      end
+      results
+    end
+
+    def self.house_veterans_minority(page=1)
+      results = []
+      url = "https://republicans-veterans.house.gov/news/documentquery.aspx?DocumentTypeID=2613&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.xpath("//ul[@class='UnorderedNewsList']//li").each do |row|
+        results << { :source => url, :url => "https://republicans-veterans.house.gov/news/"+row.css('a').first['href'], :title => row.css('a').first.text.strip, :date => Date.parse(row.children[1].children[2].text.strip), :domain => "veterans.house.gov", :party => 'minority' }
+      end
+      results
+    end
+
+    def self.house_intel_majority(page=1)
+      results = []
+      url = "https://intelligence.house.gov/news/documentquery.aspx?DocumentTypeID=27&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("article").each do |row|
+        results << { :source => url, :url => "https://intelligence.house.gov/news/"+row.css('a').first['href'], :title => row.css('a').first.text.strip, :date => Date.parse(row.css('time').text), :domain => "intelligence.house.gov", :party => 'majority' }
+      end
+      results
+    end
+
+    def self.house_intel_minority(page=1)
+      results = []
+      url = "https://republicans-intelligence.house.gov/news/documentquery.aspx?DocumentTypeID=27&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.xpath("//ul[@class='UnorderedNewsList']//li").each do |row|
+        results << { :source => url, :url => "https://republicans-intelligence.house.gov/news/"+row.css('a').first['href'], :title => row.css('a').first.text.strip, :date => Date.parse(row.children[3].text.strip), :domain => "intelligence.house.gov", :party => 'minority' }
+      end
+      results
+    end
+
+    def self.house_climate_majority(page=0)
+      results = []
+      url = "https://climatecrisis.house.gov/news/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".view-content .views-row").each do |row|
+        results << { :source => url, :url => "https://climatecrisis.house.gov"+row.css('a').first['href'], :title => row.css('a').first.text.strip, :date => Date.parse(row.css(".views-field-created").text.strip), :domain => "climatecrisis.house.gov", :party => 'majority' }
+      end
+      results
+    end
+
+    def self.house_modernization(page=0)
+      results = []
+      url = "https://modernizecongress.house.gov/news/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".view-content .views-row").each do |row|
+        results << { :source => url, :url => "https://modernizecongress.house.gov"+row.css('a').first['href'], :title => row.css('a').first.text.strip, :date => Date.parse(row.css(".views-field-created").text.strip), :domain => "modernizecongress.house.gov", :party => nil }
       end
       results
     end
