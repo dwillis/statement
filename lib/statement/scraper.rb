@@ -85,9 +85,16 @@ module Statement
 
     def self.committee_scrapers
       year = current_year
-      results = [senate_approps_majority, senate_approps_minority, senate_banking(year), senate_hsag_majority(year), senate_hsag_minority(year),
-         senate_indian, senate_aging, senate_smallbiz_minority, senate_intel(113, 2013, 2014), house_energy_minority, house_homeland_security_minority,
-         house_judiciary_majority, house_rules_majority, house_ways_means_majority].flatten
+      results = [senate_approps_majority, senate_approps_minority, senate_banking_majority, senate_banking_minority, senate_hsag_majority, senate_hsag_minority,
+      senate_indian_republican, senate_indian_democratic, senate_ag_majority, senate_ag_minority, senate_budget_majority, senate_budget_minority,
+      senate_commerce_majority, senate_commerce_minority, senate_epw_majority, senate_epw_minority, senate_finance_majority, senate_finance_minority,
+      senate_foreign_relations_majority, senate_foreign_relations_minority, senate_help_majority, senate_help_minority, senate_judiciary_majority,
+      senate_judiciary_minority, senate_rules_majority, senate_rules_minority, senate_aging, senate_smallbiz_majority, senate_smallbiz_minority, senate_intel,
+      house_ag_majority, house_ag_minority, house_approps_minority, house_armedservices_majority, house_armedservices_minority, house_education_majority,
+      house_energy_majority, house_ethics, house_financial_services_majority, house_financial_services_minority, house_foreign_affairs_majority,
+      house_homeland_security_majority, house_administration_majority, house_administration_minority, house_judiciary_minority, house_resources_majority,
+      house_science_majority, house_science_minority, house_smallbiz_majority, house_smallbiz_minority, house_transportation_majority, house_transportation_minority,
+      house_veterans_minority, house_intel_majority, house_intel_minority, house_climate_majority, house_modernization].flatten
       Utils.remove_generic_urls!(results)
     end
 
