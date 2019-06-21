@@ -84,7 +84,6 @@ module Statement
     end
 
     def self.committee_scrapers
-      year = current_year
       results = [senate_approps_majority, senate_approps_minority, senate_banking_majority, senate_banking_minority, senate_hsag_majority, senate_hsag_minority,
       senate_indian_republican, senate_indian_democratic, senate_ag_majority, senate_ag_minority, senate_budget_majority, senate_budget_minority,
       senate_commerce_majority, senate_commerce_minority, senate_epw_majority, senate_epw_minority, senate_finance_majority, senate_finance_minority,
