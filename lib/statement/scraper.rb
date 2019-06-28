@@ -1545,12 +1545,12 @@ module Statement
           {'houlahan.house.gov' => 27},
           {'hern.house.gov' => 27},
           {'markgreen.house.gov' => 27},
-          {'chuygarcia.house.gov' => 27},
           {'fletcher.house.gov' => 27},
           {'crenshaw.house.gov' => 27}
         ]
       end
       domains.each do |domain|
+        puts domain
         source_url = "https://"+domain.keys.first+"/news/documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}"
         doc = Statement::Scraper.open_html(source_url)
         return if doc.nil?
