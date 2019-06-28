@@ -1548,7 +1548,8 @@ module Statement
           {'fletcher.house.gov' => 27},
           {'crenshaw.house.gov' => 27},
           {'guthrie.house.gov' => 2381},
-          {"pingree.house.gov" => 27}
+          {"pingree.house.gov" => 27},
+          {"long.house.gov" => 27}
         ]
       end
       domains.each do |domain|
