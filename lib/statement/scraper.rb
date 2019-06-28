@@ -41,7 +41,7 @@ module Statement
     end
 
     def self.member_methods
-      [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :halrogers, :bucshon, :document_query_new, :fulcher, :gardner, :costa,
+      [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :halrogers, :bucshon, :document_query_new, :fulcher, :gardner, :costa, :jordan,
       :wenstrup, :robbishop, :tomrice, :bwcoleman, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :calvert, :chuygarcia,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :connolly, :mast, :hassan, :yarmuth,
       :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith,
@@ -63,7 +63,7 @@ module Statement
 
     def self.member_scrapers
       year = Date.today.year
-      results = [klobuchar(year), kilmer, lacyclay, sullivan, halrogers, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, fulcher, gardner,
+      results = [klobuchar(year), kilmer, lacyclay, sullivan, halrogers, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, fulcher, gardner, jordan,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, calvert, dougjones,
         inhofe, fischer, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, robbishop, yarmuth, costa, chuygarcia,
         schumer, lowey, mcmorris, schiff, takano, heinrich, walorski, marchant, garypeters, rounds, connolly, paul, banks, harris, tomrice, hydesmith,
@@ -1568,6 +1568,17 @@ module Statement
       return if doc.nil?
       doc.xpath("//ul[@class='UnorderedNewsList']//a").each do |row|
         results << {:source => url, :url => 'https://watsoncoleman.house.gov/newsroom/' + row['href'], :title => row.css('li').children[1].text.strip, :date => Date.parse(row.css('li').children[3].text.strip), :domain => 'watsoncoleman.house.gov' }
+      end
+      results
+    end
+
+    def self.jordan(page=1)
+      results = []
+      url = "https://jordan.house.gov/newsroom/documentquery.aspx?DocumentTypeID=1611&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css('.UnorderedNewsList li').each do |row|
+        results << {:source => url, :url => 'https://jordan.house.gov/newsroom/' + row.css('a').first['href'], :title => row.css('a').first.text.strip, :date => Date.parse(row.css('a').first.next.next.text.strip), :domain => 'jordan.house.gov' }
       end
       results
     end
