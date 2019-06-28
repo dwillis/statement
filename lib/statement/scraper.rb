@@ -1108,18 +1108,6 @@ module Statement
       results
     end
 
-    def self.lujan
-      results = []
-      base_url = 'https://lujan.house.gov/'
-      doc = open_html(base_url+'index.php?option=com_content&view=article&id=981&Itemid=78')
-      return if doc.nil?
-      doc.xpath('//ul')[1].children.each do |row|
-        next if row.text.strip == ''
-        results << { :source => base_url+'index.php?option=com_content&view=article&id=981&Itemid=78', :url => base_url + row.children[0]['href'], :title => row.children[0].text, :date => nil, :domain => "lujan.house.gov" }
-      end
-      results
-    end
-
     def self.schiff(page=1)
       results = []
       url = "https://schiff.house.gov/news/press-releases?PageNum_rs=#{page}&"
@@ -1546,7 +1534,9 @@ module Statement
           {'hern.house.gov' => 27},
           {'markgreen.house.gov' => 27},
           {'fletcher.house.gov' => 27},
-          {'crenshaw.house.gov' => 27}
+          {'crenshaw.house.gov' => 27},
+          {'guthrie.house.gov' => 2381},
+          {"pingree.house.gov" => 27}
         ]
       end
       domains.each do |domain|
@@ -1694,6 +1684,18 @@ module Statement
       results
     end
 
+    def self.engel
+      results = []
+      domain = "engel.house.gov"
+      url = "https://engel.house.gov/latest-news/showallitems/"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".article").each do |row|
+        results << {:source => url, :url => 'https://engel.house.gov' + row.css('h3 a').first['href'], :title => row.css('h3').first.text.strip, :date => Date.strptime(row.css(".sectiondate").text, "%m/%d/%y"), :domain => domain }
+      end
+      results
+    end
+
     def self.robbishop(page=0)
       results = []
       domain = "robbishop.house.gov"
@@ -1783,7 +1785,6 @@ module Statement
             "https://mccaul.house.gov/media-center/press-releases",
             "https://mcnerney.house.gov/media-center/press-releases",
             "https://butterfield.house.gov/media-center/press-releases",
-            "https://pingree.house.gov/media-center/press-releases",
             "https://wilson.house.gov/media-center/press-releases",
             "https://bilirakis.house.gov/media/press-releases",
             "https://quigley.house.gov/media-center/press-releases",
@@ -1934,7 +1935,8 @@ module Statement
       results = []
       if urls.empty?
         urls = [
-          "https://www.young.senate.gov/newsroom/press-releases"
+          "https://www.young.senate.gov/newsroom/press-releases",
+          "https://lujan.house.gov/media-center/press-releases"
         ]
       end
       urls.each do |url|
