@@ -1520,7 +1520,6 @@ module Statement
           {'gosar.house.gov' => 27},
           {'wassermanschultz.house.gov' => 27},
           {'weber.house.gov' => 27},
-          {'plaskett.house.gov' => 27},
           {'gomez.house.gov' => 27},
           {'gwenmoore.house.gov' => 27},
           {'reed.house.gov' => 27},
@@ -1564,6 +1563,7 @@ module Statement
           {"long.house.gov" => 27},
           {'perry.house.gov' => 2608},
           {"babin.house.gov" => 27},
+          {'plaskett.house.gov' => 27}
         ]
       end
       domains.each do |domain|
