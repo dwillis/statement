@@ -1488,7 +1488,6 @@ module Statement
           {"rodneydavis.house.gov" => 2427},
           {"kevinbrady.house.gov" => 2657},
           {"loudermilk.house.gov" => 27},
-          {"babin.house.gov" => 27},
           {"allen.house.gov" => 27},
           {"holding.house.gov" => 27},
           {"davidscott.house.gov" => 377},
@@ -1563,7 +1562,8 @@ module Statement
           {'guthrie.house.gov' => 2381},
           {"pingree.house.gov" => 27},
           {"long.house.gov" => 27},
-          {'perry.house.gov' => 2608}
+          {'perry.house.gov' => 2608},
+          {"babin.house.gov" => 27},
         ]
       end
       domains.each do |domain|
