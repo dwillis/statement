@@ -1378,6 +1378,19 @@ module Statement
       results
     end
 
+    def self.walorski(page=nil)
+      results = []
+      url = "https://walorski.house.gov/news/press-releases/"
+      url = url + "page/#{page}" if page
+      doc = open_html(url)
+      return if doc.nil?
+      doc.xpath("//div[@class='media-body']").each do |row|
+        date = row.children[5].text.strip == '' ? nil : Date.parse(row.children[5].text)
+        results << { source: url, url: row.children[1]['href'], title: row.children[3].text.strip, date: date, domain: "walorski.house.gov"}
+      end
+      results
+    end
+
     def self.welch(page=1)
       results = []
       domain = 'welch.house.gov'
@@ -1960,7 +1973,8 @@ module Statement
       if urls.empty?
         urls = [
           "https://www.young.senate.gov/newsroom/press-releases",
-          "https://lujan.house.gov/media-center/press-releases"
+          "https://lujan.house.gov/media-center/press-releases",
+          "https://kennedy.house.gov/newsroom/press-releases"
         ]
       end
       urls.each do |url|
