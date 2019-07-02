@@ -41,7 +41,7 @@ module Statement
     end
 
     def self.member_methods
-      [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :halrogers, :bucshon, :document_query_new, :fulcher, :gardner, :costa, :jordan,
+      [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :halrogers, :bucshon, :document_query_new, :fulcher, :gardner, :costa, :jordan, :morelle,
       :wenstrup, :robbishop, :tomrice, :bwcoleman, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :calvert, :chuygarcia,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :connolly, :mast, :hassan, :yarmuth, :adamsmith,
       :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :rouzer,
@@ -66,7 +66,7 @@ module Statement
       results = [klobuchar(year), kilmer, lacyclay, sullivan, halrogers, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, fulcher, gardner, jordan,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, calvert, dougjones,
         inhofe, fischer, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, robbishop, yarmuth, costa, chuygarcia, adamsmith,
-        schumer, lowey, mcmorris, schiff, takano, heinrich, walorski, marchant, garypeters, rounds, connolly, paul, banks, harris, tomrice, hydesmith, rouzer, correa,
+        schumer, lowey, mcmorris, schiff, takano, heinrich, walorski, marchant, garypeters, rounds, connolly, paul, banks, harris, tomrice, hydesmith, rouzer, correa, morelle,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
@@ -1689,6 +1689,18 @@ module Statement
       results
     end
 
+    def self.morelle(page=0)
+      results = []
+      domain = "morelle.house.gov"
+      url = "https://morelle.house.gov/media/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".view-content .views-row").first(10).each do |row|
+        results << {:source => url, :url => 'https://morelle.house.gov' + row.css('h3').first.children.first['href'], :title => row.css('h3').first.children.first.text.strip, :date => Date.parse(row.css(".views-field .field-content")[1].text), :domain => domain }
+      end
+      results
+    end
+
     def self.chuygarcia(page=0)
       results = []
       domain = "chuygarcia.house.gov"
@@ -1928,7 +1940,6 @@ module Statement
             "https://malinowski.house.gov/media/press-releases",
             "https://meuser.house.gov/media/press-releases",
             "https://miller.house.gov/media/press-releases",
-            "https://morelle.house.gov/media/press-releases",
             "https://mucarsel-powell.house.gov/media/press-releases",
             "https://mcbath.house.gov/media/press-releases",
             "https://mcadams.house.gov/media/press-releases",
@@ -2219,7 +2230,7 @@ module Statement
           "https://www.braun.senate.gov/press-releases",
           "https://www.cramer.senate.gov/press-releases",
           "https://www.rosen.senate.gov/press-releases",
-          "https://www.sinema.senate.gov/press-releases"
+          "https://www.sinema.senate.gov/press-releases",
         ]
       end
       results = []
