@@ -1566,7 +1566,8 @@ module Statement
           {'ratcliffe.house.gov' => 27},
           {'jasonsmith.house.gov' => "1951:27"},
           {'ferguson.house.gov' => 27},
-          {'anthonybrown.house.gov' => 27}
+          {'anthonybrown.house.gov' => 27},
+          {"spano.house.gov"=>27}
         ]
       end
       domains.each do |domain|
@@ -1689,7 +1690,14 @@ module Statement
           "stanton.house.gov",
           "harder.house.gov",
           "cox.house.gov",
-          "katiehill.house.gov"
+          "katiehill.house.gov",
+          "cisneros.house.gov",
+          "porter.house.gov",
+          "rouda.house.gov",
+          "mikelevin.house.gov",
+          "neguse.house.gov",
+          "crow.house.gov",
+          "waltz.house.gov"
         ]
       end
 
@@ -1901,9 +1909,7 @@ module Statement
             "https://casten.house.gov/media/press-releases",
             "https://cline.house.gov/media/press-releases",
             "https://craig.house.gov/media/press-releases",
-            "https://crow.house.gov/media/press-releases",
             "https://cunningham.house.gov/media/press-releases",
-            "https://cisneros.house.gov/media/press-releases",
             "https://cox.house.gov/media/press-releases",
             "https://davids.house.gov/media/press-releases",
             "https://delgado.house.gov/media/press-releases",
@@ -1918,7 +1924,6 @@ module Statement
             "https://haaland.house.gov/media/press-releases",
             "https://hayes.house.gov/media/press-releases",
             "https://horn.house.gov/media/press-releases",
-            "https://katiehill.house.gov/media/press-releases",
             "https://hagedorn.house.gov/media/press-releases",
             "https://harder.house.gov/media/press-releases",
             "https://dustyjohnson.house.gov/media/press-releases",
@@ -1927,7 +1932,6 @@ module Statement
             "https://susielee.house.gov/media/press-releases",
             "https://luria.house.gov/media/press-releases",
             "https://andylevin.house.gov/media/press-releases",
-            "https://mikelevin.house.gov/media/press-releases",
             "https://malinowski.house.gov/media/press-releases",
             "https://meuser.house.gov/media/press-releases",
             "https://miller.house.gov/media/press-releases",
@@ -1941,17 +1945,14 @@ module Statement
             "https://pence.house.gov/media/press-releases",
             "https://phillips.house.gov/media/press-releases",
             "https://pressley.house.gov/media/press-releases",
-            "https://porter.house.gov/media/press-releases",
             "https://reschenthaler.house.gov/media/press-releases",
             "https://riggleman.house.gov/media/press-releases",
             "https://johnrose.house.gov/media/press-releases",
             "https://roy.house.gov/media/press-releases",
             "https://rouda.house.gov/media/press-releases",
             "https://sannicolas.house.gov/media/press-releases",
-            "https://scanlon.house.gov/media/press-releases",
             "https://sherrill.house.gov/media/press-releases",
             "https://slotkin.house.gov/media/press-releases",
-            "https://spano.house.gov/media/press-releases",
             "https://stanton.house.gov/media/press-releases",
             "https://stauber.house.gov/media/press-releases",
             "https://steil.house.gov/media/press-releases",
@@ -1967,7 +1968,6 @@ module Statement
             "https://waltz.house.gov/media/press-releases",
             "https://watkins.house.gov/media/press-releases",
             "https://wexton.house.gov/media/press-releases",
-            "https://wild.house.gov/media/press-releases",
             "https://wright.house.gov/media/press-releases"
         ]
       end
