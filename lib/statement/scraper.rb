@@ -766,6 +766,7 @@ module Statement
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css('.recordList tr')[1..-1].each do |row|
+        next if row.css('a').empty?
         results << { :source => url, :url => "https://foreignaffairs.house.gov"+row.css('a').first['href'], :title => row.css('a').text.strip, :date => Date.strptime(row.css('.recordListDate').text, '%m/%d/%y'), :domain => "foreignaffairs.house.gov", :party => 'majority' }
       end
       results
