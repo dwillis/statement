@@ -45,7 +45,7 @@ module Statement
       :wenstrup, :robbishop, :tomrice, :bwcoleman, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :pence, :tlaib,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :connolly, :mast, :hassan, :yarmuth, :adamsmith, :vandrew,
       :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :rouzer, :mcbath,
-      :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :dougjones, :angusking, :correa]
+      :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :dougjones, :angusking, :correa, :blunt]
     end
 
     def self.committee_methods
@@ -67,7 +67,7 @@ module Statement
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, dougjones, tlaib,
         inhofe, fischer, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, robbishop, yarmuth, costa, house_drupal, adamsmith,
         schumer, lowey, mcmorris, schiff, takano, heinrich, walorski, marchant, garypeters, rounds, connolly, paul, banks, harris, tomrice, hydesmith, rouzer, correa, pence,
-        bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, mcbath].flatten
+        bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, mcbath, blunt].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -2072,7 +2072,7 @@ module Statement
         urls = [
           "https://www.young.senate.gov/newsroom/press-releases",
           "https://lujan.house.gov/media-center/press-releases",
-          "https://kennedy.house.gov/newsroom/press-releases",
+          "https://kennedy.house.gov/newsroom/press-releases"
         ]
       end
       urls.each do |url|
@@ -2209,6 +2209,21 @@ module Statement
                        :title => row.css('a').text.strip,
                        :date => Date.parse(row.next.next.text),
                        :domain => 'www.jones.senate.gov' }
+      end
+      results
+    end
+
+    def self.blunt(page=1)
+      results = []
+      url = "https://www.blunt.senate.gov/news/press-releases?pagenum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".data-browser h2").each do |row|
+          results << { :source => url,
+                       :url => "https://www.blunt.senate.gov" + row.css('a').first['href'],
+                       :title => row.css('a').text.strip,
+                       :date => Date.parse(row.next.next.text),
+                       :domain => 'www.blunt.senate.gov' }
       end
       results
     end
