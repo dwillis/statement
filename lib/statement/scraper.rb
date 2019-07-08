@@ -2207,14 +2207,14 @@ module Statement
 
     def self.hydesmith(page=0)
       results = []
-      url = "https://www.hydesmith.senate.gov/press-releases?page=#{page}"
+      url = "https://www.hydesmith.senate.gov/news-releases?page=#{page}"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.css(".views-row").each do |row|
+      doc.css("article").each do |row|
           results << { :source => url,
                        :url => "https://www.hydesmith.senate.gov" + row.css('a').first['href'],
                        :title => row.css('h2').text.strip,
-                       :date => Date.parse(row.children[1].children[2].text),
+                       :date => Date.parse(row.css('time').text),
                        :domain => 'www.hydesmith.senate.gov' }
       end
       results
