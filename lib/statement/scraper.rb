@@ -44,7 +44,7 @@ module Statement
       [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :halrogers, :bucshon, :document_query_new, :fulcher, :gardner, :costa, :jordan, :watkins,
       :wenstrup, :robbishop, :tomrice, :bwcoleman, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :pence, :tlaib,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :connolly, :mast, :hassan, :yarmuth, :adamsmith, :vandrew,
-      :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :rouzer, :mcbath,
+      :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :rouzer, :mcbath, :coons,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :dougjones, :angusking, :correa, :blunt, :tillis]
     end
 
@@ -67,7 +67,7 @@ module Statement
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, dougjones, tlaib,
         inhofe, fischer, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, robbishop, yarmuth, costa, house_drupal, adamsmith,
         schumer, lowey, mcmorris, schiff, takano, heinrich, walorski, marchant, garypeters, rounds, connolly, paul, banks, harris, tomrice, hydesmith, rouzer, correa, pence,
-        bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, mcbath, blunt, tillis].flatten
+        bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, mcbath, blunt, tillis, coons].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -1140,6 +1140,17 @@ module Statement
       return if doc.nil?
       doc.css(".element").each do |row|
         results << { :source => url, :url => row.css('a').first['href'], :title => row.css(".element-title").text, :date => Date.strptime(row.css(".element-datetime").text, "%m/%d/%Y"), :domain => "www.tillis.senate.gov" }
+      end
+      results
+    end
+
+    def self.coons(page=1)
+      results = []
+      url = "https://www.coons.senate.gov/news/press-releases?pagenum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".ArticleBlock").each do |row|
+        results << { :source => url, :url => row.css('a').first['href'], :title => row.css('h3').text.strip, :date => Date.parse(row.css('.ArticleBlock__date').text), :domain => "www.coons.senate.gov" }
       end
       results
     end
