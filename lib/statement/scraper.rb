@@ -2322,7 +2322,7 @@ module Statement
       results
     end
 
-    def self.senate_drupal(urls=[], page=0)
+    def self.senate_drupal(urls=[], page=1)
       if urls.empty?
         urls = [
           "https://www.durbin.senate.gov/newsroom/press-releases",
@@ -2331,8 +2331,8 @@ module Statement
           "https://www.daines.senate.gov/news/press-releases",
           "https://www.leahy.senate.gov/press/releases",
           "https://www.hoeven.senate.gov/news/news-releases",
-          "https://www.murkowski.senate.gov/press/press-releases",
           "https://www.stabenow.senate.gov/news",
+          "https://www.murkowski.senate.gov/press/press-releases",
           "https://www.lankford.senate.gov/news/press-releases",
           "https://www.tomudall.senate.gov/news/press-releases",
           "https://www.republicanleader.senate.gov/newsroom/press-releases",
@@ -2345,7 +2345,6 @@ module Statement
       urls.each do |url|
         uri = URI(url)
         source_url = "#{url}?PageNum_rs=#{page}"
-
         domain =  URI.parse(source_url).host
         doc = Statement::Scraper.open_html(source_url)
         return if doc.nil?
