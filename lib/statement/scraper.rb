@@ -1775,7 +1775,7 @@ module Statement
     def self.pence(page=0)
       results = []
       domain = 'pence.house.gov'
-      url = "https://pence.house.gov/press-releases?page=#{page}"
+      url = "https://pence.house.gov/media/press-releases?page=#{page}"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css(".view-content .views-row").first(10).each do |row|
