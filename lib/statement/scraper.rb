@@ -1735,7 +1735,6 @@ module Statement
           "porter.house.gov",
           "rouda.house.gov",
           "mikelevin.house.gov",
-          "neguse.house.gov",
           "crow.house.gov",
           "waltz.house.gov",
           "steube.house.gov",
@@ -1764,6 +1763,7 @@ module Statement
       end
 
       domains.each do |domain|
+        puts domain
         url = "https://#{domain}/media/press-releases?page=#{page}"
         doc = Statement::Scraper.open_html(url)
         return if doc.nil?
