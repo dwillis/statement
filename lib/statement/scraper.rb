@@ -1758,7 +1758,8 @@ module Statement
           "guest.house.gov",
           "armstrong.house.gov",
           "pappas.house.gov",
-          "kim.house.gov"
+          "kim.house.gov",
+          "kirkpatrick.house.gov"
         ]
       end
 
