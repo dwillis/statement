@@ -2357,6 +2357,7 @@ module Statement
           "https://www.cramer.senate.gov/press-releases",
           "https://www.rosen.senate.gov/press-releases",
           "https://www.sinema.senate.gov/press-releases",
+          "https://www.hawley.senate.gov/press-releases"
         ]
       end
       results = []
