@@ -7,6 +7,7 @@ module Utils
   end
 
   def self.remove_generic_urls!(results)
+    results = results.reject{|r| r.nil?}
     results.reject{|r| r[:url].nil?}
     results.reject{|r| URI.parse(URI.escape(r[:url])).path == '/news/' or URI.parse(URI.escape(r[:url])).path == '/news'}
   end
