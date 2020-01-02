@@ -330,6 +330,7 @@ module Statement
       url = "https://www.commerce.senate.gov/public/index.cfm/pressreleases?MonthDisplay=0&YearDisplay=#{year}"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
+      return if doc.xpath("//table[@class='table recordList']").css('tbody tr').empty?
       doc.xpath("//table[@class='table recordList']").css('tbody tr').each do |row|
         title = row.css('td')[1].text.strip
         release_url = "https://www.commerce.senate.gov" + row.css('a').first['href'].strip
@@ -350,6 +351,7 @@ module Statement
       url = "https://www.commerce.senate.gov/public/index.cfm/minority-dems-press-releases?MonthDisplay=0&YearDisplay=#{year}"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
+      return if doc.xpath("//table[@class='table recordList']").css('tbody tr').empty?
       doc.xpath("//table[@class='table recordList']").css('tbody tr').each do |row|
         title = row.css('td')[1].text.strip
         release_url = "https://www.commerce.senate.gov" + row.css('a').first['href'].strip
@@ -370,6 +372,7 @@ module Statement
       url = "https://www.epw.senate.gov/public/index.cfm/news?MonthDisplay=0&YearDisplay=#{year}"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
+      return if doc.xpath("//table[@class='table recordList']").css('tbody tr').empty?
       doc.xpath("//table[@class='table recordList']").css('tbody tr').each do |row|
         title = row.css('td')[1].text.strip
         release_url = "https://www.epw.senate.gov" + row.css('a').first['href'].strip
@@ -390,6 +393,7 @@ module Statement
       url = "https://www.epw.senate.gov/public/index.cfm/press-releases-democratic?MonthDisplay=0&YearDisplay=#{year}"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
+      return if doc.xpath("//table[@class='table recordList']").css('tbody tr').empty?
       doc.xpath("//table[@class='table recordList']").css('tbody tr').each do |row|
         title = row.css('td')[1].text.strip
         release_url = "https://www.epw.senate.gov" + row.css('a').first['href'].strip
@@ -1094,6 +1098,7 @@ module Statement
         end
         doc = Statement::Scraper.open_html(url)
         return if doc.nil?
+        return if doc.xpath("//tr").empty?
         if domain == 'www.lee.senate.gov' or domain == 'www.barrasso.senate.gov' or domain == "www.heitkamp.senate.gov" or domain == 'www.moran.senate.gov' or domain == 'www.feinstein.senate.gov' or domain == 'www.shelby.senate.gov'
           rows = doc.xpath("//tr")[1..-1]
         else
