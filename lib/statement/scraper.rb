@@ -1872,6 +1872,7 @@ module Statement
       url = "https://barr.house.gov/press-releases?MonthDisplay=0&YearDisplay=#{year}"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
+      return if doc.xpath("//table[@class='table recordList']//tr").empty?
       doc.xpath("//table[@class='table recordList']//tr")[1..-1].each do |row|
         next if row.children[3].text.strip == 'Title'
         results << { :source => url, :url => "https://barr.house.gov"+row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.parse(row.children[1].text), :domain => "barr.house.gov" }
