@@ -1126,6 +1126,7 @@ module Statement
       url = "https://www.klobuchar.senate.gov/public/index.cfm/news-releases?MonthDisplay=#{month}&YearDisplay=#{year}&page=#{page}"
       doc = open_html(url)
       return if doc.nil?
+      return if doc.xpath("//tr").empty?
       doc.xpath("//tr")[2..-1].each do |row|
         next if row.text.strip[0..3] == "Date"
         results << { :source => url, :url => "https://www.klobuchar.senate.gov" + row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.strptime(row.children[1].text.strip, "%m/%d/%y"), :domain => "www.klobuchar.senate.gov" }
