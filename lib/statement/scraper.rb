@@ -43,7 +43,7 @@ module Statement
     def self.member_methods
       [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :halrogers, :bucshon, :document_query_new, :fulcher, :gardner, :costa, :jordan, :watkins, :barr,
       :wenstrup, :robbishop, :tomrice, :bwcoleman, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :pence, :tlaib, :hayes,
-      :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :connolly, :mast, :hassan, :yarmuth, :adamsmith, :vandrew,
+      :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :connolly, :mast, :hassan, :yarmuth, :adamsmith, :vandrew, :rickscott,
       :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :rouzer, :mcbath, :coons,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :dougjones, :angusking, :correa, :blunt, :tillis]
     end
@@ -66,7 +66,7 @@ module Statement
       results = [klobuchar(year), kilmer, lacyclay, sullivan, halrogers, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, fulcher, gardner, jordan, watkins,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, dougjones, tlaib,
         inhofe, fischer, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, robbishop, yarmuth, costa, house_drupal, adamsmith,
-        schumer, lowey, mcmorris, schiff, takano, heinrich, walorski, marchant, garypeters, rounds, connolly, paul, banks, harris, tomrice, hydesmith, rouzer, correa, pence,
+        schumer, lowey, mcmorris, schiff, takano, heinrich, walorski, marchant, garypeters, rounds, connolly, paul, banks, harris, tomrice, hydesmith, rouzer, correa, pence, rickscott,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, mcbath, blunt, tillis, coons, hayes, barr].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
@@ -2238,6 +2238,21 @@ module Statement
                        :title => row.css('h2').text.strip,
                        :date => Date.parse(row.css(".pub-date").text),
                        :domain => 'www.paul.senate.gov' }
+      end
+      results
+    end
+
+    def self.rickscott(page=0)
+      results = []
+      url = "https://www.rickscott.senate.gov/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".views-row").each do |row|
+          results << { :source => url,
+                       :url => "https://www.rickscott.senate.gov" + row.css('a').first['href'],
+                       :title => row.children[0].text.strip,
+                       :date => Date.parse(row.children.last.text),
+                       :domain => 'www.rickscott.senate.gov' }
       end
       results
     end
