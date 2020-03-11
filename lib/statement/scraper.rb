@@ -1762,7 +1762,8 @@ module Statement
           "armstrong.house.gov",
           "pappas.house.gov",
           "kim.house.gov",
-          "kirkpatrick.house.gov"
+          "kirkpatrick.house.gov",
+          "wright.house.gov"
         ]
       end
 
@@ -2092,8 +2093,7 @@ module Statement
             "https://schrier.house.gov/media/press-releases",
             "https://timmons.house.gov/media/press-releases",
             "https://torressmall.house.gov/media/press-releases",
-            "https://wexton.house.gov/media/press-releases",
-            "https://wright.house.gov/media/press-releases"
+            "https://wexton.house.gov/media/press-releases"
         ]
       end
 
@@ -2129,7 +2129,8 @@ module Statement
         urls = [
           "https://www.young.senate.gov/newsroom/press-releases",
           "https://lujan.house.gov/media-center/press-releases",
-          "https://kennedy.house.gov/newsroom/press-releases"
+          "https://kennedy.house.gov/newsroom/press-releases",
+          "https://huffman.house.gov/media-center/press-releases"
         ]
       end
       urls.each do |url|
