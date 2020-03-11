@@ -1544,7 +1544,6 @@ module Statement
           {"davidscott.house.gov" => 377},
           {"buddycarter.house.gov" => 27},
           {"grothman.house.gov" => 27},
-          {"beyer.house.gov" => 27},
           {"kathleenrice.house.gov" => 27},
           {"wittman.house.gov" => 2670},
           {"kinzinger.house.gov" => 2665},
@@ -1622,6 +1621,8 @@ module Statement
           {"anthonygonzalez.house.gov"=>27},
           {'debbiedingell.house.gov' => 27},
           {'gomez.house.gov' => 27},
+          {"beyer.house.gov" => 27},
+          {'baird.house.gov' => 27}
         ]
       end
       domains.each do |domain|
@@ -1750,13 +1751,11 @@ module Statement
         domains = [
           "calvert.house.gov",
           "morelle.house.gov",
-          "scanlon.house.gov",
           "wild.house.gov",
           "chuygarcia.house.gov",
           "stanton.house.gov",
           "harder.house.gov",
           "cox.house.gov",
-          "katiehill.house.gov",
           "cisneros.house.gov",
           "porter.house.gov",
           "rouda.house.gov",
@@ -1768,7 +1767,6 @@ module Statement
           "axne.house.gov",
           "casten.house.gov",
           "underwood.house.gov",
-          "baird.house.gov",
           "davids.house.gov",
           "pressley.house.gov",
           "trone.house.gov",
