@@ -1384,11 +1384,9 @@ module Statement
       domain = "www.inhofe.senate.gov"
       doc = open_html(url)
       return if doc.nil?
-      if doc.xpath("//tr")[1..-1]
-        doc.xpath("//tr")[1..-1].each do |row|
-          next if row.text.strip.size < 30
-          results << { :source => url, :url => row.children[3].children[0]['href'].strip, :title => row.children[3].text.strip, :date => Date.strptime(row.children[1].text, "%m/%d/%y"), :domain => domain}
-        end
+      doc.xpath("//div[@class='data-browser']//h2").each do |row|
+        next if row.text.strip.size < 30
+        results << { :source => url, :url => row.at('a')['href'], :title => row.text.strip, :date => Date.parse(row.next.next.text), :domain => domain}
       end
       results
     end
