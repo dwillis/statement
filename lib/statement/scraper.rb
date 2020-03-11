@@ -1569,7 +1569,6 @@ module Statement
           {'gosar.house.gov' => 27},
           {'wassermanschultz.house.gov' => 27},
           {'weber.house.gov' => 27},
-          {'gomez.house.gov' => 27},
           {'gwenmoore.house.gov' => 27},
           {'reed.house.gov' => 27},
           {'susandavis.house.gov' => 1782},
@@ -1621,7 +1620,8 @@ module Statement
           {"mikerogers.house.gov" => 27},
           {'nadler.house.gov' => 1753},
           {"anthonygonzalez.house.gov"=>27},
-          {'debbiedingell.house.gov' => 27}
+          {'debbiedingell.house.gov' => 27},
+          {'gomez.house.gov' => 27},
         ]
       end
       domains.each do |domain|
