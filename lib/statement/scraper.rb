@@ -1622,7 +1622,8 @@ module Statement
           {'debbiedingell.house.gov' => 27},
           {'gomez.house.gov' => 27},
           {"beyer.house.gov" => 27},
-          {'baird.house.gov' => 27}
+          {'baird.house.gov' => 27},
+          {"waltz.house.gov" => 27}
         ]
       end
       domains.each do |domain|
@@ -1761,7 +1762,6 @@ module Statement
           "rouda.house.gov",
           "mikelevin.house.gov",
           "crow.house.gov",
-          "waltz.house.gov",
           "steube.house.gov",
           "finkenauer.house.gov",
           "axne.house.gov",
