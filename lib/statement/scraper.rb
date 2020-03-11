@@ -42,7 +42,7 @@ module Statement
 
     def self.member_methods
       [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :halrogers, :bucshon, :document_query_new, :fulcher, :gardner, :costa, :jordan, :watkins, :barr,
-      :wenstrup, :robbishop, :tomrice, :bwcoleman, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :pence, :tlaib, :hayes,
+      :wenstrup, :robbishop, :tomrice, :bwcoleman, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :pence, :tlaib, :hayes, :markgreen,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :connolly, :mast, :hassan, :yarmuth, :adamsmith, :vandrew, :rickscott,
       :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :rouzer, :mcbath, :coons, :norman,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :dougjones, :angusking, :correa, :blunt, :tillis]
@@ -64,7 +64,7 @@ module Statement
     def self.member_scrapers
       year = Date.today.year
       results = [klobuchar(year), kilmer, lacyclay, sullivan, halrogers, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, fulcher, gardner, jordan, watkins,
-        document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, dougjones, tlaib,
+        document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, dougjones, tlaib, markgreen,
         inhofe, fischer, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, robbishop, yarmuth, costa, house_drupal, adamsmith, norman,
         schumer, lowey, mcmorris, schiff, takano, heinrich, walorski, marchant, garypeters, rounds, connolly, paul, banks, harris, tomrice, hydesmith, rouzer, correa, pence, rickscott,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, mcbath, blunt, tillis, coons, hayes, barr].flatten
@@ -1017,6 +1017,18 @@ module Statement
       results
     end
 
+    def self.markgreen(page=1)
+      results = []
+      url = "https://markgreen.house.gov/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.xpath("//table[@class='table recordList']//tr")[1..-1].each do |row|
+        next if row.children[3].text.strip == 'Title'
+        results << { :source => url, :url => "https://markgreen.house.gov"+row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.parse(row.children[1].text), :domain => "markgreen.house.gov" }
+      end
+      results
+    end
+
     def self.tomrice(page=1)
       results = []
       url = "https://rice.house.gov/press-releases?page=#{page}"
@@ -1592,7 +1604,6 @@ module Statement
           {'maxrose.house.gov' => 27},
           {'houlahan.house.gov' => 27},
           {'hern.house.gov' => 27},
-          {'markgreen.house.gov' => 27},
           {'fletcher.house.gov' => 27},
           {'crenshaw.house.gov' => 27},
           {'guthrie.house.gov' => 2381},
@@ -1614,6 +1625,7 @@ module Statement
         ]
       end
       domains.each do |domain|
+        puts domain
         source_url = "https://"+domain.keys.first+"/news/documentquery.aspx?DocumentTypeID=#{domain.values.first}&Page=#{page}"
         doc = Statement::Scraper.open_html(source_url)
         return if doc.nil?
