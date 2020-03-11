@@ -1784,7 +1784,6 @@ module Statement
           "armstrong.house.gov",
           "pappas.house.gov",
           "kim.house.gov",
-          "kirkpatrick.house.gov",
           "wright.house.gov"
         ]
       end
