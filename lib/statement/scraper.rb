@@ -2124,7 +2124,6 @@ module Statement
             "https://dankildee.house.gov/media/press-releases",
             "https://walberg.house.gov/media/press-releases",
             "https://smucker.house.gov/media/press-releases",
-            "https://speier.house.gov/press-releases",
             "https://peteking.house.gov/media-center/statements",
             "https://gianforte.house.gov/media-center/press-releases",
             "https://price.house.gov/newsroom/press-releases",
