@@ -2121,6 +2121,7 @@ module Statement
             "https://radewagen.house.gov/media-center/press-releases",
             "https://delauro.house.gov/media-center/press-releases",
             "https://gabbard.house.gov/news",
+            "https://lowenthal.house.gov/media/press-releases",
             "https://dankildee.house.gov/media/press-releases",
             "https://walberg.house.gov/media/press-releases",
             "https://smucker.house.gov/media/press-releases",
