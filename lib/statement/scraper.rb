@@ -1637,7 +1637,8 @@ module Statement
           {'gomez.house.gov' => 27},
           {"beyer.house.gov" => 27},
           {'baird.house.gov' => 27},
-          {"waltz.house.gov" => 27}
+          {"waltz.house.gov" => 27},
+          {'horn.house.gov' => 27}
         ]
       end
       domains.each do |domain|
@@ -2153,7 +2154,6 @@ module Statement
             "https://gooden.house.gov/media/press-releases",
             "https://golden.house.gov/media/press-releases",
             "https://haaland.house.gov/media/press-releases",
-            "https://horn.house.gov/media/press-releases",
             "https://harder.house.gov/media/press-releases",
             "https://dustyjohnson.house.gov/media/press-releases",
             "https://johnjoyce.house.gov/media/press-releases",
