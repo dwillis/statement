@@ -46,7 +46,7 @@ module Statement
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :connolly, :mast, :hassan, :yarmuth, :adamsmith, :vandrew, :rickscott,
       :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :rouzer, :mcbath, :coons, :norman,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :dougjones, :angusking, :correa, :blunt, :tillis, :emmer,
-      :porter]
+      :porter, :lawson]
     end
 
     def self.committee_methods
@@ -68,7 +68,8 @@ module Statement
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, dougjones, tlaib, markgreen,
         inhofe, fischer, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, robbishop, yarmuth, costa, house_drupal, adamsmith, norman,
         schumer, lowey, mcmorris, schiff, takano, heinrich, walorski, marchant, garypeters, rounds, connolly, paul, banks, harris, tomrice, hydesmith, rouzer, correa, pence, rickscott,
-        bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, mcbath, blunt, tillis, coons, hayes, barr, emmer, porter].flatten
+        bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, mcbath, blunt, tillis, coons, hayes, barr, emmer, porter,
+        lawson].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -2281,6 +2282,21 @@ module Statement
                      :title => row.text.strip,
                      :date => Date.parse(row.next.next.text),
                      :domain => 'www.scott.senate.gov' }
+      end
+      results
+    end
+
+    def self.lawson(page=1)
+      results = []
+      url = "https://lawson.house.gov/media/press-releases?PageNum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("#newscontent h2")[0..-1].each do |row|
+        results << { :source => url,
+                     :url => "https://lawson.house.gov" + row.css('a').first['href'],
+                     :title => row.text.strip,
+                     :date => Date.parse(row.previous.previous.text),
+                     :domain => 'lawson.house.gov' }
       end
       results
     end
