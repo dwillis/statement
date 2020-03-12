@@ -1206,7 +1206,7 @@ module Statement
       return if doc.nil?
       rows = doc.css("#press").first.css('h2')
       rows.each do |row|
-        results << { :source => url, :url => "https://moulton.house.gov" + row.css('a')[0]['href'], :title => row.children.last.text.strip, :date => Date.parse(row.previous.previous.text), :domain => "moulton.house.gov" }
+        results << { :source => url, :url => "https://moulton.house.gov" + row.css('a')[0]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.previous.previous.text), :domain => "moulton.house.gov" }
       end
       results
     end
