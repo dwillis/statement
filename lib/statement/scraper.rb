@@ -46,7 +46,7 @@ module Statement
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :connolly, :mast, :hassan, :yarmuth, :adamsmith, :vandrew, :rickscott,
       :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :rouzer, :mcbath, :coons, :norman,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :dougjones, :angusking, :correa, :blunt, :tillis, :emmer,
-      :porter, :lawson, :speier, :neguse, :jasonsmith, :vargas, :moulton]
+      :porter, :lawson, :speier, :neguse, :jasonsmith, :vargas, :moulton, :bacon]
     end
 
     def self.committee_methods
@@ -69,7 +69,7 @@ module Statement
         inhofe, fischer, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, robbishop, yarmuth, costa, house_drupal, adamsmith, norman,
         schumer, lowey, mcmorris, schiff, takano, heinrich, walorski, marchant, garypeters, rounds, connolly, paul, banks, harris, tomrice, hydesmith, rouzer, correa, pence, rickscott,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, mcbath, blunt, tillis, coons, hayes, barr, emmer, porter,
-        lawson, speier, neguse, jasonsmith, vargas, moulton].flatten
+        lawson, speier, neguse, jasonsmith, vargas, moulton, bacon].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -1504,6 +1504,18 @@ module Statement
       results
     end
 
+    def self.bacon(page=1)
+      results = []
+      domain = 'bacon.house.gov'
+      url = "https://bacon.house.gov/news/documentquery.aspx?DocumentTypeID=27&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.xpath("//article").each do |row|
+        results << {:source => url, :url => "https://bacon.house.gov" + row.css("h3 a").first['href'], :title => row.css("h3").text.strip, :date => Date.parse(row.css('time').first['datetime']), :domain => domain }
+      end
+      results
+    end
+
     def self.banks(page=1)
       results = []
       domain = 'banks.house.gov'
@@ -1599,7 +1611,7 @@ module Statement
           {'susandavis.house.gov' => 1782},
           {'meadows.house.gov' => 27},
           {'mckinley.house.gov' => 27},
-          {'hill.house.gov' => 27}
+          {'hill.house.gov' => 27},
         ]
       end
       domains.each do |domain|
@@ -1821,7 +1833,9 @@ module Statement
           "armstrong.house.gov",
           "pappas.house.gov",
           "kim.house.gov",
-          "wright.house.gov"
+          "wright.house.gov",
+          "schakowsky.house.gov",
+          "eshoo.house.gov"
         ]
       end
 
@@ -2235,7 +2249,8 @@ module Statement
           "https://www.young.senate.gov/newsroom/press-releases",
           "https://lujan.house.gov/media-center/press-releases",
           "https://kennedy.house.gov/newsroom/press-releases",
-          "https://huffman.house.gov/media-center/press-releases"
+          "https://huffman.house.gov/media-center/press-releases",
+          "https://castro.house.gov/media-center/press-releases"
         ]
       end
       urls.each do |url|
