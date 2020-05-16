@@ -737,8 +737,8 @@ module Statement
       url = "https://ethics.house.gov/media-center"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.css('.list-item')[1..-1].each do |row|
-        results << { :source => url, :url => "https://ethics.house.gov"+row.css('a').first['href'], :title => row.css('h4').text, :date => Date.parse(row.css(".date").text), :domain => "ethics.house.gov", :party => nil }
+      doc.css(".view-content .views-row").each do |row|
+        results << { :source => url, :url => "https://ethics.house.gov"+row.css('a').first['href'], :title => row.css('a').text, :date => Date.parse(row.css('.field-content')[1].text), :domain => "ethics.house.gov", :party => nil }
       end
       results
     end
