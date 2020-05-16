@@ -46,7 +46,7 @@ module Statement
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :marchant, :connolly, :mast, :hassan, :yarmuth, :adamsmith, :vandrew, :rickscott,
       :welch, :schumer, :cassidy, :lowey, :mcmorris, :takano, :lacyclay, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :rouzer, :mcbath, :coons, :norman,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :dougjones, :angusking, :correa, :blunt, :tillis, :emmer,
-      :porter, :lawson, :speier, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert]
+      :porter, :lawson, :speier, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :finkenauer]
     end
 
     def self.committee_methods
@@ -69,7 +69,7 @@ module Statement
         inhofe, fischer, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, robbishop, yarmuth, costa, house_drupal, adamsmith, norman,
         schumer, lowey, mcmorris, schiff, takano, heinrich, walorski, marchant, garypeters, rounds, connolly, paul, banks, harris, tomrice, hydesmith, rouzer, correa, pence, rickscott,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, mcbath, blunt, tillis, coons, hayes, barr, emmer, porter,
-        lawson, speier, neguse, jasonsmith, vargas, moulton, bacon, calvert].flatten
+        lawson, speier, neguse, jasonsmith, vargas, moulton, bacon, calvert, finkenauer].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -1813,7 +1813,6 @@ module Statement
           "mikelevin.house.gov",
           "crow.house.gov",
           "steube.house.gov",
-          "finkenauer.house.gov",
           "axne.house.gov",
           "casten.house.gov",
           "underwood.house.gov",
@@ -1914,6 +1913,22 @@ module Statement
       results = []
       domain = 'calvert.house.gov'
       url = "https://calvert.house.gov/media/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".view-content .views-row").first(10).each do |row|
+        begin
+          results << {:source => url, :url => "https://#{domain}" + row.css('h3').first.children.first['href'], :title => row.css('h3').first.children.first.text.strip, :date => Date.parse(row.css(".views-field .field-content")[1].text), :domain => domain }
+        rescue
+          next
+        end
+      end
+      results
+    end
+
+    def self.finkenauer(page=0)
+      results = []
+      domain = 'finkenauer.house.gov'
+      url = "https://finkenauer.house.gov/media/press-releases?page=#{page}"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css(".view-content .views-row").first(10).each do |row|
