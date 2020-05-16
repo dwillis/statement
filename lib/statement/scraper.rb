@@ -1819,7 +1819,6 @@ module Statement
           "davids.house.gov",
           "pressley.house.gov",
           "trone.house.gov",
-          "slotkin.house.gov",
           "andylevin.house.gov",
           "stevens.house.gov",
           "hagedorn.house.gov",
