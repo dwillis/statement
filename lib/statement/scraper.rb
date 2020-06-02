@@ -1642,6 +1642,7 @@ module Statement
       results = []
       if domains.empty?
         domains = [
+          {"larsen.house.gov"=>27},
           {"thornberry.house.gov" => 1776},
           {'trahan.house.gov' => 27},
           {'vantaylor.house.gov' => 27},
