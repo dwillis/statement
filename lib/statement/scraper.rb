@@ -1580,7 +1580,6 @@ module Statement
       results = []
       if domains.empty?
         domains = [
-          {"thornberry.house.gov" => 1776},
           {"palazzo.house.gov" => 2519},
           {"roe.house.gov" => 1532},
           {"perry.house.gov" => 2607},
@@ -1643,6 +1642,7 @@ module Statement
       results = []
       if domains.empty?
         domains = [
+          {"thornberry.house.gov" => 1776},
           {'trahan.house.gov' => 27},
           {'vantaylor.house.gov' => 27},
           {'spanberger.house.gov' => 27},
