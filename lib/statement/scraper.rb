@@ -1620,7 +1620,6 @@ module Statement
           {'gwenmoore.house.gov' => 27},
           {'reed.house.gov' => 27},
           {'susandavis.house.gov' => 1782},
-          {'meadows.house.gov' => 27},
           {'mckinley.house.gov' => 27},
           {'hill.house.gov' => 27},
         ]
