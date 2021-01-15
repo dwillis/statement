@@ -1731,7 +1731,7 @@ module Statement
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.xpath("//article").each do |row|
-        results << {:source => url, :url => "https://trahan.house.gov/" + row.css("h2 a").first['href'], :title => row.css("h2").text.strip, :date => Date.parse(row.css('time').text), :domain => 'trahan.house.gov' }
+        results << {:source => url, :url => "https://trahan.house.gov/news/" + row.css("h2 a").first['href'], :title => row.css("h2").text.strip, :date => Date.parse(row.css('time').text), :domain => 'trahan.house.gov' }
       end
       results
     end
