@@ -41,10 +41,10 @@ module Statement
     end
 
     def self.member_methods
-      [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :halrogers, :bucshon, :document_query_new, :fulcher, :costa, :jordan, :barr, :lamborn,
+      [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :halrogers, :bucshon, :document_query_new, :fulcher, :costa, :jordan, :barr, :lamborn, :sherrod_brown,
       :wenstrup, :robbishop, :tomrice, :bwcoleman, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :pence, :tlaib, :hayes, :markgreen,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :yarmuth, :adamsmith, :vandrew, :rickscott,
-      :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :rouzer, :mcbath, :coons, :norman,
+      :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :rouzer, :mcbath, :coons, :norman, :senate_wordpress,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer,
       :porter, :lawson, :speier, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :slotkin, :booker, :capito, :granger, :johncarter, :vela, :trahan, :vantaylor]
     end
@@ -64,10 +64,10 @@ module Statement
 
     def self.member_scrapers
       year = Date.today.year
-      results = [klobuchar(year), kilmer, sullivan, halrogers, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, fulcher, jordan, lamborn,
+      results = [klobuchar(year), kilmer, sullivan, halrogers, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, fulcher, jordan, lamborn, senate_wordpress,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, tlaib, markgreen,
         inhofe, fischer, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal, adamsmith, norman,
-        schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, banks, harris, tomrice, hydesmith, rouzer, correa, pence, rickscott,
+        schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, banks, harris, tomrice, hydesmith, rouzer, correa, pence, rickscott, sherrod_brown,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, mcbath, blunt, tillis, coons, hayes, barr, emmer, porter,
         lawson, speier, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, booker, capito, granger, johncarter, vela, trahan, vantaylor].flatten
       results = results.compact
@@ -1189,6 +1189,17 @@ module Statement
       results
     end
 
+    def self.sherrod_brown(page=1)
+      results = []
+      url = "https://www.brown.senate.gov/newsroom/press-releases?pagenum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".ArticleBlock").each do |row|
+        results << { :source => url, :url => row.css('a').first['href'], :title => row.css('h3').text.strip, :date => Date.parse(row.css('.ArticleBlock__date').text), :domain => "www.brown.senate.gov" }
+      end
+      results
+    end
+
     def self.booker(page=1)
       results = []
       url = "https://www.booker.senate.gov/news/press?pagenum_rs=#{page}"
@@ -1462,19 +1473,6 @@ module Statement
       (doc/:tr)[1..-1].each do |row|
         next if row.children[1].text.strip == 'Date'
         results << { :source => url, :date => Date.parse(row.children[1].text.strip), :title => row.children[3].children.text, :url => "https://katherineclark.house.gov" + row.children[3].children[0]['href'], :domain => domain}
-      end
-      results
-    end
-
-    def self.walorski(page=nil)
-      results = []
-      url = "https://walorski.house.gov/news/press-releases/"
-      url = url + "page/#{page}" if page
-      doc = open_html(url)
-      return if doc.nil?
-      doc.xpath("//div[@class='media-body']").each do |row|
-        date = row.children[5].text.strip == '' ? nil : Date.parse(row.children[5].text)
-        results << { source: url, url: row.children[1]['href'], title: row.children[3].text.strip, date: date, domain: "walorski.house.gov"}
       end
       results
     end
@@ -2285,6 +2283,31 @@ module Statement
                        :url => "https://#{domain}" + row.css('a').first['href'],
                        :title => row.text.strip,
                        :date => Date.parse(row.previous.previous.text),
+                       :domain => domain }
+        end
+      end
+      results
+    end
+
+    def self.senate_wordpress(urls=[], page=1)
+      results = []
+      if urls.empty?
+        urls = [
+          "https://www.kelly.senate.gov/media/press-releases/",
+          "https://www.hickenlooper.senate.gov/media/press-releases/",
+        ]
+      end
+      urls.each do |url|
+        uri = URI(url)
+        source_url = "#{url}/#{page}"
+        domain =  URI.parse(source_url).host
+        doc = Statement::Scraper.open_html(source_url)
+        return if doc.nil?
+        doc.css('.elementor-post__text').each do |row|
+          results << { :source => url,
+                       :url => row.css('a').first['href'],
+                       :title => row.css('h2').text.strip,
+                       :date => Date.parse(row.css('.elementor-post-date').text.strip),
                        :domain => domain }
         end
       end
