@@ -41,7 +41,7 @@ module Statement
     end
 
     def self.member_methods
-      [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :bucshon, :document_query_new, :costa, :jordan, :barr, :lamborn, :sherrod_brown,
+      [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :bucshon, :document_query_new, :costa, :jordan, :barr, :lamborn, :sherrod_brown, :media_body,
       :wenstrup, :robbishop, :bwcoleman, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :pence, :tlaib, :hayes,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :yarmuth, :vandrew, :rickscott, :amodei,
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :rouzer, :coons, :norman, :senate_wordpress,
@@ -64,7 +64,7 @@ module Statement
 
     def self.member_scrapers
       year = Date.today.year
-      results = [klobuchar(year), kilmer, sullivan, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, jordan, lamborn, senate_wordpress,
+      results = [klobuchar(year), kilmer, sullivan, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, jordan, lamborn, senate_wordpress, media_body,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, tlaib,
         inhofe, fischer, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal, norman, amodei,
         schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, banks, harris, hydesmith, rouzer, correa, pence, rickscott, sherrod_brown,
@@ -975,7 +975,6 @@ module Statement
        puts url
        uri = URI(url)
        source_url = "#{url}?page=#{page}"
-
        domain =  URI.parse(source_url).host
        doc = open_html(source_url)
        return if doc.nil?
@@ -985,6 +984,29 @@ module Statement
        end
      end
      results
+    end
+
+    def self.media_body(urls=[], page=0)
+      if urls.empty?
+        urls = [
+          "https://issa.house.gov/media/press-releases",
+          "https://tenney.house.gov/media/press-releases",
+          "https://sessions.house.gov/media/press-releases"
+        ]
+      end
+      results = []
+      urls.each do |url|
+        puts url
+        uri = URI(url)
+        source_url = "#{url}?page=#{page}"
+        domain =  URI.parse(source_url).host
+        doc = open_html(source_url)
+        return if doc.nil?
+        doc.css(".media-body").each do |row|
+          results << { :source => url, :url => "https://"+domain+row.css('a').first['href'], :title => row.css('a').first.text, :date => Date.parse(row.css('.row .col-auto').first.text.strip), :domain => domain }
+        end
+      end
+      results
     end
 
     def self.webster
@@ -1434,7 +1456,7 @@ module Statement
 
     def self.johncarter
       results = []
-      domain = 'johncarter.house.gov'
+      domain = 'carter.house.gov'
       url = "https://carter.house.gov/news/press-releases"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
@@ -1604,7 +1626,8 @@ module Statement
           {'escobar.house.gov' => 27},
           {'wexton.house.gov' => 27},
           {'arrington.house.gov' => 27},
-          {'stewart.house.gov' => 27}
+          {'stewart.house.gov' => 27},
+          {'valadao.house.gov' => 27}
         ]
       end
       domains.each do |domain|
