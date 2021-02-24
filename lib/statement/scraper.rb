@@ -64,7 +64,7 @@ module Statement
 
     def self.member_scrapers
       year = Date.today.year
-      results = [klobuchar(year), kilmer, sullivan, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, fulcher, jordan, lamborn, senate_wordpress,
+      results = [klobuchar(year), kilmer, sullivan, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, jordan, lamborn, senate_wordpress,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, tlaib,
         inhofe, fischer, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal, norman, amodei,
         schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, banks, harris, hydesmith, rouzer, correa, pence, rickscott, sherrod_brown,
