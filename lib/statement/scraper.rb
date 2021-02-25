@@ -46,7 +46,7 @@ module Statement
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :yarmuth, :vandrew, :rickscott, :amodei,
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :coons, :norman, :senate_wordpress, :recordlist,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
-      :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :slotkin, :booker, :capito, :johncarter, :trahan, :vantaylor]
+      :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :slotkin, :booker, :capito, :johncarter, :trahan, :vantaylor, :tonko]
     end
 
     def self.committee_methods
@@ -69,7 +69,7 @@ module Statement
         inhofe, fischer, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal, norman, amodei,
         schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, banks, harris, hydesmith, correa, pence, rickscott, sherrod_brown,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, coons, hayes, barr, porter,
-        lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, booker, capito, johncarter, trahan, vantaylor, house_title_header, recordlist].flatten
+        lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, booker, capito, johncarter, trahan, vantaylor, house_title_header, recordlist, tonko].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -1516,6 +1516,18 @@ module Statement
       results
     end
 
+    def self.tonko(page=1)
+      results = []
+      domain = 'tonko.house.gov'
+      url = "https://tonko.house.gov/news/documentquery.aspx?DocumentTypeID=27&Page=#{page}"
+      doc = open_html(url)
+      return if doc.nil?
+      doc.css('.news-texthold').each do |row|
+        results << { :source => url, :url => "https://tonko.house.gov/news/" + row.css('h2 a').first['href'], :title => row.css('h2 a').text.strip, :date => Date.parse(row.css('time').text), :domain => domain }
+      end
+      results
+    end
+
     def self.yarmuth
       results = []
       domain = 'yarmuth.house.gov'
@@ -1561,7 +1573,6 @@ module Statement
           {"frankel.house.gov" => 27},
           {'chabot.house.gov' => 2508},
           {'hice.house.gov' => 27},
-          {'tonko.house.gov' => 27},
           {'perlmutter.house.gov' => 27},
           {'crist.house.gov' => 27},
           {'bergman.house.gov' => 27},
