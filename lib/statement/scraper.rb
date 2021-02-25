@@ -1971,7 +1971,8 @@ module Statement
           "https://rouzer.house.gov/press-releases",
           "https://kaygranger.house.gov/press-releases",
           "https://emmer.house.gov/press-releases",
-          "https://fitzpatrick.house.gov/press-releases"
+          "https://fitzpatrick.house.gov/press-releases",
+          "https://lynch.house.gov/press-releases"
         ]
       end
       results = []
