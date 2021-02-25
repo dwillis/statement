@@ -44,9 +44,9 @@ module Statement
       [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :bucshon, :document_query_new, :costa, :jordan, :barr, :lamborn, :sherrod_brown, :media_body,
       :wenstrup, :robbishop, :bwcoleman, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :pence, :tlaib, :hayes,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :yarmuth, :vandrew, :rickscott, :amodei,
-      :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :rouzer, :coons, :norman, :senate_wordpress,
+      :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :coons, :norman, :senate_wordpress, :recordlist,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
-      :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :slotkin, :booker, :capito, :granger, :johncarter, :trahan, :vantaylor]
+      :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :slotkin, :booker, :capito, :johncarter, :trahan, :vantaylor]
     end
 
     def self.committee_methods
@@ -67,9 +67,9 @@ module Statement
       results = [klobuchar(year), kilmer, sullivan, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, jordan, lamborn, senate_wordpress, media_body,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, tlaib,
         inhofe, fischer, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal, norman, amodei,
-        schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, banks, harris, hydesmith, rouzer, correa, pence, rickscott, sherrod_brown,
-        bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, coons, hayes, barr, emmer, porter,
-        lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, booker, capito, granger, johncarter, trahan, vantaylor, house_title_header].flatten
+        schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, banks, harris, hydesmith, correa, pence, rickscott, sherrod_brown,
+        bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, coons, hayes, barr, porter,
+        lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, booker, capito, johncarter, trahan, vantaylor, house_title_header, recordlist].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -1965,38 +1965,27 @@ module Statement
       results
     end
 
-    def self.rouzer(page=1)
-      results = []
-      url = "https://rouzer.house.gov/press-releases?page=#{page}"
-      doc = Statement::Scraper.open_html(url)
-      return if doc.nil?
-      doc.xpath("//table[@class='table recordList']//tr")[1..-1].each do |row|
-        next if row.children[3].text.strip == 'Title'
-        results << { :source => url, :url => "https://rouzer.house.gov"+row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.parse(row.children[1].text), :domain => "rouzer.house.gov" }
+    def self.recordlist(urls=[], page=1)
+      if urls.empty?
+        urls = [
+          "https://rouzer.house.gov/press-releases",
+          "https://kaygranger.house.gov/press-releases",
+          "https://emmer.house.gov/press-releases",
+          "https://fitzpatrick.house.gov/press-releases"
+        ]
       end
-      results
-    end
-
-    def self.granger(page=1)
       results = []
-      url = "https://kaygranger.house.gov/press-releases?page=#{page}"
-      doc = Statement::Scraper.open_html(url)
-      return if doc.nil?
-      doc.xpath("//table[@class='table recordList']//tr")[1..-1].each do |row|
-        next if row.children[3].text.strip == 'Title'
-        results << { :source => url, :url => "https://kaygranger.house.gov"+row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.parse(row.children[1].text), :domain => "kaygranger.house.gov" }
-      end
-      results
-    end
-
-    def self.emmer(page=1)
-      results = []
-      url = "https://emmer.house.gov/press-releases?page=#{page}"
-      doc = Statement::Scraper.open_html(url)
-      return if doc.nil?
-      doc.xpath("//table[@class='table recordList']//tr")[1..-1].each do |row|
-        next if row.children[3].text.strip == 'Title'
-        results << { :source => url, :url => "https://emmer.house.gov"+row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.parse(row.children[1].text), :domain => "emmer.house.gov" }
+      urls.each do |url|
+        puts url
+        uri = URI(url)
+        source_url = "#{url}?page=#{page}"
+        domain =  URI.parse(source_url).host
+        doc = open_html(source_url)
+        return if doc.nil?
+        doc.xpath("//table[@class='table recordList']//tr")[1..-1].each do |row|
+          next if row.children[3].text.strip == 'Title'
+          results << { :source => url, :url => "https://"+domain+row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.parse(row.children[1].text), :domain => domain }
+        end
       end
       results
     end
