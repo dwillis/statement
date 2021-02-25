@@ -1507,11 +1507,11 @@ module Statement
     def self.connolly(page=1)
       results = []
       domain = 'connolly.house.gov'
-      url = "https://connolly.house.gov/news/documentquery.aspx?DocumentTypeID=1951&Page=#{page}"
+      url = "https://connolly.house.gov/news/documentquery.aspx?DocumentTypeID=1952&Page=#{page}"
       doc = open_html(url)
       return if doc.nil?
-      doc.xpath("//div[@class='middlecopy']//li").each do |row|
-        results << { :source => url, :url => "https://connolly.house.gov/news/" + row.children[1]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.children[3].text.strip), :domain => domain }
+      doc.css('.news-texthold').each do |row|
+        results << { :source => url, :url => "https://connolly.house.gov/news/" + row.css('h2 a').first['href'], :title => row.css('h2 a').text.strip, :date => Date.parse(row.css('time').text), :domain => domain }
       end
       results
     end
