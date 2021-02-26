@@ -42,7 +42,7 @@ module Statement
 
     def self.member_methods
       [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :bucshon, :document_query_new, :costa, :jordan, :barr, :lamborn, :sherrod_brown, :media_body,
-      :wenstrup, :robbishop, :bwcoleman, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :pence, :tlaib, :hayes,
+      :wenstrup, :robbishop, :bwcoleman, :manchin, :harris, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :pence, :tlaib, :hayes, :grijalva,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :yarmuth, :vandrew, :rickscott, :amodei,
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :coons, :norman, :senate_wordpress, :recordlist,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
@@ -70,7 +70,7 @@ module Statement
         schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, banks, harris, hydesmith, correa, pence, rickscott, sherrod_brown,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, coons, hayes, barr, porter,
         lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, booker, capito, johncarter, trahan, vantaylor, house_title_header, recordlist, tonko, johnjoyce,
-        larsen].flatten
+        larsen, grijalva].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -2060,6 +2060,23 @@ module Statement
       return if doc.nil?
       doc.css(".view-content .views-row").first(10).each do |row|
         results << {:source => url, :url => 'https://aderholt.house.gov' + row.css('h3').first.children.first['href'], :title => row.css('h3').first.children.first.text.strip, :date => Date.parse(row.css(".views-field .field-content")[1].text), :domain => domain }
+      end
+      results
+    end
+
+    def self.grijalva(page=0)
+      results = []
+      domain = "grijalva.house.gov"
+      url = "https://grijalva.house.gov/media/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".view-content .views-row").first(10).each do |row|
+        if row.css(".views-field .field-content")[1].text.include?('ago')
+          date = Date.today
+        else
+          date = Date.parse(row.css(".views-field .field-content")[1].text)
+        end
+        results << {:source => url, :url => 'https://grijalva.house.gov' + row.css('h3').first.children.first['href'], :title => row.css('h3').first.children.first.text.strip, :date => date, :domain => domain }
       end
       results
     end
