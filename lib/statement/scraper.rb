@@ -46,7 +46,7 @@ module Statement
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :yarmuth, :vandrew, :rickscott, :amodei,
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :coons, :norman, :senate_wordpress, :recordlist,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
-      :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :slotkin, :booker, :capito, :johncarter, :trahan, :vantaylor, :tonko, :johnjoyce]
+      :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :slotkin, :booker, :capito, :johncarter, :trahan, :vantaylor, :tonko, :johnjoyce, :larsen]
     end
 
     def self.committee_methods
@@ -69,7 +69,8 @@ module Statement
         inhofe, fischer, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal, norman, amodei,
         schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, banks, harris, hydesmith, correa, pence, rickscott, sherrod_brown,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, coons, hayes, barr, porter,
-        lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, booker, capito, johncarter, trahan, vantaylor, house_title_header, recordlist, tonko, johnjoyce].flatten
+        lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, booker, capito, johncarter, trahan, vantaylor, house_title_header, recordlist, tonko, johnjoyce,
+        larsen].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -79,8 +80,8 @@ module Statement
         document_query(page=4), grassley(page=1), grassley(page=2), grassley(page=3), burr(page=2), burr(page=3), burr(page=4), cantwell(page=2),
         clark(year=2013), kilmer(page=2), kilmer(page=3), heinrich(page=2), kind(page=1), walorski(page=2), manchin(page=2), manchin(page=3),
         cassidy(page=2), cassidy(page=3), gillibrand(page=2), paul(page=1), paul(page=2), banks(page=2),
-        olson(year=2013), schumer(page=2), schumer(page=3), poe(year=2015, month=2), lowey(page=1), wyden(page=2),
-        lowey(page=2), lowey(page=3), mcmorris(page=2), mcmorris(page=3), schiff(page=2), schiff(page=3),
+        olson(year=2013), schumer(page=2), schumer(page=3), poe(year=2015, month=2), wyden(page=2),
+        mcmorris(page=2), mcmorris(page=3), schiff(page=2), schiff(page=3),
         takano(page=2), takano(page=3)].flatten
       Utils.remove_generic_urls!(results)
     end
@@ -1504,6 +1505,18 @@ module Statement
       results
     end
 
+    def self.larsen(page=1)
+      results = []
+      domain = 'larsen.house.gov'
+      url = "https://larsen.house.gov/news/documentquery.aspx?DocumentTypeID=27&Page=#{page}"
+      doc = open_html(url)
+      return if doc.nil?
+      doc.css('.news-texthold').each do |row|
+        results << { :source => url, :url => "https://larsen.house.gov/news/" + row.css('h2 a').first['href'], :title => row.css('h2 a').text.strip, :date => Date.parse(row.css('time').text), :domain => domain }
+      end
+      results
+    end
+
     def self.connolly(page=1)
       results = []
       domain = 'connolly.house.gov'
@@ -1826,7 +1839,6 @@ module Statement
           "chuygarcia.house.gov",
           "stanton.house.gov",
           "harder.house.gov",
-          "mikelevin.house.gov",
           "crow.house.gov",
           "steube.house.gov",
           "axne.house.gov",
@@ -2063,18 +2075,6 @@ module Statement
       results
     end
 
-    def self.lowey(page=0)
-      results = []
-      domain = "lowey.house.gov"
-      url = "https://lowey.house.gov/media-center/press-releases?page=#{page}"
-      doc = open_html(url)
-      return if doc.nil?
-      doc.css(".view-content .views-row").first(10).each do |row|
-        results << {:source => url, :url => 'https://lowey.house.gov' + row.css('h3').first.children.first['href'], :title => row.css('h3').first.children.first.text.strip, :date => Date.parse(row.css(".views-field .field-content")[1].text), :domain => domain }
-      end
-      results
-    end
-
     def self.kind(page=0)
       results = []
       domain = "kind.house.gov"
@@ -2231,7 +2231,8 @@ module Statement
           "https://www.young.senate.gov/newsroom/press-releases",
           "https://huffman.house.gov/media-center/press-releases",
           "https://castro.house.gov/media-center/press-releases",
-          "https://cardenas.house.gov/media-center/press-releases"
+          "https://cardenas.house.gov/media-center/press-releases",
+          "https://mikelevin.house.gov/media/press-releases"
         ]
       end
       urls.each do |url|
