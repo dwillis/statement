@@ -2007,7 +2007,8 @@ module Statement
           "https://kaygranger.house.gov/press-releases",
           "https://emmer.house.gov/press-releases",
           "https://fitzpatrick.house.gov/press-releases",
-          "https://lynch.house.gov/press-releases"
+          "https://lynch.house.gov/press-releases",
+          "https://fudge.house.gov/press-statements"
         ]
       end
       results = []
