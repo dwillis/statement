@@ -47,7 +47,7 @@ module Statement
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :coons, :norman, :senate_wordpress, :recordlist,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
       :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :slotkin, :booker, :capito, :johncarter, :trahan, :vantaylor, :tonko, :johnjoyce, :larsen,
-      :hudson]
+      :hudson, :cartwright]
     end
 
     def self.committee_methods
@@ -71,7 +71,7 @@ module Statement
         schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, banks, harris, hydesmith, correa, pence, rickscott, sherrod_brown,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, coons, hayes, barr, porter,
         lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, booker, capito, johncarter, trahan, vantaylor, house_title_header, recordlist, tonko, johnjoyce,
-        larsen, grijalva, hudson].flatten
+        larsen, grijalva, hudson, cartwright].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -1514,6 +1514,18 @@ module Statement
       return if doc.nil?
       doc.css('.news-texthold').each do |row|
         results << { :source => url, :url => "https://larsen.house.gov/news/" + row.css('h2 a').first['href'], :title => row.css('h2 a').text.strip, :date => Date.parse(row.css('time').text), :domain => domain }
+      end
+      results
+    end
+
+    def self.cartwright(page=1)
+      results = []
+      domain = 'cartwright.house.gov'
+      url = "https://cartwright.house.gov/news/documentquery.aspx?DocumentTypeID=2442&Page=#{page}"
+      doc = open_html(url)
+      return if doc.nil?
+      doc.css('.news-texthold').each do |row|
+        results << { :source => url, :url => "https://cartwright.house.gov/news/" + row.css('h2 a').first['href'], :title => row.css('h2 a').text.strip, :date => Date.parse(row.css('time').text), :domain => domain }
       end
       results
     end
