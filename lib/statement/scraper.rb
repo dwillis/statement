@@ -1127,7 +1127,8 @@ module Statement
           "https://www.brown.senate.gov/newsroom/press-releases",
           "https://www.booker.senate.gov/news/press",
           "https://www.cramer.senate.gov/news/press-releases",
-          "https://www.markey.senate.gov/news/press-releases"
+          "https://www.markey.senate.gov/news/press-releases",
+          "https://www.murphy.senate.gov/newsroom/press-releases"
         ]
       end
       results = []
