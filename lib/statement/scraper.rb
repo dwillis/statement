@@ -47,7 +47,7 @@ module Statement
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :norman, :senate_wordpress, :recordlist,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
       :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :slotkin, :capito, :johncarter, :trahan, :vantaylor, :tonko, :johnjoyce, :larsen,
-      :hudson, :cartwright, :article_block, :jackreed, :blackburn]
+      :hudson, :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1]
     end
 
     def self.committee_methods
@@ -71,7 +71,7 @@ module Statement
         schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, banks, hydesmith, correa, pence, rickscott,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, hayes, barr, porter,
         lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, capito, johncarter, trahan, vantaylor, house_title_header, recordlist, tonko, johnjoyce,
-        larsen, grijalva, hudson, cartwright, article_block, jackreed, blackburn].flatten
+        larsen, grijalva, hudson, cartwright, article_block, jackreed, blackburn, article_block_h1].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -1127,11 +1127,7 @@ module Statement
           "https://www.brown.senate.gov/newsroom/press-releases",
           "https://www.booker.senate.gov/news/press",
           "https://www.cramer.senate.gov/news/press-releases",
-          "https://www.markey.senate.gov/news/press-releases",
-          "https://www.murphy.senate.gov/newsroom/press-releases",
           "https://www.toomey.senate.gov/newsroom/press-releases",
-          "https://www.menendez.senate.gov/newsroom/press",
-          "https://www.cotton.senate.gov/news/press-releases"
         ]
       end
       results = []
@@ -1145,6 +1141,31 @@ module Statement
        return if doc.nil?
        doc.css(".ArticleBlock").each do |row|
          results << { :source => url, :url => row.css('a').first['href'], :title => row.css('h3').text.strip, :date => Date.parse(row.css('.ArticleBlock__date').text), :domain => domain }
+       end
+      end
+      results
+    end
+
+    def self.article_block_h1(urls=[], page=1)
+      if urls.empty?
+        urls = [
+          "https://www.markey.senate.gov/news/press-releases",
+          "https://www.murphy.senate.gov/newsroom/press-releases",
+          "https://www.cotton.senate.gov/news/press-releases",
+          "https://www.menendez.senate.gov/newsroom/press"
+        ]
+      end
+      results = []
+
+      urls.each do |url|
+       puts url
+       uri = URI(url)
+       source_url = "#{url}?pagenum_rs=#{page}"
+       domain =  URI.parse(source_url).host
+       doc = open_html(source_url)
+       return if doc.nil?
+       doc.css(".ArticleBlock").each do |row|
+         results << { :source => url, :url => row.css('a').first['href'], :title => row.css('a').text.strip, :date => Date.parse(row.css('.ArticleBlock__date').text), :domain => domain }
        end
       end
       results
