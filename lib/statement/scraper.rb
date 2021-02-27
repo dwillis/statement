@@ -47,7 +47,7 @@ module Statement
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :norman, :senate_wordpress, :recordlist,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
       :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :slotkin, :capito, :johncarter, :trahan, :vantaylor, :tonko, :johnjoyce, :larsen,
-      :hudson, :cartwright, :article_block, :jackreed]
+      :hudson, :cartwright, :article_block, :jackreed, :blackburn]
     end
 
     def self.committee_methods
@@ -71,7 +71,7 @@ module Statement
         schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, banks, harris, hydesmith, correa, pence, rickscott,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, hayes, barr, porter,
         lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, capito, johncarter, trahan, vantaylor, house_title_header, recordlist, tonko, johnjoyce,
-        larsen, grijalva, hudson, cartwright, article_block, jackreed].flatten
+        larsen, grijalva, hudson, cartwright, article_block, jackreed, blackburn].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -1342,7 +1342,18 @@ module Statement
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css("div.ArticleBlock").each do |row|
-        results << { :source => url, :url => row.at('a')['href'], :title => row.at('a').text.strip, :date => row.css("time").first.text, :domain => 'www.reed.senate.gov'}
+        results << { :source => url, :url => row.at('a')['href'], :title => row.at('a').text.strip, :date => Date.parse(row.css("time").first.text), :domain => 'www.reed.senate.gov'}
+      end
+      results
+    end
+
+    def self.blackburn(page=1)
+      results = []
+      url = "https://www.blackburn.senate.gov/news/cc8c80c1-d564-4bbb-93a4-f1d772346ae0?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("div.element").each do |row|
+        results << { :source => url, :url => row.at('a')['href'], :title => row.css('div.element-title').text, :date => Date.parse(row.css('span.element-datetime').text), :domain => 'www.blackburn.senate.gov'}
       end
       results
     end
@@ -2547,7 +2558,6 @@ module Statement
         urls = [
           "https://www.smith.senate.gov/press-releases",
           "https://www.romney.senate.gov/press-releases",
-          "https://www.blackburn.senate.gov/press-releases",
           "https://www.braun.senate.gov/press-releases",
           "https://www.rosen.senate.gov/press-releases",
           "https://www.sinema.senate.gov/press-releases",
