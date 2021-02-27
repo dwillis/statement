@@ -1654,7 +1654,6 @@ module Statement
           {'houlahan.house.gov' => 27},
           {'hern.house.gov' => 27},
           {'fletcher.house.gov' => 27},
-          {'crenshaw.house.gov' => 27},
           {'guthrie.house.gov' => 2381},
           {"pingree.house.gov" => 27},
           {"long.house.gov" => 27},
@@ -2022,7 +2021,8 @@ module Statement
           "https://emmer.house.gov/press-releases",
           "https://fitzpatrick.house.gov/press-releases",
           "https://lynch.house.gov/press-releases",
-          "https://fudge.house.gov/press-statements"
+          "https://fudge.house.gov/press-statements",
+          "https://crenshaw.house.gov/press-releases"
         ]
       end
       results = []
