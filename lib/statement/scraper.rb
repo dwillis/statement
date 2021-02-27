@@ -1130,7 +1130,8 @@ module Statement
           "https://www.markey.senate.gov/news/press-releases",
           "https://www.murphy.senate.gov/newsroom/press-releases",
           "https://www.toomey.senate.gov/newsroom/press-releases",
-          "https://www.menendez.senate.gov/newsroom/press"
+          "https://www.menendez.senate.gov/newsroom/press",
+          "https://www.cotton.senate.gov/news/press-releases"
         ]
       end
       results = []
