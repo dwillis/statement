@@ -2311,7 +2311,8 @@ module Statement
         urls = [
           "https://www.kelly.senate.gov/media/press-releases/",
           "https://www.hickenlooper.senate.gov/media/press-releases/",
-          "https://www.lujan.senate.gov/media/press-releases/"
+          "https://www.lujan.senate.gov/media/press-releases/",
+          "https://www.sanders.senate.gov/media/press-releases/"
         ]
       end
       urls.each do |url|
