@@ -2511,7 +2511,7 @@ module Statement
       return if doc.nil?
       doc.css(".data-browser h2").each do |row|
           results << { :source => url,
-                       :url => "https://www.blunt.senate.gov" + row.css('a').first['href'],
+                       :url => row.css('a').first['href'],
                        :title => row.css('a').text.strip,
                        :date => Date.parse(row.next.next.text),
                        :domain => 'www.blunt.senate.gov' }
