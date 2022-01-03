@@ -1174,11 +1174,11 @@ module Statement
     def self.schiff(page=1)
       results = []
       url = "https://schiff.house.gov/news/press-releases?PageNum_rs=#{page}&"
-      doc = open_html(url)
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       rows = doc.css("#press").first.css('h2')
       rows.each do |row|
-        results << { :source => url, :url => "https://schiff.house.gov" + row.children.first['href'], :title => row.children.last.text.strip, :date => Date.strptime(row.previous.previous.text, "%m.%d.%y"), :domain => "schiff.house.gov" }
+        results << { :source => url, :url => "https://schiff.house.gov" + row.css('a').first['href'], :title => row.css('a').first.text, :date => Date.parse(row.previous.previous.text), :domain => "schiff.house.gov" }
       end
       results
     end
