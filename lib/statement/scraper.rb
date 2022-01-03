@@ -1294,13 +1294,13 @@ module Statement
       results
     end
 
-    def self.grassley(page=0)
+    def self.grassley(page=1)
       results = []
-      url = "https://www.grassley.senate.gov/news/news-releases?title=&tid=All&date[value]&page=#{page}"
-      doc = open_html(url)
+      url = "https://www.grassley.senate.gov/news/news-releases?pagenum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.xpath("//div[@class='views-field views-field-field-release-date']").each do |row|
-        results << { :source => url, :url => "https://www.grassley.senate.gov" + row.next.next.children[1].children[0]['href'], :title => row.next.next.text.strip, :date => Date.parse(row.text.strip), :domain => "www.grassley.senate.gov" }
+      doc.xpath("//li[@class='PageList__item']").each do |row|
+        results << { :source => url, :url => row.css('a').first['href'], :title => row.css('a').first.text.strip, :date => Date.parse(row.css('p').text.gsub('.','/')), :domain => "www.grassley.senate.gov" }
       end
       results
     end
@@ -1781,7 +1781,7 @@ module Statement
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.xpath("//article").each do |row|
-        results << {:source => url, :url => "https://bucshon.house.gov" + row.css("h3 a").first['href'], :title => row.css("h3").text.strip, :date => Date.parse(row.css('time').first['datetime']), :domain => 'bucshon.house.gov' }
+        results << {:source => url, :url => "https://bucshon.house.gov" + row.css("h2 a").first['href'], :title => row.css("h2").text.strip, :date => Date.parse(row.css('time').first['datetime']), :domain => 'bucshon.house.gov' }
       end
       results
     end
@@ -1824,7 +1824,7 @@ module Statement
       results = []
       domain = 'www.schumer.senate.gov'
       url = "https://www.schumer.senate.gov/newsroom/press-releases/table?PageNum_rs=#{page}"
-      doc = open_html(url)
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       rows = (doc/:table/:tr).select{|r| !r.children[3].nil?}
       rows.each do |row|
