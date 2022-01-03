@@ -2472,17 +2472,15 @@ module Statement
       results
     end
 
-    def self.rickscott(page=0)
+    def self.rickscott(page=1)
       results = []
       url = "https://www.rickscott.senate.gov/press-releases?page=#{page}"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.css(".views-row").each do |row|
-          results << { :source => url,
-                       :url => "https://www.rickscott.senate.gov" + row.css('a').first['href'],
-                       :title => row.children[0].text.strip,
-                       :date => Date.parse(row.children.last.text),
-                       :domain => 'www.rickscott.senate.gov' }
+      rows = doc.css(".element")
+      rows.each do |row|
+        year = Date.today.month == 1 ? Date.today.year-1 : Date.today.year
+        results << { :source => url, :url => row.css('a').first['href'], :title => row.css('.element-title').text.strip, :date => Date.strptime(row.css('.element-date').text + " "+ year.to_s, "%b %d %Y"), :domain => "www.rickscott.senate.gov" }
       end
       results
     end
