@@ -1099,7 +1099,7 @@ module Statement
     def self.klobuchar(year=current_year, month=0, page=1)
       results = []
       url = "https://www.klobuchar.senate.gov/public/index.cfm/news-releases?MonthDisplay=#{month}&YearDisplay=#{year}&page=#{page}"
-      doc = open_html(url)
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       return if doc.xpath("//tr").empty?
       doc.xpath("//tr")[2..-1].each do |row|
@@ -1234,12 +1234,12 @@ module Statement
 
     def self.burr(page=1)
       results = []
-      url = "https://www.burr.senate.gov/press/releases?PageNum_rs=#{page}&"
-      doc = open_html(url)
+      url = "https://www.burr.senate.gov/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      rows = doc.css("#press").first.css('h2')
+      rows = doc.css(".element")
       rows.each do |row|
-        results << { :source => url, :url => "https://www.burr.senate.gov" + row.children.first['href'], :title => row.children.last.text.strip, :date => Date.strptime(row.previous.previous.text, "%m.%d.%y"), :domain => "burr.senate.gov" }
+        results << { :source => url, :url => row.css('a').first['href'], :title => row.css('.element-title').text, :date => Date.parse(row.css('.element-datetime').text), :domain => "burr.senate.gov" }
       end
       results
     end
