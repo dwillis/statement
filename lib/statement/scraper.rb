@@ -1448,15 +1448,14 @@ module Statement
       results
     end
 
-    def self.walorski(page=nil)
+    def self.walorski(page=1)
       results = []
-      url = "https://walorski.house.gov/news/press-releases/"
-      url = url + "page/#{page}" if page
-      doc = open_html(url)
+      url = "https://walorski.house.gov/news/page/#{page}/"
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.xpath("//div[@class='media-body']").each do |row|
-        date = row.children[5].text.strip == '' ? nil : Date.parse(row.children[5].text)
-        results << { source: url, url: row.children[1]['href'], title: row.children[3].text.strip, date: date, domain: "walorski.house.gov"}
+        date = row.css('p').first.text.strip == '' ? nil : Date.parse(row.css('p').first.text)
+        results << { source: url, url: row.css('a').first['href'], title: row.css('h3').text.strip, date: date, domain: "walorski.house.gov"}
       end
       results
     end
