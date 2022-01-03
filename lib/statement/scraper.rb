@@ -2049,7 +2049,6 @@ module Statement
           "https://emmer.house.gov/press-releases",
           "https://fitzpatrick.house.gov/press-releases",
           "https://lynch.house.gov/press-releases",
-          "https://fudge.house.gov/press-statements",
           "https://crenshaw.house.gov/press-releases"
         ]
       end
