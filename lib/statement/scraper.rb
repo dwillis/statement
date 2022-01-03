@@ -2389,11 +2389,11 @@ module Statement
       url = "https://www.hassan.senate.gov/news/press-releases?PageNum_rs=#{page}"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.css("#newscontent h2")[1..-1].each do |row|
+      doc.css("div.ArticleBlock").each do |row|
         results << { :source => url,
-                     :url => "https://www.hassan.senate.gov/" + row.css('a').first['href'],
-                     :title => row.text.strip,
-                     :date => Date.parse(row.previous.previous.text),
+                     :url => row.css('a').first['href'],
+                     :title => row.css('h2').text,
+                     :date => Date.parse(row.css('p').text.gsub('.','/')),
                      :domain => 'www.hassan.senate.gov' }
       end
       results
