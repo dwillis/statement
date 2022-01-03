@@ -1272,12 +1272,8 @@ module Statement
       url = "https://www.crapo.senate.gov/media/newsreleases/?PageNum_rs=#{page}&"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.css("#newscontent h2").each do |row|
-          results << { :source => url,
-                       :url => "https://www.crapo.senate.gov/" + row.css('a').first['href'],
-                       :title => row.text.strip,
-                       :date => Date.parse(row.previous.previous.text),
-                       :domain => 'www.crapo.senate.gov' }
+      doc.css("div.ArticleBlock").each do |row|
+        results << { :source => url, :url => row.at('a')['href'], :title => row.at('a').text.strip, :date => Date.parse(row.css('p').text), :domain => 'www.crapo.senate.gov'}
       end
       results
     end
