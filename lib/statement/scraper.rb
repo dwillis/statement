@@ -47,7 +47,7 @@ module Statement
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :norman, :senate_wordpress, :recordlist,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
       :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :slotkin, :capito, :johncarter, :trahan, :vantaylor, :tonko, :johnjoyce, :larsen,
-      :hudson, :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1, :casey]
+      :hudson, :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine]
     end
 
     def self.committee_methods
@@ -66,8 +66,8 @@ module Statement
     def self.member_scrapers
       year = Date.today.year
       results = [klobuchar(year), kilmer, sullivan, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, jordan, lamborn, senate_wordpress, media_body,
-        document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, casey, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, tlaib,
-        inhofe, fischer, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal, norman, amodei,
+        document_query([], page=1), document_query([], page=2), crapo, grassley(page=0), burr, casey, schatz, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, tlaib,
+        inhofe, fischer, kaine, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal, norman, amodei,
         schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, banks, hydesmith, correa, pence, rickscott,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, hayes, barr, porter,
         lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, capito, johncarter, trahan, vantaylor, house_title_header, recordlist, tonko, johnjoyce,
@@ -1379,6 +1379,17 @@ module Statement
       results
     end
 
+    def self.kaine(page=1)
+      results = []
+      url = "https://www.kaine.senate.gov/news?pagenum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("div.ArticleBlock").each do |row|
+        results << { :source => url, :url => row.at('a')['href'], :title => row.at('a').text.strip, :date => Date.parse(row.css("p").text), :domain => 'www.kaine.senate.gov'}
+      end
+      results
+    end
+
     def self.blackburn(page=1)
       results = []
       url = "https://www.blackburn.senate.gov/news/cc8c80c1-d564-4bbb-93a4-f1d772346ae0?page=#{page}"
@@ -2400,6 +2411,21 @@ module Statement
                      :title => row.css('h2').text,
                      :date => Date.parse(row.css('p').text.gsub('.','/')),
                      :domain => 'www.hassan.senate.gov' }
+      end
+      results
+    end
+
+    def self.schatz(page=1)
+      results = []
+      url = "https://www.schatz.senate.gov/news/press-releases?PageNum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("div.ArticleBlock").each do |row|
+        results << { :source => url,
+                     :url => row.css('a').first['href'],
+                     :title => row.css('h2').text,
+                     :date => Date.parse(row.css('p').text.gsub('.','/')),
+                     :domain => 'www.schatz.senate.gov' }
       end
       results
     end
