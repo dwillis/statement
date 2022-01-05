@@ -41,7 +41,7 @@ module Statement
     end
 
     def self.member_methods
-      [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :bucshon, :document_query_new, :costa, :jordan, :barr, :lamborn, :media_body,
+      [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :bucshon, :document_query_new, :costa, :jordan, :barr, :lamborn, :media_body, :trone,
       :wenstrup, :robbishop, :bwcoleman, :manchin, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :pence, :tlaib, :hayes, :grijalva,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :yarmuth, :vandrew, :rickscott,
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :norman, :senate_wordpress, :recordlist,
@@ -71,7 +71,7 @@ module Statement
         schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, banks, hydesmith, correa, pence, rickscott,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, hayes, barr, porter,
         lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, capito, johncarter, trahan, vantaylor, house_title_header, recordlist, tonko, johnjoyce,
-        larsen, grijalva, hudson, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus].flatten
+        larsen, grijalva, hudson, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -995,7 +995,8 @@ module Statement
           "https://tenney.house.gov/media/press-releases",
           "https://sessions.house.gov/media/press-releases",
           "https://amodei.house.gov/news-releases",
-          "https://palmer.house.gov/media-center/press-releases"
+          "https://palmer.house.gov/media-center/press-releases",
+          "https://newhouse.house.gov/media-center/press-releases"
         ]
       end
       results = []
@@ -1910,7 +1911,6 @@ module Statement
           "morelle.house.gov",
           "wild.house.gov",
           "chuygarcia.house.gov",
-          "stanton.house.gov",
           "harder.house.gov",
           "crow.house.gov",
           "steube.house.gov",
@@ -1919,7 +1919,6 @@ module Statement
           "underwood.house.gov",
           "davids.house.gov",
           "pressley.house.gov",
-          "trone.house.gov",
           "andylevin.house.gov",
           "stevens.house.gov",
           "hagedorn.house.gov",
@@ -1931,9 +1930,9 @@ module Statement
           "armstrong.house.gov",
           "pappas.house.gov",
           "kim.house.gov",
-          "wright.house.gov",
           "schakowsky.house.gov",
-          "eshoo.house.gov"
+          "eshoo.house.gov",
+          "foster.house.gov"
         ]
       end
 
@@ -2081,7 +2080,8 @@ module Statement
           "https://emmer.house.gov/press-releases",
           "https://fitzpatrick.house.gov/press-releases",
           "https://lynch.house.gov/press-releases",
-          "https://crenshaw.house.gov/press-releases"
+          "https://crenshaw.house.gov/press-releases",
+          "https://stanton.house.gov/press-releases"
         ]
       end
       results = []
@@ -2145,6 +2145,18 @@ module Statement
       return if doc.nil?
       doc.css(".view-content .views-row").first(10).each do |row|
         results << {:source => url, :url => 'https://hudson.house.gov' + row.css('h3').first.children.first['href'], :title => row.css('h3').first.children.first.text.strip, :date => Date.parse(row.css(".views-field .field-content")[1].text), :domain => domain }
+      end
+      results
+    end
+
+    def self.trone(page=1)
+      results = []
+      domain = "trone.house.gov"
+      url = "https://trone.house.gov/category/congress_press_release/page/#{page}/"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("div.item").each do |row|
+        results << {:source => url, :url => row.css('a').first['href'], :title => row.css('h2').text, :date => Date.parse(row.css("p").first.text), :domain => domain }
       end
       results
     end
