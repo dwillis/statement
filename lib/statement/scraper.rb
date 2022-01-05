@@ -995,7 +995,7 @@ module Statement
           "https://tenney.house.gov/media/press-releases",
           "https://sessions.house.gov/media/press-releases",
           "https://amodei.house.gov/news-releases",
-          "https://palmer.house.gov/media-center/news-releases"
+          "https://palmer.house.gov/media-center/press-releases"
         ]
       end
       results = []
