@@ -43,11 +43,11 @@ module Statement
     def self.member_methods
       [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :bucshon, :document_query_new, :costa, :jordan, :barr, :lamborn, :media_body,
       :wenstrup, :robbishop, :bwcoleman, :manchin, :timscott, :banks, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :pence, :tlaib, :hayes, :grijalva,
-      :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :yarmuth, :vandrew, :rickscott, :amodei,
+      :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :yarmuth, :vandrew, :rickscott,
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :norman, :senate_wordpress, :recordlist,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
       :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :slotkin, :capito, :johncarter, :trahan, :vantaylor, :tonko, :johnjoyce, :larsen,
-      :hudson, :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn]
+      :hudson, :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus]
     end
 
     def self.committee_methods
@@ -67,11 +67,11 @@ module Statement
       year = Date.today.year
       results = [klobuchar(year), kilmer, sullivan, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, jordan, lamborn, senate_wordpress, media_body,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=1), baldwin, burr, casey, cruz, schatz, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, tlaib,
-        inhofe, fischer, kaine, padilla, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal, norman, amodei,
+        inhofe, fischer, kaine, padilla, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal, norman,
         schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, banks, hydesmith, correa, pence, rickscott,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, hayes, barr, porter,
         lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, capito, johncarter, trahan, vantaylor, house_title_header, recordlist, tonko, johnjoyce,
-        larsen, grijalva, hudson, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn].flatten
+        larsen, grijalva, hudson, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -993,7 +993,9 @@ module Statement
         urls = [
           "https://issa.house.gov/media/press-releases",
           "https://tenney.house.gov/media/press-releases",
-          "https://sessions.house.gov/media/press-releases"
+          "https://sessions.house.gov/media/press-releases",
+          "https://amodei.house.gov/news-releases",
+          "https://palmer.house.gov/news-releases"
         ]
       end
       results = []
@@ -1749,17 +1751,6 @@ module Statement
       results
     end
 
-    def self.amodei(page=0)
-      results = []
-      url = "https://amodei.house.gov/news-releases?page=#{page}"
-      doc = Statement::Scraper.open_html(url)
-      return if doc.nil?
-      doc.css("div.media-body").each do |row|
-        results << { :source => url, :url => "https://amodei.house.gov"+row.css('a').first['href'], :title => row.css('a').first.text, :date => Date.parse(row.css('div.row')[0].text), :domain => "amodei.house.gov" }
-      end
-      results
-    end
-
     def self.norman(page=1)
       results = []
       url = "https://norman.house.gov/newsroom/default.aspx?DocumentTypeID=27&Page=#{page}"
@@ -1811,6 +1802,17 @@ module Statement
       return if doc.nil?
       doc.xpath("//article").each do |row|
         results << {:source => url, :url => "https://bucshon.house.gov" + row.css("h2 a").first['href'], :title => row.css("h2").text.strip, :date => Date.parse(row.css('time').first['datetime']), :domain => 'bucshon.house.gov' }
+      end
+      results
+    end
+
+    def self.titus(page=1)
+      results = []
+      url = "https://titus.house.gov/news/documentquery.aspx?DocumentTypeID=27&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.xpath("//article").each do |row|
+        results << {:source => url, :url => "https://titus.house.gov" + row.css("h2 a").first['href'], :title => row.css("h2").text.strip, :date => Date.parse(row.css('time').first['datetime']), :domain => 'titus.house.gov' }
       end
       results
     end
