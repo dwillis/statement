@@ -996,7 +996,8 @@ module Statement
           "https://sessions.house.gov/media/press-releases",
           "https://amodei.house.gov/news-releases",
           "https://palmer.house.gov/media-center/press-releases",
-          "https://newhouse.house.gov/media-center/press-releases"
+          "https://newhouse.house.gov/media-center/press-releases",
+          "https://doggett.house.gov/media/press-releases"
         ]
       end
       results = []
@@ -2081,7 +2082,8 @@ module Statement
           "https://fitzpatrick.house.gov/press-releases",
           "https://lynch.house.gov/press-releases",
           "https://crenshaw.house.gov/press-releases",
-          "https://stanton.house.gov/press-releases"
+          "https://stanton.house.gov/press-releases",
+          "https://davidson.house.gov/press-releases"
         ]
       end
       results = []
@@ -2266,7 +2268,6 @@ module Statement
             "https://keating.house.gov/media-center/press-releases",
             "https://blumenauer.house.gov/media-center/press-releases",
             "https://larson.house.gov/media-center/press-releases",
-  #          "https://doggett.house.gov/media-center/press-releases",
             "https://kaptur.house.gov/media-center/press-releases",
   #          "https://neal.house.gov/press-releases",
             "https://khanna.house.gov/media/press-releases",
