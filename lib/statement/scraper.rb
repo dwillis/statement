@@ -1793,7 +1793,7 @@ module Statement
 
     def self.buddycarter(page=1)
       results = []
-      url = "https://buddycarter.house.gov/newsroom/default.aspx?DocumentTypeID=27&Page=#{page}"
+      url = "https://buddycarter.house.gov/news/default.aspx?DocumentTypeID=27&Page=#{page}"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.xpath("//article").each do |row|
