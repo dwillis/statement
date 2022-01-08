@@ -47,7 +47,7 @@ module Statement
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :norman, :senate_wordpress, :recordlist,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
       :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :slotkin, :capito, :johncarter, :trahan, :vantaylor, :tonko, :johnjoyce, :larsen,
-      :hudson, :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus]
+      :hudson, :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :rodneydavis]
     end
 
     def self.committee_methods
@@ -68,7 +68,7 @@ module Statement
       results = [klobuchar(year), kilmer, sullivan, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, jordan, lamborn, senate_wordpress, media_body,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=1), baldwin, burr, casey, cruz, schatz, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, tlaib,
         inhofe, fischer, kaine, padilla, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal, norman,
-        schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, banks, hydesmith, correa, pence, rickscott,
+        schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, banks, hydesmith, correa, pence, rickscott, rodneydavis,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, hayes, barr, porter,
         lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, capito, johncarter, trahan, vantaylor, house_title_header, recordlist, tonko, johnjoyce,
         larsen, grijalva, hudson, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce].flatten
@@ -1536,6 +1536,20 @@ module Statement
       results = []
       domain = 'joyce.house.gov'
       url = "https://joyce.house.gov/press"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      json = JSON.load(doc.at_css('[id="__NEXT_DATA__"]').text)
+      posts = json['props']['pageProps']['dehydratedState']['queries'][11]['state']['data']['posts']['edges']
+      posts.each do |post|
+        results << { :source => url, :url => post['node']['link'], :title => post['node']['title'], :date => Date.parse(post['node']['date']), :domain => domain}
+      end
+      results
+    end
+
+    def self.rodneydavis
+      results = []
+      domain = 'rodneydavis.house.gov'
+      url = "https://rodneydavis.house.gov/press"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       json = JSON.load(doc.at_css('[id="__NEXT_DATA__"]').text)
