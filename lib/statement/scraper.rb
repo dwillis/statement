@@ -47,7 +47,8 @@ module Statement
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :norman, :senate_wordpress, :recordlist,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
       :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :slotkin, :capito, :johncarter, :trahan, :vantaylor, :tonko, :johnjoyce, :larsen,
-      :hudson, :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :rodneydavis]
+      :hudson, :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :rodneydavis,
+      :buddycarter]
     end
 
     def self.committee_methods
@@ -68,7 +69,7 @@ module Statement
       results = [klobuchar(year), kilmer, sullivan, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, jordan, lamborn, senate_wordpress, media_body,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=1), baldwin, burr, casey, cruz, schatz, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, tlaib,
         inhofe, fischer, kaine, padilla, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal, norman,
-        schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, banks, hydesmith, correa, pence, rickscott, rodneydavis,
+        schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, banks, hydesmith, correa, pence, rickscott, rodneydavis, buddycarter,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, hayes, barr, porter,
         lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, capito, johncarter, trahan, vantaylor, house_title_header, recordlist, tonko, johnjoyce,
         larsen, grijalva, hudson, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce].flatten
@@ -1692,7 +1693,6 @@ module Statement
           {"loudermilk.house.gov" => 27},
           {"allen.house.gov" => 27},
           {"davidscott.house.gov" => 377},
-          {"buddycarter.house.gov" => 27},
           {"grothman.house.gov" => 27},
           {"kathleenrice.house.gov" => 27},
           {"wittman.house.gov" => 2670},
@@ -1787,6 +1787,17 @@ module Statement
       return if doc.nil?
       doc.xpath("//article").each do |row|
         results << {:source => url, :url => "https://norman.house.gov" + row.css("h2 a").first['href'], :title => row.css("h2").text.strip, :date => Date.parse(row.css('time').first['datetime']), :domain => 'norman.house.gov' }
+      end
+      results
+    end
+
+    def self.buddycarter(page=1)
+      results = []
+      url = "https://buddycarter.house.gov/newsroom/default.aspx?DocumentTypeID=27&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.xpath("//article").each do |row|
+        results << {:source => url, :url => "https://buddycarter.house.gov" + row.css("h2 a").first['href'], :title => row.css("h2").text.strip, :date => Date.parse(row.css('time').first['datetime']), :domain => 'buddycarter.house.gov' }
       end
       results
     end
