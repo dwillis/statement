@@ -997,7 +997,8 @@ module Statement
           "https://amodei.house.gov/news-releases",
           "https://palmer.house.gov/media-center/press-releases",
           "https://newhouse.house.gov/media-center/press-releases",
-          "https://doggett.house.gov/media/press-releases"
+          "https://doggett.house.gov/media/press-releases",
+          "https://ocasio-cortez.house.gov/media/press-releases",
         ]
       end
       results = []
@@ -2089,7 +2090,8 @@ module Statement
           "https://lynch.house.gov/press-releases",
           "https://crenshaw.house.gov/press-releases",
           "https://stanton.house.gov/press-releases",
-          "https://davidson.house.gov/press-releases"
+          "https://davidson.house.gov/press-releases",
+          "https://dean.house.gov/press-releases"
         ]
       end
       results = []
@@ -2296,7 +2298,6 @@ module Statement
             "https://burchett.house.gov/media/press-releases",
             "https://cline.house.gov/media/press-releases",
             "https://delgado.house.gov/media/press-releases",
-  #          "https://dean.house.gov/media/press-releases",
             "https://sylviagarcia.house.gov/media/press-releases",
             "https://golden.house.gov/media/press-releases",
             "https://haaland.house.gov/media/press-releases",
@@ -2307,7 +2308,6 @@ module Statement
             "https://malinowski.house.gov/media/press-releases",
             "https://meuser.house.gov/media/press-releases",
             "https://miller.house.gov/media/press-releases",
-            "https://ocasio-cortez.house.gov/media/press-releases",
             "https://reschenthaler.house.gov/media/press-releases",
             "https://johnrose.house.gov/media/press-releases",
             "https://roy.house.gov/media/press-releases",
