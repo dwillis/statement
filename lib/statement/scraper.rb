@@ -996,7 +996,8 @@ module Statement
           "https://newhouse.house.gov/media-center/press-releases",
           "https://doggett.house.gov/media/press-releases",
           "https://ocasio-cortez.house.gov/media/press-releases",
-          "https://hudson.house.gov/media/press-releases"
+          "https://hudson.house.gov/media/press-releases",
+          "https://delgado.house.gov/media/press-releases"
         ]
       end
       results = []
@@ -1678,26 +1679,18 @@ module Statement
           {"loudermilk.house.gov" => 27},
           {"davidscott.house.gov" => 377},
           {"kathleenrice.house.gov" => 27},
-          {"wittman.house.gov" => 2670},
           {"kinzinger.house.gov" => 2665},
           {"frankel.house.gov" => 27},
           {'chabot.house.gov' => 2508},
           {'hice.house.gov' => 27},
-          {'perlmutter.house.gov' => 27},
-          {'crist.house.gov' => 27},
           {'bergman.house.gov' => 27},
           {'stephaniemurphy.house.gov' => 27},
           {'gottheimer.house.gov' => 27},
           {'mcgovern.house.gov' => 2472},
           {'crawford.house.gov' => 2080},
-          {'estes.house.gov' => 27},
-          {'budd.house.gov' => 27},
           {'delbene.house.gov' => 27},
-          {'gosar.house.gov' => 27},
           {'wassermanschultz.house.gov' => 27},
-          {'reed.house.gov' => 27},
-          {'mckinley.house.gov' => 27},
-          {'hill.house.gov' => 27},
+          {'reed.house.gov' => 27}
         ]
       end
       domains.each do |domain|
@@ -1758,7 +1751,15 @@ module Statement
           {"timmons.house.gov" => 27},
           {"allen.house.gov" => 27},
           {'matsui.house.gov' => 27},
-          {"palazzo.house.gov" => 2519}
+          {"palazzo.house.gov" => 2519},
+          {'estes.house.gov' => 27},
+          {'mckinley.house.gov' => 27},
+          {'hill.house.gov' => 27},
+          {'perlmutter.house.gov' => 27},
+          {'crist.house.gov' => 27},
+          {'budd.house.gov' => 27},
+          {"wittman.house.gov" => 2670},
+          {'gosar.house.gov' => 27}
         ]
       end
       domains.each do |domain|
@@ -2275,7 +2276,6 @@ module Statement
             "https://allred.house.gov/media/press-releases",
             "https://burchett.house.gov/media/press-releases",
             "https://cline.house.gov/media/press-releases",
-            "https://delgado.house.gov/media/press-releases",
             "https://sylviagarcia.house.gov/media/press-releases",
             "https://golden.house.gov/media/press-releases",
             "https://haaland.house.gov/media/press-releases",
