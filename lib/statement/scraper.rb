@@ -1519,20 +1519,6 @@ module Statement
       results
     end
 
-    def self.johncarter
-      results = []
-      domain = 'carter.house.gov'
-      url = "https://carter.house.gov/news/press-releases"
-      doc = Statement::Scraper.open_html(url)
-      return if doc.nil?
-      row = doc.css(".news-row")[1]
-      results << { :source => url, :url => "https://johncarter.house.gov"+row.css('a').first['href'], :title => row.css('a').first.text, :date => Date.parse(row.css(".field-content").first.text.strip), :domain => domain}
-      doc.css(".news-row")[2..-1].each do |row|
-        results << { :source => url, :url => "https://johncarter.house.gov"+row.css('a').first['href'], :title => row.css('a').first.text, :date => Date.parse(row.css(".field-content")[1].text.strip), :domain => domain}
-      end
-      results
-    end
-
     def self.joyce
       results = []
       domain = 'joyce.house.gov'
@@ -1798,6 +1784,18 @@ module Statement
       return if doc.nil?
       doc.xpath("//article").each do |row|
         results << {:source => url, :url => "https://buddycarter.house.gov" + row.css("h2 a").first['href'], :title => row.css("h2").text.strip, :date => Date.parse(row.css('time').first['datetime']), :domain => 'buddycarter.house.gov' }
+      end
+      results
+    end
+
+    def self.johncarter(page=1)
+      results = []
+      domain = 'carter.house.gov'
+      url = "https://carter.house.gov/news/documentquery.aspx?DocumentTypeID=27&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.xpath("//article").each do |row|
+        results << {:source => url, :url => "https://carter.house.gov" + row.css("h2 a").first['href'], :title => row.css("h2").text.strip, :date => Date.parse(row.css('time').first['datetime']), :domain => domain }
       end
       results
     end
