@@ -42,11 +42,11 @@ module Statement
 
     def self.member_methods
       [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :bucshon, :document_query_new, :costa, :jordan, :barr, :lamborn, :media_body, :trone,
-      :wenstrup, :robbishop, :bwcoleman, :manchin, :timscott, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :pence, :tlaib, :hayes, :grijalva,
+      :wenstrup, :robbishop, :bwcoleman, :manchin, :timscott, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :pence, :tlaib, :hayes, :grijalva, :aguilar,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :yarmuth, :vandrew, :rickscott, :joyce,
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
-      :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :slotkin, :capito, :vantaylor, :tonko, :johnjoyce, :larsen, :mooney,
+      :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :slotkin, :capito, :vantaylor, :tonko, :johnjoyce, :larsen, :mooney, :himes,
       :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :rodneydavis]
     end
 
@@ -68,9 +68,9 @@ module Statement
       results = [klobuchar(year), kilmer, sullivan, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, jordan, lamborn, senate_wordpress, media_body,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=1), baldwin, burr, casey, cruz, schatz, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, tlaib,
         inhofe, fischer, kaine, padilla, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal,
-        schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, hydesmith, correa, pence, rickscott, rodneydavis, mooney,
+        schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, hydesmith, correa, pence, rickscott, rodneydavis, mooney, himes,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, hayes, barr, porter,
-        lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, capito, vantaylor, house_title_header, recordlist, tonko, johnjoyce,
+        lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, capito, vantaylor, house_title_header, recordlist, tonko, johnjoyce, aguilar,
         larsen, grijalva, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
@@ -1514,6 +1514,18 @@ module Statement
       results
     end
 
+    def self.himes(page=1)
+      results = []
+      domain = 'himes.house.gov'
+      url = "https://himes.house.gov/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("div.media-digest-body").each do |row|
+        results << { :source => url, :url => "https://himes.house.gov"+row.css("a").attr('href').value, :title => row.css("div.post-media-digest-title").text, :date => Date.parse(row.css("div.post-media-digest-date").text + " " + (Date.today.year-1).to_s), :domain => domain}
+      end
+      results
+    end
+
     def self.costa(page=1)
       results = []
       domain = 'costa.house.gov'
@@ -2155,6 +2167,18 @@ module Statement
       results = []
       domain = "trone.house.gov"
       url = "https://trone.house.gov/category/congress_press_release/page/#{page}/"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("div.item").each do |row|
+        results << {:source => url, :url => row.css('a').first['href'], :title => row.css('h2').text, :date => Date.parse(row.css("p").first.text), :domain => domain }
+      end
+      results
+    end
+
+    def self.aguilar(page=1)
+      results = []
+      domain = "aguilar.house.gov"
+      url = "https://aguilar.house.gov/category/congress_press_release/page/#{page}/"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css("div.item").each do |row|
