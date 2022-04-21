@@ -2704,6 +2704,7 @@ module Statement
       end
       results = []
       urls.each do |url|
+        puts url
         uri = URI(url)
         source_url = "#{url}?page=#{page}"
         domain =  URI.parse(source_url).host
