@@ -2695,7 +2695,6 @@ module Statement
       if urls.empty?
         urls = [
           "https://www.smith.senate.gov/press-releases",
-          "https://www.romney.senate.gov/press-releases",
           "https://www.braun.senate.gov/press-releases",
           "https://www.rosen.senate.gov/press-releases",
           "https://www.sinema.senate.gov/press-releases",
