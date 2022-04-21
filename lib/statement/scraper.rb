@@ -960,7 +960,6 @@ module Statement
         urls = [
           "https://halrogers.house.gov/press-releases",
           "https://fulcher.house.gov/press-releases",
-          "https://vela.house.gov/press-release",
           "https://speier.house.gov/press-releases",
           "https://mcbath.house.gov/press-releases",
           "https://markgreen.house.gov/press-releases",
