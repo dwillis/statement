@@ -2375,11 +2375,12 @@ module Statement
         ]
       end
       urls.each do |url|
+        puts url
         uri = URI(url)
         source_url = "#{url}?PageNum_rs=#{page}"
 
         domain =  URI.parse(source_url).host
-        doc = open_html(source_url)
+        doc = Statement::Scraper.open_html(source_url)
         return if doc.nil?
         doc.css('#newscontent h2').each do |row|
           results << { :source => url,
