@@ -1702,7 +1702,6 @@ module Statement
           {'bergman.house.gov' => 27},
           {'stephaniemurphy.house.gov' => 27},
           {'mcgovern.house.gov' => 2472},
-          {'crawford.house.gov' => 2080},
           {'delbene.house.gov' => 27},
           {'wassermanschultz.house.gov' => 27},
           {'reed.house.gov' => 27}
