@@ -1003,7 +1003,8 @@ module Statement
           "https://mariodiazbalart.house.gov/media-center/press-releases",
           "https://meeks.house.gov/media/press-releases",
           "https://biggs.house.gov/media/press-releases",
-          "https://johnjoyce.house.gov/media/press-releases"
+          "https://johnjoyce.house.gov/media/press-releases",
+          "https://wilson.house.gov/media/press-releases"
         ]
       end
       results = []
@@ -2274,7 +2275,6 @@ module Statement
             "https://mccaul.house.gov/media-center/press-releases",
             "https://mcnerney.house.gov/media-center/press-releases",
             "https://butterfield.house.gov/media-center/press-releases",
-            "https://wilson.house.gov/media-center/press-releases",
             "https://bilirakis.house.gov/media/press-releases",
             "https://quigley.house.gov/media-center/press-releases",
             "https://sewell.house.gov/media-center/press-releases",
