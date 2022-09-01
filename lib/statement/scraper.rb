@@ -2331,6 +2331,7 @@ module Statement
             "https://sylviagarcia.house.gov/media/press-releases",
             "https://susielee.house.gov/media/press-releases",
             "https://sannicolas.house.gov/media/press-releases"
+        ]
       end
 
       results = []
