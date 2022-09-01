@@ -44,7 +44,7 @@ module Statement
       [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :bucshon, :document_query_new, :costa, :jordan, :barr, :lamborn, :media_body, :trone,
       :wenstrup, :robbishop, :bwcoleman, :manchin, :timscott, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :pence, :tlaib, :hayes, :grijalva, :aguilar,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :yarmuth, :vandrew, :rickscott, :joyce,
-      :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist,
+      :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
       :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :slotkin, :capito, :vantaylor, :tonko, :johnjoyce, :larsen, :mooney, :himes,
       :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :rodneydavis]
@@ -70,7 +70,7 @@ module Statement
         inhofe, fischer, kaine, padilla, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal,
         schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, hydesmith, correa, pence, rickscott, rodneydavis, mooney, himes,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, hayes, barr, porter,
-        lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, capito, vantaylor, house_title_header, recordlist, tonko, johnjoyce, aguilar,
+        lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, capito, vantaylor, house_title_header, recordlist, tonko, johnjoyce, aguilar, rosen,
         larsen, grijalva, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
@@ -2643,6 +2643,17 @@ module Statement
       results
     end
 
+    def self.rosen(page=1)
+      results = []
+      url = "https://www.rosen.senate.gov/category/press_release/page/#{page}/"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css('article').each do |row|
+        results << { :source => url, :url => row.css("h2 a").first['href'], :title => row.css("h2").text.strip, :date => Date.parse(row.css("span").text.strip), :domain => "www.rosen.senate.gov" }
+      end
+      results
+    end
+
     def self.capito(page=1)
       results = []
       url = "https://www.capito.senate.gov/news/press-releases?pagenum_rs=#{page}"
@@ -2695,7 +2706,6 @@ module Statement
         urls = [
           "https://www.smith.senate.gov/press-releases",
           "https://www.braun.senate.gov/press-releases",
-          "https://www.rosen.senate.gov/press-releases",
           "https://www.sinema.senate.gov/press-releases",
           "https://www.hawley.senate.gov/press-releases"
         ]
