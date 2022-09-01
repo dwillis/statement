@@ -46,7 +46,7 @@ module Statement
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :yarmuth, :vandrew, :rickscott, :joyce,
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
-      :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :slotkin, :capito, :vantaylor, :tonko, :johnjoyce, :larsen, :mooney, :himes,
+      :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :slotkin, :capito, :vantaylor, :tonko, :larsen, :mooney, :himes,
       :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :rodneydavis]
     end
 
@@ -70,7 +70,7 @@ module Statement
         inhofe, fischer, kaine, padilla, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal,
         schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, hydesmith, correa, pence, rickscott, rodneydavis, mooney, himes,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, hayes, barr, porter,
-        lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, capito, vantaylor, house_title_header, recordlist, tonko, johnjoyce, aguilar, rosen,
+        lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, slotkin, capito, vantaylor, house_title_header, recordlist, tonko, aguilar, rosen,
         larsen, grijalva, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
@@ -1002,7 +1002,8 @@ module Statement
           "https://algreen.house.gov/media/press-releases",
           "https://mariodiazbalart.house.gov/media-center/press-releases",
           "https://meeks.house.gov/media/press-releases",
-          "https://biggs.house.gov/media/press-releases"
+          "https://biggs.house.gov/media/press-releases",
+          "https://johnjoyce.house.gov/media/press-releases"
         ]
       end
       results = []
@@ -1649,18 +1650,6 @@ module Statement
       results
     end
 
-    def self.johnjoyce(page=1)
-      results = []
-      domain = 'johnjoyce.house.gov'
-      url = "https://johnjoyce.house.gov/news/documentquery.aspx?DocumentTypeID=27&Page=#{page}"
-      doc = open_html(url)
-      return if doc.nil?
-      doc.css('.news-texthold').each do |row|
-        results << { :source => url, :url => "https://johnjoyce.house.gov/news/" + row.css('h2 a').first['href'], :title => row.css('h2 a').text.strip, :date => Date.parse(row.css('time').text), :domain => domain }
-      end
-      results
-    end
-
     def self.yarmuth
       results = []
       domain = 'yarmuth.house.gov'
@@ -2180,7 +2169,7 @@ module Statement
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css("div.item").each do |row|
-        results << {:source => url, :url => row.css('a').first['href'], :title => row.css('h2').text, :date => Date.parse(row.css("p").first.text), :domain => domain }
+        results << {:source => url, :url => row.css('a').first['href'], :title => row.css('h2').text.strip, :date => Date.parse(row.css('span.date').text), :domain => domain }
       end
       results
     end
