@@ -1929,7 +1929,6 @@ module Statement
           "pressley.house.gov",
           "andylevin.house.gov",
           "stevens.house.gov",
-          "hagedorn.house.gov",
           "craig.house.gov",
           "omar.house.gov",
           "stauber.house.gov",
