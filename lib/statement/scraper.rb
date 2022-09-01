@@ -1777,7 +1777,8 @@ module Statement
           {"perry.house.gov" => 2645},
           {"perry.house.gov" => 2608},
           {"neal.house.gov" => 27},
-          {'gottheimer.house.gov' => 27}
+          {'gottheimer.house.gov' => 27},
+          {'rouzer.house.gov' => 27}
         ]
       end
       domains.each do |domain|
@@ -2092,7 +2093,6 @@ module Statement
     def self.recordlist(urls=[], page=1)
       if urls.empty?
         urls = [
-          "https://rouzer.house.gov/press-releases",
           "https://kaygranger.house.gov/press-releases",
           "https://emmer.house.gov/press-releases",
           "https://fitzpatrick.house.gov/press-releases",
