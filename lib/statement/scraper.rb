@@ -2317,7 +2317,6 @@ module Statement
             "https://cline.house.gov/media/press-releases",
             "https://sylviagarcia.house.gov/media/press-releases",
             "https://golden.house.gov/media/press-releases",
-            "https://haaland.house.gov/media/press-releases",
             "https://harder.house.gov/media/press-releases",
             "https://dustyjohnson.house.gov/media/press-releases",
             "https://susielee.house.gov/media/press-releases",
