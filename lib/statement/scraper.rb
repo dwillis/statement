@@ -1004,7 +1004,30 @@ module Statement
           "https://meeks.house.gov/media/press-releases",
           "https://biggs.house.gov/media/press-releases",
           "https://johnjoyce.house.gov/media/press-releases",
-          "https://wilson.house.gov/media/press-releases"
+          "https://wilson.house.gov/media/press-releases",
+
+          "https://blumenauer.house.gov/media-center/press-releases",
+          "https://larson.house.gov/media-center/press-releases",
+          "https://kaptur.house.gov/media-center/press-releases",
+          "https://benniethompson.house.gov/media/press-releases",
+          "https://walberg.house.gov/media/press-releases",
+          "https://allred.house.gov/media/press-releases",
+          "https://burchett.house.gov/media/press-releases",
+          "https://cline.house.gov/media/press-releases",
+          "https://golden.house.gov/media/press-releases",
+          "https://harder.house.gov/media/press-releases",
+          "https://dustyjohnson.house.gov/media/press-releases",
+          "https://luria.house.gov/media/press-releases",
+          "https://malinowski.house.gov/media/press-releases",
+          "https://meuser.house.gov/media/press-releases",
+          "https://miller.house.gov/media/press-releases",
+          "https://reschenthaler.house.gov/media/press-releases",
+          "https://johnrose.house.gov/media/press-releases",
+          "https://roy.house.gov/media/press-releases",
+          "https://sherrill.house.gov/media/press-releases",
+          "https://steil.house.gov/media/press-releases",
+          "https://schrier.house.gov/media/press-releases"
+
         ]
       end
       results = []
@@ -2295,54 +2318,35 @@ module Statement
             "https://brooks.house.gov/media-center/news-releases",
             "https://swalwell.house.gov/media-center/press-releases",
             "https://keating.house.gov/media-center/press-releases",
-            "https://blumenauer.house.gov/media-center/press-releases",
-            "https://larson.house.gov/media-center/press-releases",
-            "https://kaptur.house.gov/media-center/press-releases",
             "https://khanna.house.gov/media/press-releases",
             "https://panetta.house.gov/media/press-releases",
             "https://demings.house.gov/media/press-releases",
             "https://schneider.house.gov/media/press-releases",
-            "https://schweikert.house.gov/media-center/press-releases",
-            "https://benniethompson.house.gov/media/press-releases",
             "https://delauro.house.gov/media-center/press-releases",
             "https://lowenthal.house.gov/media/press-releases",
             "https://dankildee.house.gov/media/press-releases",
-            "https://walberg.house.gov/media/press-releases",
             "https://smucker.house.gov/media/press-releases",
             "https://price.house.gov/newsroom/press-releases",
             "https://lofgren.house.gov/media/press-releases",
-            "https://lesko.house.gov/media",
-            "https://allred.house.gov/media/press-releases",
-            "https://burchett.house.gov/media/press-releases",
-            "https://cline.house.gov/media/press-releases",
             "https://sylviagarcia.house.gov/media/press-releases",
-            "https://golden.house.gov/media/press-releases",
-            "https://harder.house.gov/media/press-releases",
-            "https://dustyjohnson.house.gov/media/press-releases",
             "https://susielee.house.gov/media/press-releases",
-            "https://luria.house.gov/media/press-releases",
-            "https://malinowski.house.gov/media/press-releases",
-            "https://meuser.house.gov/media/press-releases",
-            "https://miller.house.gov/media/press-releases",
-            "https://reschenthaler.house.gov/media/press-releases",
-            "https://johnrose.house.gov/media/press-releases",
-            "https://roy.house.gov/media/press-releases",
-            "https://sannicolas.house.gov/media/press-releases",
-            "https://sherrill.house.gov/media/press-releases",
-            "https://steil.house.gov/media/press-releases",
-            "https://schrier.house.gov/media/press-releases"        ]
+            "https://sannicolas.house.gov/media/press-releases"
       end
 
       results = []
 
       urls.each do |url|
-        puts url
+#        puts url
         uri = URI(url)
         source_url = "#{url}?page=#{page}"
 
         domain =  URI.parse(source_url).host
         doc = open_html(source_url)
         return if doc.nil?
+
+        if doc.css("#region-content .views-row").size == 0
+          puts url
+        end
 
         doc.css("#region-content .views-row").each do |row|
             title_anchor = row.css("h3 a")
