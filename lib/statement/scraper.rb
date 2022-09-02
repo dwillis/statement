@@ -46,7 +46,7 @@ module Statement
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :yarmuth, :vandrew, :rickscott, :joyce,
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
-      :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :capito, :vantaylor, :tonko, :larsen, :mooney, :ellzey, :media_digest,
+      :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :capito, :vantaylor, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford,
       :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :rodneydavis, :houlahan]
     end
 
@@ -69,7 +69,7 @@ module Statement
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=1), baldwin, burr, casey, cruz, schatz, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, tlaib,
         inhofe, fischer, kaine, padilla, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal,
         schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, hydesmith, correa, rickscott, rodneydavis, mooney, ellzey, bergman,
-        bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, barr, porter,
+        bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, barr, porter, crawford,
         lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, capito, vantaylor, house_title_header, recordlist, tonko, aguilar, rosen, spanberger, media_digest,
         larsen, grijalva, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce, houlahan].flatten
       results = results.compact
@@ -1048,7 +1048,9 @@ module Statement
           "https://pence.house.gov/media/press-releases",
           "https://fleischmann.house.gov/media/press-releases",
           "https://lamb.house.gov/media/press-releases",
-          "https://timryan.house.gov/media/press-releases"
+          "https://timryan.house.gov/media/press-releases",
+          "https://langevin.house.gov/media/press-releases",
+          "https://stevens.house.gov/media/press-releases"
         ]
       end
       results = []
@@ -1824,6 +1826,19 @@ module Statement
       results
     end
 
+    def self.crawford
+      results = []
+      url = "https://crawford.house.gov/resources/in-the-news"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      json = JSON.load(doc.at_css('[id="__NEXT_DATA__"]').text)
+      posts = json['props']['pageProps']['dehydratedState']['queries'][12]['state']['data']['posts']['edges']
+      posts.each do |post|
+        results << { :source => url, :url => post['node']['link'], :title => post['node']['title'], :date => Date.parse(post['node']['date']), :domain => 'crawford.house.gov'}
+      end
+      results
+    end
+
     def self.vantaylor(page=1)
       results = []
       url = "https://vantaylor.house.gov/news/documentquery.aspx?DocumentTypeID=27&Page=#{page}"
@@ -1965,7 +1980,6 @@ module Statement
           "davids.house.gov",
           "pressley.house.gov",
           "andylevin.house.gov",
-          "stevens.house.gov",
           "craig.house.gov",
           "stauber.house.gov",
           "guest.house.gov",
