@@ -2080,18 +2080,15 @@ module Statement
       results
     end
 
-    def self.tlaib(page=0)
+    def self.tlaib
       results = []
-      domain = 'tlaib.house.gov'
-      url = "https://tlaib.house.gov/press-releases?page=#{page}"
+      url = "https://tlaib.house.gov/resources/press"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.css('div.media-digest-body').each do |row|
-        begin
-          results << {:source => url, :url => "https://#{domain}" + row.css('a').first['href'], :title => row.css('div.post-media-digest-title').text.strip, :date => Date.parse(row.css('div.post-media-digest-date').text), :domain => domain }
-        rescue
-          next
-        end
+      json = JSON.load(doc.at_css('[id="__NEXT_DATA__"]').text)
+      posts = json['props']['pageProps']['dehydratedState']['queries'][12]['state']['data']['posts']['edges']
+      posts.each do |post|
+        results << { :source => url, :url => post['node']['link'], :title => post['node']['title'], :date => Date.parse(post['node']['date']), :domain => 'tlaib.house.gov'}
       end
       results
     end
