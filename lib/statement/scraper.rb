@@ -1033,7 +1033,8 @@ module Statement
           "https://stansbury.house.gov/media/press-releases",
           "https://troycarter.house.gov/media/press-releases",
           "https://letlow.house.gov/media",
-          "https://slotkin.house.gov/media/press-releases"
+          "https://slotkin.house.gov/media/press-releases",
+          "https://matsui.house.gov/media"
         ]
       end
       results = []
@@ -1804,7 +1805,6 @@ module Statement
           {"phillips.house.gov" => 27},
           {"timmons.house.gov" => 27},
           {"allen.house.gov" => 27},
-          {'matsui.house.gov' => 27},
           {"palazzo.house.gov" => 2519},
           {'estes.house.gov' => 27},
           {'mckinley.house.gov' => 27},
