@@ -1047,7 +1047,8 @@ module Statement
           "https://casten.house.gov/media/press-releases",
           "https://pence.house.gov/media/press-releases",
           "https://fleischmann.house.gov/media/press-releases",
-          "https://lamb.house.gov/media/press-releases"
+          "https://lamb.house.gov/media/press-releases",
+          "https://timryan.house.gov/media/press-releases"
         ]
       end
       results = []
