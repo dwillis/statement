@@ -47,7 +47,7 @@ module Statement
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
       :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :capito, :vantaylor, :tonko, :larsen, :mooney, :himes, :austinscott, :ellzey,
-      :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :rodneydavis]
+      :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :rodneydavis, :houlahan]
     end
 
     def self.committee_methods
@@ -71,7 +71,7 @@ module Statement
         schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, hydesmith, correa, pence, rickscott, rodneydavis, mooney, himes, ellzey,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, hayes, barr, porter,
         lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, capito, vantaylor, house_title_header, recordlist, tonko, aguilar, rosen, austinscott, spanberger,
-        larsen, grijalva, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce].flatten
+        larsen, grijalva, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce, houlahan].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -1768,7 +1768,6 @@ module Statement
       results = []
       if domains.empty?
         domains = [
-          {'houlahan.house.gov' => 27},
           {'hern.house.gov' => 27},
           {'fletcher.house.gov' => 27},
           {'guthrie.house.gov' => 2381},
@@ -2232,6 +2231,18 @@ module Statement
       return if doc.nil?
       doc.css("article").each do |row|
         results << {:source => url, :url => "https://mooney.house.gov"+ row.css('a').first['href'], :title => row.css('span.screen-reader-text').text, :date => Date.parse(row.css("p").at("span")['datetime']), :domain => domain }
+      end
+      results
+    end
+
+    def self.houlahan(page=1)
+      results = []
+      domain = 'houlahan.house.gov'
+      url = "https://houlahan.house.gov/press/documentquery.aspx?DocumentTypeID=27&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("article").each do |row|
+        results << {:source => url, :url => "https://houlahan.house.gov"+ row.at_css('a')['href'], :title => row.at_css('a').text, :date => Date.parse(row.css("span.date").text + ", 2022"), :domain => domain }
       end
       results
     end
