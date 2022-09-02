@@ -1050,7 +1050,8 @@ module Statement
           "https://lamb.house.gov/media/press-releases",
           "https://timryan.house.gov/media/press-releases",
           "https://langevin.house.gov/media/press-releases",
-          "https://stevens.house.gov/media/press-releases"
+          "https://stevens.house.gov/media/press-releases",
+          "https://guest.house.gov/media/press-releases"
         ]
       end
       results = []
@@ -1981,7 +1982,6 @@ module Statement
           "andylevin.house.gov",
           "craig.house.gov",
           "stauber.house.gov",
-          "guest.house.gov",
           "armstrong.house.gov",
           "schakowsky.house.gov",
           "eshoo.house.gov",
