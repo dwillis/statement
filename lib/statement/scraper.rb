@@ -1052,7 +1052,8 @@ module Statement
           "https://langevin.house.gov/media/press-releases",
           "https://stevens.house.gov/media/press-releases",
           "https://guest.house.gov/media/press-releases",
-          "https://armstrong.house.gov/media/press-releases"
+          "https://armstrong.house.gov/media/press-releases",
+          "https://morelle.house.gov/media/press-releases"
         ]
       end
       results = []
@@ -1974,7 +1975,6 @@ module Statement
       results = []
       if domains.empty?
         domains = [
-          "morelle.house.gov",
           "wild.house.gov",
           "harder.house.gov",
           "axne.house.gov",
