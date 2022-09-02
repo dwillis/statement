@@ -1039,7 +1039,8 @@ module Statement
           "https://wagner.house.gov/media-center/press-releases",
           "https://kim.house.gov/media/press-releases",
           "https://pappas.house.gov/media/press-releases",
-          "https://crow.house.gov/media/press-releases"
+          "https://crow.house.gov/media/press-releases",
+          "https://chuygarcia.house.gov/media/press-releases"
         ]
       end
       results = []
@@ -1952,7 +1953,6 @@ module Statement
         domains = [
           "morelle.house.gov",
           "wild.house.gov",
-          "chuygarcia.house.gov",
           "harder.house.gov",
           "steube.house.gov",
           "axne.house.gov",
