@@ -1040,7 +1040,8 @@ module Statement
           "https://kim.house.gov/media/press-releases",
           "https://pappas.house.gov/media/press-releases",
           "https://crow.house.gov/media/press-releases",
-          "https://chuygarcia.house.gov/media/press-releases"
+          "https://chuygarcia.house.gov/media/press-releases",
+          "https://omar.house.gov/media/press-releases"
         ]
       end
       results = []
@@ -1963,7 +1964,6 @@ module Statement
           "andylevin.house.gov",
           "stevens.house.gov",
           "craig.house.gov",
-          "omar.house.gov",
           "stauber.house.gov",
           "guest.house.gov",
           "armstrong.house.gov",
