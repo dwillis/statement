@@ -46,7 +46,7 @@ module Statement
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :yarmuth, :vandrew, :rickscott, :joyce,
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
-      :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :capito, :vantaylor, :tonko, :larsen, :mooney, :himes, :austinscott, :ellzey,
+      :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :capito, :vantaylor, :tonko, :larsen, :mooney, :ellzey,
       :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :rodneydavis, :houlahan]
     end
 
@@ -68,9 +68,9 @@ module Statement
       results = [klobuchar(year), kilmer, sullivan, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, jordan, lamborn, senate_wordpress, media_body,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=1), baldwin, burr, casey, cruz, schatz, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, tlaib,
         inhofe, fischer, kaine, padilla, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal,
-        schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, hydesmith, correa, pence, rickscott, rodneydavis, mooney, himes, ellzey,
+        schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, hydesmith, correa, pence, rickscott, rodneydavis, mooney, ellzey,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, hayes, barr, porter,
-        lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, capito, vantaylor, house_title_header, recordlist, tonko, aguilar, rosen, austinscott, spanberger,
+        lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, capito, vantaylor, house_title_header, recordlist, tonko, aguilar, rosen, spanberger,
         larsen, grijalva, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce, houlahan].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
@@ -1034,7 +1034,9 @@ module Statement
           "https://troycarter.house.gov/media/press-releases",
           "https://letlow.house.gov/media",
           "https://slotkin.house.gov/media/press-releases",
-          "https://matsui.house.gov/media"
+          "https://matsui.house.gov/media",
+          "https://harris.house.gov/media/press-releases",
+          "https://wagner.house.gov/media-center/press-releases"
         ]
       end
       results = []
@@ -1545,42 +1547,6 @@ module Statement
       results
     end
 
-    def self.gooden(page=1)
-      results = []
-      domain = 'gooden.house.gov'
-      url = "https://gooden.house.gov/press-releases?page=#{page}"
-      doc = Statement::Scraper.open_html(url)
-      return if doc.nil?
-      doc.css("div.media-digest-body").each do |row|
-        results << { :source => url, :url => "https://gooden.house.gov"+row.css("a").attr('href').value, :title => row.css("div.post-media-digest-title").text, :date => Date.parse(row.css("div.post-media-digest-date").text), :domain => domain}
-      end
-      results
-    end
-
-    def self.austinscott(page=1)
-      results = []
-      domain = 'austinscott.house.gov'
-      url = "https://austinscott.house.gov/press-releases?page=#{page}"
-      doc = Statement::Scraper.open_html(url)
-      return if doc.nil?
-      doc.css("div.media-digest-body").each do |row|
-        results << { :source => url, :url => "https://austinscott.house.gov"+row.css("a").attr('href').value, :title => row.css("div.post-media-digest-title").text, :date => Date.parse(row.css("div.post-media-digest-date").text), :domain => domain}
-      end
-      results
-    end
-
-    def self.himes(page=1)
-      results = []
-      domain = 'himes.house.gov'
-      url = "https://himes.house.gov/press-releases?page=#{page}"
-      doc = Statement::Scraper.open_html(url)
-      return if doc.nil?
-      doc.css("div.media-digest-body").each do |row|
-        results << { :source => url, :url => "https://himes.house.gov"+row.css("a").attr('href').value, :title => row.css("div.post-media-digest-title").text, :date => Date.parse(row.css("div.post-media-digest-date").text), :domain => domain}
-      end
-      results
-    end
-
     def self.costa(page=1)
       results = []
       domain = 'costa.house.gov'
@@ -1746,8 +1712,7 @@ module Statement
           {'stephaniemurphy.house.gov' => 27},
           {'mcgovern.house.gov' => 2472},
           {'delbene.house.gov' => 27},
-          {'wassermanschultz.house.gov' => 27},
-          {'reed.house.gov' => 27}
+          {'wassermanschultz.house.gov' => 27}
         ]
       end
       domains.each do |domain|
@@ -2125,6 +2090,30 @@ module Statement
       results
     end
 
+    def self.media_digest(urls=[], page=1)
+      if urls.empty?
+        urls = [
+          "https://himes.house.gov/press-releases",
+          "https://austinscott.house.gov/press-releases",
+          "https://gooden.house.gov/press-releases",
+          "https://gibbs.house.gov/press-releases"
+        ]
+      end
+      results = []
+      urls.each do |url|
+        puts url
+        uri = URI(url)
+        source_url = "#{url}?page=#{page}"
+        domain =  URI.parse(source_url).host
+        doc = open_html(source_url)
+        return if doc.nil?
+        doc.css("div.media-digest-body").each do |row|
+          results << { :source => url, :url => "https://"+domain+row.css("a").attr('href').value, :title => row.css("div.post-media-digest-title").text, :date => Date.parse(row.css("div.post-media-digest-date").text), :domain => domain}
+        end
+      end
+      results
+    end
+
     def self.recordlist(urls=[], page=1)
       if urls.empty?
         urls = [
@@ -2373,7 +2362,7 @@ module Statement
 
         doc.css("#region-content .views-row").each do |row|
             title_anchor = row.css("h3 a")
-            title = title_anchor.text
+            title = title_anchor.text.strip
             release_url = "#{uri.scheme}://#{domain + title_anchor.attr('href')}"
             raw_date = row.css(".views-field-created").text
             results << { :source => source_url,
