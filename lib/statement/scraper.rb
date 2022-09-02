@@ -42,7 +42,7 @@ module Statement
 
     def self.member_methods
       [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :bucshon, :document_query_new, :costa, :jordan, :barr, :lamborn, :media_body, :trone, :spanberger,
-      :wenstrup, :robbishop, :bwcoleman, :manchin, :timscott, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :tlaib, :grijalva, :aguilar,
+      :wenstrup, :robbishop, :bwcoleman, :manchin, :timscott, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :tlaib, :grijalva, :aguilar, :bergman,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :yarmuth, :vandrew, :rickscott, :joyce,
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
@@ -68,7 +68,7 @@ module Statement
       results = [klobuchar(year), kilmer, sullivan, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, jordan, lamborn, senate_wordpress, media_body,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=1), baldwin, burr, casey, cruz, schatz, cassidy, cantwell, cornyn, kind, senate_drupal_new, bwcoleman, tlaib,
         inhofe, fischer, kaine, padilla, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal,
-        schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, hydesmith, correa, rickscott, rodneydavis, mooney, ellzey,
+        schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, hydesmith, correa, rickscott, rodneydavis, mooney, ellzey, bergman,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, barr, porter,
         lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, capito, vantaylor, house_title_header, recordlist, tonko, aguilar, rosen, spanberger, media_digest,
         larsen, grijalva, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce, houlahan].flatten
@@ -1720,7 +1720,6 @@ module Statement
           {"frankel.house.gov" => 27},
           {'chabot.house.gov' => 2508},
           {'hice.house.gov' => 27},
-          {'bergman.house.gov' => 27},
           {'stephaniemurphy.house.gov' => 27},
           {'mcgovern.house.gov' => 2472},
           {'delbene.house.gov' => 27},
@@ -2226,6 +2225,18 @@ module Statement
       return if doc.nil?
       doc.css(".view-content .views-row").first(10).each do |row|
         results << {:source => url, :url => 'https://vargas.house.gov' + row.css('h3').first.children.first['href'], :title => row.css('h3').first.children.first.text.strip, :date => Date.parse(row.css(".views-field .field-content")[1].text), :domain => domain }
+      end
+      results
+    end
+
+    def self.bergman(page=1)
+      results = []
+      domain = "bergman.house.gov"
+      url = "https://bergman.house.gov/news/documentquery.aspx?DocumentTypeID=27&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("article").each do |row|
+        results << {:source => url, :url => 'https://bergman.house.gov/news/' + row.at_css('h2 a')['href'], :title => row.at_css('h2').text, :date => Date.parse(row.css('time').text), :domain => domain }
       end
       results
     end
