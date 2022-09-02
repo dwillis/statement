@@ -42,7 +42,7 @@ module Statement
 
     def self.member_methods
       [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :bucshon, :document_query_new, :costa, :jordan, :barr, :lamborn, :media_body, :trone, :spanberger,
-      :wenstrup, :robbishop, :bwcoleman, :manchin, :timscott, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :tlaib, :grijalva, :aguilar, :bergman,
+      :wenstrup, :robbishop, :bwcoleman, :manchin, :timscott, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :tlaib, :grijalva, :aguilar, :bergman, :chabot,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :yarmuth, :vandrew, :rickscott, :joyce,
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
@@ -71,7 +71,7 @@ module Statement
         schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, hydesmith, correa, rickscott, rodneydavis, mooney, ellzey, bergman,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, barr, porter, crawford,
         lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, capito, vantaylor, house_title_header, recordlist, tonko, aguilar, rosen, spanberger, media_digest,
-        larsen, grijalva, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce, houlahan].flatten
+        larsen, grijalva, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce, houlahan, chabot].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -1720,7 +1720,6 @@ module Statement
           {"kathleenrice.house.gov" => 27},
           {"kinzinger.house.gov" => 2665},
           {"frankel.house.gov" => 27},
-          {'chabot.house.gov' => 2508},
           {'hice.house.gov' => 27},
           {'stephaniemurphy.house.gov' => 27},
           {'mcgovern.house.gov' => 2472},
@@ -2251,6 +2250,18 @@ module Statement
       return if doc.nil?
       doc.css("article").each do |row|
         results << {:source => url, :url => 'https://bergman.house.gov/news/' + row.at_css('h2 a')['href'], :title => row.at_css('h2').text, :date => Date.parse(row.css('time').text), :domain => domain }
+      end
+      results
+    end
+
+    def self.chabot(page=1)
+      results = []
+      domain = "chabot.house.gov"
+      url = "https://chabot.house.gov/news/documentquery.aspx?DocumentTypeID=2508&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("article").each do |row|
+        results << {:source => url, :url => 'https://chabot.house.gov/news/' + row.at_css('h2 a')['href'], :title => row.at_css('h2').text, :date => Date.parse(row.css('time').text), :domain => domain }
       end
       results
     end
