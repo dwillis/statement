@@ -1058,7 +1058,9 @@ module Statement
           "https://rubengallego.house.gov/media-center/press-releases",
           "https://beatty.house.gov/media-center/press-releases",
           "https://robinkelly.house.gov/media-center/press-releases",
-          "https://clayhiggins.house.gov/media/press-releases"
+          "https://clayhiggins.house.gov/media/press-releases",
+          "https://moolenaar.house.gov/media-center/press-releases",
+          "https://adams.house.gov/media-center/press-releases"
         ]
       end
       results = []
