@@ -47,7 +47,7 @@ module Statement
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen, :schweikert,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
       :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :capito, :vantaylor, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker,
-      :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :rodneydavis, :houlahan]
+      :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :rodneydavis, :houlahan, :nikemawilliams]
     end
 
     def self.committee_methods
@@ -70,7 +70,7 @@ module Statement
         inhofe, fischer, kaine, padilla, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal, cloud,
         schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, hydesmith, correa, rickscott, rodneydavis, mooney, ellzey, bergman, gimenez,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, barr, porter, crawford,
-        lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, capito, vantaylor, house_title_header, recordlist, tonko, aguilar, rosen, spanberger, media_digest,
+        lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, capito, vantaylor, house_title_header, recordlist, tonko, aguilar, rosen, spanberger, media_digest, nikemawilliams,
         larsen, grijalva, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce, houlahan, chabot, lucas, schweikert, gosar].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
@@ -1072,6 +1072,7 @@ module Statement
           "https://boebert.house.gov/media/press-releases",
           "https://cammack.house.gov/media/press-releases",
           "https://franklin.house.gov/media/press-releases",
+          "https://salazar.house.gov/media/press-releases"
 
         ]
       end
@@ -1197,6 +1198,19 @@ module Statement
       posts = json['props']['pageProps']['dehydratedState']['queries'][11]['state']['data']['posts']['edges']
       posts.each do |post|
         results << { :source => url, :url => post['node']['link'], :title => post['node']['title'], :date => Date.parse(post['node']['date']), :domain => 'mcmorris.house.gov'}
+      end
+      results
+    end
+
+    def self.nikemawilliams
+      results = []
+      url = "https://nikemawilliams.house.gov/press"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      json = JSON.load(doc.at_css('[id="__NEXT_DATA__"]').text)
+      posts = json['props']['pageProps']['dehydratedState']['queries'][11]['state']['data']['posts']['edges']
+      posts.each do |post|
+        results << { :source => url, :url => post['node']['link'], :title => post['node']['title'], :date => Date.parse(post['node']['date']), :domain => 'nikemawilliams.house.gov'}
       end
       results
     end
