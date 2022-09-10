@@ -1077,7 +1077,14 @@ module Statement
           "https://kahele.house.gov/media/press-releases",
           "https://hinson.house.gov/media/press-releases",
           "https://millermeeks.house.gov/media/press-releases",
-          "https://feenstra.house.gov/media/press-releases"
+          "https://feenstra.house.gov/media/press-releases",
+          "https://marymiller.house.gov/media/press-releases",
+          "https://mrvan.house.gov/media/press-releases",
+          "https://spartz.house.gov/media/press-releases",
+          "https://mann.house.gov/media/press-releases",
+          "https://laturner.house.gov/media/press-releases",
+          "https://auchincloss.house.gov/media/press-releases",
+          "https://meijer.house.gov/media/press-releases"
 
         ]
       end
@@ -2171,7 +2178,8 @@ module Statement
           "https://gooden.house.gov/press-releases",
           "https://gibbs.house.gov/press-releases",
           "https://hayes.house.gov/press-releases",
-          "https://desjarlais.house.gov/media-center"
+          "https://desjarlais.house.gov/media-center",
+          "https://mcclain.house.gov/press-releases"
         ]
       end
       results = []
@@ -2205,7 +2213,8 @@ module Statement
           "https://turner.house.gov/press-releases",
           "https://stefanik.house.gov/press-releases",
           "https://bost.house.gov/press-releases",
-          "https://comer.house.gov/press-release"
+          "https://comer.house.gov/press-release",
+          "https://fischbach.house.gov/press-releases"
         ]
       end
       results = []
