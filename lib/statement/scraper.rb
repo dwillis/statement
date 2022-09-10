@@ -2414,7 +2414,8 @@ module Statement
             "https://susielee.house.gov/media/press-releases",
             "https://sannicolas.house.gov/media/press-releases",
             "https://danbishop.house.gov/media/press-releases",
-            "https://gregmurphy.house.gov/media/press-releases"
+            "https://gregmurphy.house.gov/media/press-releases",
+            "https://evans.house.gov/media-center/press-releases"
         ]
       end
 
