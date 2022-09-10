@@ -43,7 +43,7 @@ module Statement
     def self.member_methods
       [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :bucshon, :document_query_new, :costa, :jordan, :barr, :lamborn, :media_body, :trone, :spanberger, :cloud,
       :wenstrup, :robbishop, :manchin, :timscott, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :tlaib, :grijalva, :aguilar, :bergman, :chabot, :scanlon, :gimenez,
-      :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :yarmuth, :vandrew, :rickscott, :joyce, :gosar,
+      :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :yarmuth, :vandrew, :rickscott, :joyce, :gosar, :bourdeaux,
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen, :schweikert,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
       :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :capito, :vantaylor, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker,
@@ -69,7 +69,7 @@ module Statement
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=1), baldwin, burr, casey, cruz, schatz, cassidy, cantwell, cornyn, kind, senate_drupal_new, tlaib,
         inhofe, fischer, kaine, padilla, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal, cloud,
         schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, hydesmith, correa, rickscott, rodneydavis, mooney, ellzey, bergman, gimenez,
-        bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, barr, porter, crawford,
+        bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, barr, porter, crawford, bourdeaux,
         lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, capito, vantaylor, house_title_header, recordlist, tonko, aguilar, rosen, spanberger, media_digest, nikemawilliams,
         larsen, grijalva, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce, houlahan, chabot, lucas, schweikert, gosar].flatten
       results = results.compact
@@ -2799,6 +2799,17 @@ module Statement
       return if doc.nil?
       doc.css('article').each do |row|
         results << { :source => url, :url => row.css("h2 a").first['href'], :title => row.css("h2").text.strip, :date => Date.parse(row.css("span").text.strip), :domain => "www.rosen.senate.gov" }
+      end
+      results
+    end
+
+    def self.bourdeaux(page=1)
+      results = []
+      url = "https://bourdeaux.house.gov/category/press_release/page/#{page}/"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css('div.item').each do |row|
+        results << { :source => url, :url => row.at_css("h2 a")['href'], :title => row.at_css("h2").text.strip, :date => Date.parse(row.at_css("p.date").text.strip), :domain => "bourdeaux.house.gov" }
       end
       results
     end
