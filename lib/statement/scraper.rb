@@ -43,7 +43,7 @@ module Statement
     def self.member_methods
       [:klobuchar, :crapo, :burr, :trentkelly, :kilmer, :cardin, :heinrich, :bucshon, :document_query_new, :costa, :jordan, :barr, :lamborn, :media_body, :trone, :spanberger,
       :wenstrup, :robbishop, :manchin, :timscott, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :tlaib, :grijalva, :aguilar, :bergman, :chabot, :scanlon, :hollingsworth,
-      :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :yarmuth, :vandrew, :rickscott, :joyce, :gosar,
+      :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :yarmuth, :vandrew, :rickscott, :joyce, :gosar, :lesko,
       :welch, :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :walorski, :garypeters, :webster, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen, :schweikert,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :blunt, :tillis, :emmer, :house_title_header,
       :porter, :lawson, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :capito, :vantaylor, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :bluntrochester,
@@ -67,7 +67,7 @@ module Statement
       year = Date.today.year
       results = [klobuchar(year), kilmer, sullivan, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, jordan, lamborn, senate_wordpress, media_body, scanlon,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=1), baldwin, burr, casey, cruz, schatz, cassidy, cantwell, cornyn, kind, senate_drupal_new, tlaib,
-        inhofe, fischer, kaine, padilla, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal,
+        inhofe, fischer, kaine, padilla, clark, welch, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, yarmuth, costa, house_drupal, lesko,
         schumer, mcmorris, schiff, takano, heinrich, walorski, garypeters, rounds, connolly, paul, hydesmith, correa, rickscott, rodneydavis, mooney, ellzey, bergman, mikegarcia,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, blunt, tillis, barr, porter, crawford, hollingsworth,
         lawson, neguse, jasonsmith, vargas, moulton, bacon, calvert, capito, vantaylor, house_title_header, recordlist, tonko, aguilar, rosen, spanberger, media_digest, bluntrochester,
@@ -2287,6 +2287,18 @@ module Statement
       return if doc.nil?
       doc.css("article").each do |row|
         results << {:source => url, :url => "https://hollingsworth.house.gov"+ row.at_css('a')['href'], :title => row.at_css('a').text, :date => row.at_css("time")['datetime'], :domain => domain }
+      end
+      results
+    end
+
+    def self.lesko(page=1)
+      results = []
+      domain = 'lesko.house.gov'
+      url = "https://lesko.house.gov/news/documentquery.aspx?DocumentTypeID=27&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("article").each do |row|
+        results << {:source => url, :url => "https://lesko.house.gov"+ row.at_css('a')['href'], :title => row.at_css('a').text, :date => row.at_css("time")['datetime'], :domain => domain }
       end
       results
     end
