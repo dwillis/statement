@@ -2547,7 +2547,8 @@ module Statement
           "https://castro.house.gov/media-center/press-releases",
           "https://cardenas.house.gov/media-center/press-releases",
           "https://mikelevin.house.gov/media/press-releases",
-          "https://watsoncoleman.house.gov/newsroom/press-releases"
+          "https://watsoncoleman.house.gov/newsroom/press-releases",
+          "https://bush.house.gov/media/press-releases"
         ]
       end
       urls.each do |url|
