@@ -2371,7 +2371,8 @@ module Statement
           "donalds.house.gov",
           "clyde.house.gov",
           "rosendale.house.gov",
-          "pfluger.house.gov"
+          "pfluger.house.gov",
+          "jackson.house.gov"
         ]
       end
       domains.each do |domain|
