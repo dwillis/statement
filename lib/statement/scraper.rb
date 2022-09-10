@@ -1091,7 +1091,13 @@ module Statement
           "https://herrell.house.gov/media/press-releases-c",
           "https://fernandez.house.gov/media/press-releases",
           "https://garbarino.house.gov/media/press-releases",
-          "https://malliotakis.house.gov/media/press-releases"
+          "https://malliotakis.house.gov/media/press-releases",
+          "https://jones.house.gov/media/press-releases",
+          "https://bice.house.gov/media/press-releases",
+          "https://bentz.house.gov/media/press-releases",
+          "https://mace.house.gov/media/press-releases",
+          "https://harshbarger.house.gov/media/press-releases",
+          "https://fallon.house.gov/media/press-releases"
 
         ]
       end
@@ -2364,7 +2370,8 @@ module Statement
           "mikegarcia.house.gov",
           "donalds.house.gov",
           "clyde.house.gov",
-          "rosendale.house.gov"
+          "rosendale.house.gov",
+          "pfluger.house.gov"
         ]
       end
       domains.each do |domain|
