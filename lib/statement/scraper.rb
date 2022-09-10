@@ -1630,10 +1630,10 @@ module Statement
       results = []
       domain = 'trentkelly.house.gov'
       url = "https://trentkelly.house.gov/newsroom/documentquery.aspx?DocumentTypeID=27&Page=#{page}"
-      doc = open_html(url)
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.xpath("//div[@class='middlecopy']//li").each do |row|
-        results << { :source => url, :url => "https://trentkelly.house.gov/news/" + row.children[1]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.children[5].text.strip), :domain => domain }
+      doc.css("article").each do |row|
+        results << { :source => url, :url => "https://trentkelly.house.gov/newsroom/" + row.at_css('a')['href'], :title => row.at_css('h3').text, :date => Date.parse(row.at_css('time').text), :domain => domain }
       end
       results
     end
