@@ -2234,7 +2234,8 @@ module Statement
           "https://stefanik.house.gov/press-releases",
           "https://bost.house.gov/press-releases",
           "https://comer.house.gov/press-release",
-          "https://fischbach.house.gov/press-releases"
+          "https://fischbach.house.gov/press-releases",
+          "https://bowman.house.gov/press-releases"
         ]
       end
       results = []
