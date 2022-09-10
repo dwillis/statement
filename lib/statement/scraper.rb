@@ -2138,7 +2138,7 @@ module Statement
           "https://lahood.house.gov/press-releases",
           "https://turner.house.gov/press-releases",
           "https://stefanik.house.gov/press-releases",
-          "https://bost.house.gov/press-releases"
+          "https://bost.house.gov/press-releases",
           "https://comer.house.gov/press-release"
         ]
       end
