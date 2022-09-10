@@ -1064,7 +1064,12 @@ module Statement
           "https://adams.house.gov/media-center/press-releases",
           "https://mfume.house.gov/media/press-releases",
           "https://tiffany.house.gov/media/press-releases",
-          "https://jacobs.house.gov/media/press-releases"
+          "https://jacobs.house.gov/media/press-releases",
+          "https://carl.house.gov/media/press-releases",
+          "https://barrymoore.house.gov/media/press-releases",
+          "https://obernolte.house.gov/media/press-releases",
+          "https://youngkim.house.gov/media/press-releases",
+          "https://steel.house.gov/media/press-releases"
         ]
       end
       results = []
