@@ -1100,8 +1100,13 @@ module Statement
           "https://fallon.house.gov/media/press-releases",
           "https://gonzales.house.gov/media/press-releases",
           "https://vanduyne.house.gov/media/press-releases",
-          "https://blakemoore.house.gov/media/press-releases"
-
+          "https://blakemoore.house.gov/media/press-releases",
+          "https://strickland.house.gov/media/press-releases",
+          "https://fitzgerald.house.gov/media/press-releases",
+          "https://cherfilus-mccormick.house.gov/media/press-releases",
+          "https://conway.house.gov/media/press-releases",
+          "https://flood.house.gov/media/press-releases",
+          "https://finstad.house.gov/media/press-releases"
         ]
       end
       results = []
@@ -2413,7 +2418,8 @@ module Statement
           "clyde.house.gov",
           "rosendale.house.gov",
           "pfluger.house.gov",
-          "jackson.house.gov"
+          "jackson.house.gov",
+          "flores.house.gov"
         ]
       end
       domains.each do |domain|
