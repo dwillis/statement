@@ -2350,7 +2350,7 @@ module Statement
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css("div.item").each do |row|
-        results << {:source => url, :url => row.css('a').first['href'], :title => row.css('h2').text, :date => Date.parse(row.css("p").first.text), :domain => domain }
+        results << {:source => url, :url => row.css('a').first['href'], :title => row.css('h2').text, :date => Date.parse(row.css("span.date").first.text), :domain => domain }
       end
       results
     end
