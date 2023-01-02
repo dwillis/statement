@@ -1,30 +1,29 @@
-require 'koala'
 require 'oj'
 require 'yaml'
 
 module Statement
   class Facebook
-    
+
     attr_accessor :graph, :feed, :batch
-    
+
     def initialize
       @@config = Statement.config rescue nil || {}
       app_id = @@config[:app_id] || ENV['APP_ID']
       app_secret = @@config[:app_secret] || ENV['APP_SECRET']
-      oauth = Koala::Facebook::OAuth.new(app_id, app_secret)
-      @graph = Koala::Facebook::API.new(oauth.get_app_access_token)
+#      oauth = Koala::Facebook::OAuth.new(app_id, app_secret)
+#      @graph = Koala::Facebook::API.new(oauth.get_app_access_token)
     end
-    
+
     def feed(member_id)
       results = graph.get_connection(member_id, 'feed')
       process_results(results.select{|r| r['from']['id'] == r['id'].split('_').first})
     end
-    
+
     # given an array of congressional facebook ids, pulls feeds in slices.
     def batch(member_ids, slice)
       results = []
       member_ids.each_slice(slice) do |members|
-         results << graph.batch do |batch_api| 
+         results << graph.batch do |batch_api|
           members.each do |member|
             batch_api.get_connection(member, 'feed')
           end
@@ -32,7 +31,7 @@ module Statement
       end
       process_results(results.flatten.select{|r| r['from']['id'] == r['id'].split('_').first})
     end
-    
+
     def process_results(links)
       results = []
       links.each do |link|
@@ -41,6 +40,6 @@ module Statement
       end
       results
     end
-    
+
   end
 end
