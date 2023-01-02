@@ -28,7 +28,6 @@ Gem::Specification.new do |spec|
   else
     spec.add_dependency "nokogiri", '~> 1.5.10'
   end
-  spec.add_dependency "koala"
   spec.add_dependency "oj"
   spec.add_dependency "twitter"
   spec.add_dependency "typhoeus"
