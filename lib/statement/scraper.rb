@@ -1091,7 +1091,27 @@ module Statement
           "https://strickland.house.gov/media/press-releases",
           "https://fitzgerald.house.gov/media/press-releases",
           "https://flood.house.gov/media/press-releases",
-          "https://finstad.house.gov/media/press-releases"
+          "https://finstad.house.gov/media/press-releases",
+          "https://patryan.house.gov/media/press-releases",
+          "https://yakym.house.gov/media/press-releases",
+          "https://kiley.house.gov/media/press-releases",
+          "https://kamlager-dove.house.gov/media/press-releases",
+          "https://robertgarcia.house.gov/media/press-releases",
+          "https://bean.house.gov/media/press-releases",
+          "https://mccormick.house.gov/media/press-releases",
+          "https://moskowitz.house.gov/media/press-releases",
+          "https://collins.house.gov/media/press-releases",
+          "https://budzinski.house.gov/media/press-releases",
+          "https://houchin.house.gov/media/press-releases",
+          "https://edwards.house.gov/media/press-releases",
+          "https://kean.house.gov/media/press-releases",
+          "https://goldman.house.gov/media/press-releases",
+          "https://molinaro.house.gov/media/press-releases",
+          "https://langworthy.house.gov/media/press-releases",
+          "https://brecheen.house.gov/media/press-releases",
+          "https://chavez-deremer.house.gov/media/press-releases",
+          "https://magaziner.house.gov/media/press-releases",
+          
         ]
       end
       results = []
@@ -2297,7 +2317,8 @@ module Statement
           "clyde.house.gov",
           "rosendale.house.gov",
           "pfluger.house.gov",
-          "jackson.house.gov"
+          "jackson.house.gov",
+          "peltola.house.gov"
         ]
       end
       domains.each do |domain|
