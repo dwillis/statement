@@ -1111,7 +1111,7 @@ module Statement
           "https://brecheen.house.gov/media/press-releases",
           "https://chavez-deremer.house.gov/media/press-releases",
           "https://magaziner.house.gov/media/press-releases",
-          
+
         ]
       end
       results = []
@@ -2005,10 +2005,10 @@ module Statement
       results = []
       domain = 'www.bennet.senate.gov'
       url = "https://www.bennet.senate.gov/public/index.cfm/press-releases?page=#{page}"
-      doc = open_html(url)
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       (doc/:article).each do |row|
-        results << {:source => url, :url => 'https://www.bennet.senate.gov' + row['data-href'], :title => row.children[3].children[1].children[1].text.strip, :date => Date.parse(row.search('.date').text), :domain => domain }
+        results << {:source => url, :url => 'https://www.bennet.senate.gov' + row['data-href'], :title => row.css('h1').text, :date => Date.parse(row.search('.date').text), :domain => domain }
       end
       results
     end
