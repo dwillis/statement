@@ -1262,13 +1262,12 @@ module Statement
 
     def self.owens
       results = []
-      url = "https://owens.house.gov/resources/press"
-      doc = Statement::Scraper.open_html(url)
-      return if doc.nil?
-      json = JSON.load(doc.at_css('[id="__NEXT_DATA__"]').text)
-      posts = json['props']['pageProps']['dehydratedState']['queries'][12]['state']['data']['posts']['edges']
+      url = "https://owens.house.gov/_next/data/NBa2ExPjzGowZJQ3Q_wvt/resources/press.json?slug=press"
+      json = JSON.load(open(url).read)
+      return if json.nil?
+      posts = json['pageProps']['initialData']['posts']['edges']
       posts.each do |post|
-        results << { :source => url, :url => post['node']['link'], :title => post['node']['title'], :date => Date.parse(post['node']['date']), :domain => 'owens.house.gov'}
+        results << { :source => "https://owens.house.gov/resources/press", :url => post['node']['link'], :title => post['node']['title'].gsub(/<[^>]*>/,'').strip, :date => Date.parse(post['node']['date']), :domain => 'owens.house.gov'}
       end
       results
     end
