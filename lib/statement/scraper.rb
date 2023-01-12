@@ -29,11 +29,7 @@ module Statement
     end
 
     def self.current_year
-      if Date.today.month == 1
-        Date.today.year-1
-      else
-        Date.today.year
-      end
+      Date.today.year
     end
 
     def self.current_month
