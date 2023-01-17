@@ -67,7 +67,7 @@ module Statement
         schumer, mcmorris, schiff, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, correa, rickscott, mooney, ellzey, bergman, gimenez,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, tillis, barr, porter, crawford, good,
         neguse, jasonsmith, vargas, moulton, bacon, calvert, capito, house_title_header, recordlist, tonko, aguilar, rosen, spanberger, media_digest, nikemawilliams,
-        larsen, grijalva, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce, houlahan, lucas, schweikert, gosar, owens].flatten
+        larsen, grijalva, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce, houlahan, lucas, schweikert, gosar].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
