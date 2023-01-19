@@ -39,7 +39,7 @@ module Statement
     def self.member_methods
       [:klobuchar, :crapo, :trentkelly, :kilmer, :cardin, :heinrich, :bucshon, :document_query_new, :costa, :jordan, :barr, :lamborn, :media_body, :trone, :spanberger, :cloud, :nehls,
       :wenstrup, :robbishop, :manchin, :timscott, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :tlaib, :grijalva, :aguilar, :bergman, :scanlon, :gimenez,
-      :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :vandrew, :rickscott, :joyce, :gosar,
+      :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :vandrew, :rickscott, :joyce, :gosar, :article_block_h2,
       :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :garypeters, :webster, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen, :schweikert, :ritchietorres,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :tillis, :emmer, :house_title_header, :good,
       :porter, :neguse, :jasonsmith, :vargas, :moulton, :bacon, :calvert, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker,
@@ -64,7 +64,7 @@ module Statement
       results = [klobuchar(year), kilmer, sullivan, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, jordan, lamborn, senate_wordpress, media_body, scanlon, nehls,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=1), baldwin, casey, cruz, schatz, cassidy, cantwell, cornyn, senate_drupal_new, tlaib,
         inhofe, fischer, kaine, padilla, clark, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, costa, house_drupal, cloud, ritchietorres,
-        schumer, mcmorris, schiff, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, correa, rickscott, mooney, ellzey, bergman, gimenez,
+        schumer, mcmorris, schiff, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, correa, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, tillis, barr, porter, crawford, good,
         neguse, jasonsmith, vargas, moulton, bacon, calvert, capito, house_title_header, recordlist, tonko, aguilar, rosen, spanberger, media_digest, nikemawilliams,
         larsen, grijalva, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce, houlahan, lucas, schweikert, gosar].flatten
@@ -1322,7 +1322,6 @@ module Statement
       if urls.empty?
         urls = [
           "https://www.coons.senate.gov/news/press-releases",
-          "https://www.brown.senate.gov/newsroom/press-releases",
           "https://www.booker.senate.gov/news/press",
           "https://www.cramer.senate.gov/news/press-releases"
         ]
@@ -1363,6 +1362,28 @@ module Statement
        return if doc.nil?
        doc.css(".ArticleBlock").each do |row|
          results << { :source => url, :url => row.css('a').first['href'], :title => row.css('a').text.strip, :date => Date.parse(row.css('.ArticleBlock__date').text), :domain => domain }
+       end
+      end
+      results
+    end
+
+    def self.article_block_h2(urls=[], page=1)
+      if urls.empty?
+        urls = [
+          "https://www.brown.senate.gov/newsroom/press-releases"
+        ]
+      end
+      results = []
+
+      urls.each do |url|
+       puts url
+       uri = URI(url)
+       source_url = "#{url}?pagenum_rs=#{page}"
+       domain =  URI.parse(source_url).host
+       doc = Statement::Scraper.open_html(source_url)
+       return if doc.nil?
+       doc.css(".ArticleBlock").each do |row|
+         results << { :source => url, :url => row.css('a').first['href'], :title => row.css("h2").text.strip, :date => Date.parse(row.css('.ArticleBlock__date').text), :domain => domain }
        end
       end
       results
