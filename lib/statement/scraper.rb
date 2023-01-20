@@ -1084,7 +1084,6 @@ module Statement
           "https://strickland.house.gov/media/press-releases",
           "https://fitzgerald.house.gov/media/press-releases",
           "https://flood.house.gov/media/press-releases",
-          "https://finstad.house.gov/media/press-releases",
           "https://patryan.house.gov/media/press-releases",
           "https://yakym.house.gov/media/press-releases",
           "https://kiley.house.gov/media/press-releases",
@@ -2233,7 +2232,8 @@ module Statement
           "https://fischbach.house.gov/press-releases",
           "https://bowman.house.gov/press-releases",
           "https://sessions.house.gov/press-releases",
-          "https://vanduyne.house.gov/press-releases"
+          "https://vanduyne.house.gov/press-releases",
+          "https://finstad.house.gov/press-releases"
         ]
       end
       results = []
