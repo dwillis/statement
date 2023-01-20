@@ -1074,7 +1074,6 @@ module Statement
           "https://fernandez.house.gov/media/press-releases",
           "https://garbarino.house.gov/media/press-releases",
           "https://malliotakis.house.gov/media/press-releases",
-          "https://jones.house.gov/media/press-releases",
           "https://bice.house.gov/media/press-releases",
           "https://bentz.house.gov/media/press-releases",
           "https://mace.house.gov/media/press-releases",
