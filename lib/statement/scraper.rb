@@ -2353,7 +2353,6 @@ module Statement
       if domains.empty?
         domains = [
           "bluntrochester.house.gov",
-          "hollingsworth.house.gov",
           "sarajacobs.house.gov",
           "lesko.house.gov",
           "balderson.house.gov",
