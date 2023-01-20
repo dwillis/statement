@@ -1100,7 +1100,6 @@ module Statement
           "https://goldman.house.gov/media/press-releases",
           "https://molinaro.house.gov/media/press-releases",
           "https://langworthy.house.gov/media/press-releases",
-          "https://brecheen.house.gov/media/press-releases",
           "https://chavez-deremer.house.gov/media/press-releases",
           "https://magaziner.house.gov/media/press-releases",
           "https://vanorden.house.gov/media/press-releases",
@@ -2369,7 +2368,8 @@ module Statement
           "nickel.house.gov",
           "ezell.house.gov",
           "pettersen.house.gov",
-          "duarte.house.gov"
+          "duarte.house.gov",
+          "brecheen.house.gov"
         ]
       end
       domains.each do |domain|
