@@ -1134,7 +1134,8 @@ module Statement
           "https://mills.house.gov/media/press-releases",
           "https://kevinmullin.house.gov/media/press-releases",
           "https://ciscomani.house.gov/media/press-releases",
-          "https://crane.house.gov/media/press-releases"
+          "https://crane.house.gov/media/press-releases",
+          "https://democraticleader.house.gov/media/press-releases"
         ]
       end
       results = []
