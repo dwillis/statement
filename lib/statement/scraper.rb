@@ -985,7 +985,6 @@ module Statement
         urls = [
           "https://issa.house.gov/media/press-releases",
           "https://tenney.house.gov/media/press-releases",
-          "https://sessions.house.gov/media/press-releases",
           "https://amodei.house.gov/news-releases",
           "https://palmer.house.gov/media-center/press-releases",
           "https://newhouse.house.gov/media-center/press-releases",
@@ -1107,7 +1106,39 @@ module Statement
           "https://brecheen.house.gov/media/press-releases",
           "https://chavez-deremer.house.gov/media/press-releases",
           "https://magaziner.house.gov/media/press-releases",
-
+          "https://vanorden.house.gov/media/press-releases",
+          "https://balint.house.gov/media/press-releases",
+          "https://gluesenkampperez.house.gov/media/press-releases",
+          "https://kiggans.house.gov/media/press-releases",
+          "https://hunt.house.gov/media/press-releases",
+          "https://casar.house.gov/media/press-releases",
+          "https://crockett.house.gov/media/press-releases",
+          "https://luttrell.house.gov/media/press-releases",
+          "https://moran.house.gov/media/press-releases",
+          "https://fry.house.gov/media/press-releases",
+          "https://deluzio.house.gov/media/press-releases",
+          "https://sykes.house.gov/media/press-releases",
+          "https://maxmiller.house.gov/media/press-releases",
+          "https://landsman.house.gov/media/press-releases",
+          "https://lawler.house.gov/media/press-releases",
+          "https://desposito.house.gov/media/press-releases",
+          "https://lalota.house.gov/media/press-releases",
+          "https://vasquez.house.gov/media/press-releases",
+          "https://alford.house.gov/media/press-releases",
+          "https://thanedar.house.gov/media/press-releases",
+          "https://james.house.gov/media/press-releases",
+          "https://scholten.house.gov/media/press-releases",
+          "https://ivey.house.gov/media/press-releases",
+          "https://mcgarvey.house.gov/media/press-releases",
+          "https://sorensen.house.gov/media/press-releases",
+          "https://nunn.house.gov/media/press-releases",
+          "https://tokuda.house.gov/media/press-releases",
+          "https://laurellee.house.gov/media/press-releases",
+          "https://luna.house.gov/media/press-releases",
+          "https://mills.house.gov/media/press-releases",
+          "https://kevinmullin.house.gov/media/press-releases",
+          "https://ciscomani.house.gov/media/press-releases",
+          "https://crane.house.gov/media/press-releases"
         ]
       end
       results = []
@@ -2202,7 +2233,8 @@ module Statement
           "https://bost.house.gov/press-releases",
           "https://comer.house.gov/press-release",
           "https://fischbach.house.gov/press-releases",
-          "https://bowman.house.gov/press-releases"
+          "https://bowman.house.gov/press-releases",
+          "https://sessions.house.gov/press-releases"
         ]
       end
       results = []
@@ -2334,7 +2366,11 @@ module Statement
           "rosendale.house.gov",
           "pfluger.house.gov",
           "jackson.house.gov",
-          "peltola.house.gov"
+          "peltola.house.gov",
+          "nickel.house.gov",
+          "ezell.house.gov",
+          "pettersen.house.gov",
+          "duarte.house.gov"
         ]
       end
       domains.each do |domain|
