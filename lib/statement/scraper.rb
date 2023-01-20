@@ -1080,7 +1080,6 @@ module Statement
           "https://harshbarger.house.gov/media/press-releases",
           "https://fallon.house.gov/media/press-releases",
           "https://gonzales.house.gov/media/press-releases",
-          "https://vanduyne.house.gov/media/press-releases",
           "https://blakemoore.house.gov/media/press-releases",
           "https://strickland.house.gov/media/press-releases",
           "https://fitzgerald.house.gov/media/press-releases",
@@ -2233,7 +2232,8 @@ module Statement
           "https://comer.house.gov/press-release",
           "https://fischbach.house.gov/press-releases",
           "https://bowman.house.gov/press-releases",
-          "https://sessions.house.gov/press-releases"
+          "https://sessions.house.gov/press-releases",
+          "https://vanduyne.house.gov/press-releases"
         ]
       end
       results = []
