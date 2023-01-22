@@ -2190,7 +2190,6 @@ module Statement
           "https://himes.house.gov/press-releases",
           "https://austinscott.house.gov/press-releases",
           "https://gooden.house.gov/press-releases",
-          "https://gibbs.house.gov/press-releases",
           "https://hayes.house.gov/press-releases",
           "https://desjarlais.house.gov/media-center",
           "https://mcclain.house.gov/press-releases"
