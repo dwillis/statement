@@ -1098,7 +1098,6 @@ module Statement
           "https://edwards.house.gov/media/press-releases",
           "https://kean.house.gov/media/press-releases",
           "https://goldman.house.gov/media/press-releases",
-          "https://molinaro.house.gov/media/press-releases",
           "https://langworthy.house.gov/media/press-releases",
           "https://chavez-deremer.house.gov/media/press-releases",
           "https://magaziner.house.gov/media/press-releases",
@@ -1135,7 +1134,8 @@ module Statement
           "https://kevinmullin.house.gov/media/press-releases",
           "https://ciscomani.house.gov/media/press-releases",
           "https://crane.house.gov/media/press-releases",
-          "https://democraticleader.house.gov/media/press-releases"
+          "https://democraticleader.house.gov/media/press-releases",
+          "https://buck.house.gov/media-center/press-releases"
         ]
       end
       results = []
@@ -1889,7 +1889,6 @@ module Statement
           {'weber.house.gov' => 27},
           {'kuster.house.gov' => 27},
           {"grothman.house.gov" => 27},
-          {"carter.house.gov" => 27},
           {"norman.house.gov" => 27},
           {"buddycarter.house.gov" => 27},
           {"trahan.house.gov" => 27},
@@ -2369,7 +2368,9 @@ module Statement
           "ezell.house.gov",
           "pettersen.house.gov",
           "duarte.house.gov",
-          "brecheen.house.gov"
+          "brecheen.house.gov",
+          "carter.house.gov",
+          "molinaro.house.gov"
         ]
       end
       domains.each do |domain|
