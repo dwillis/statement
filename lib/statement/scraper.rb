@@ -2497,6 +2497,7 @@ module Statement
       results = []
 
       urls.each do |url|
+        puts url
         uri = URI(url)
         source_url = "#{url}?page=#{page}"
 
