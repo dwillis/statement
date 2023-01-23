@@ -2370,7 +2370,8 @@ module Statement
           "molinaro.house.gov",
           "stewart.house.gov",
           "baird.house.gov",
-          "greene.house.gov"
+          "greene.house.gov",
+          "frankel.house.gov"
         ]
       end
       domains.each do |domain|
