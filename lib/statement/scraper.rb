@@ -42,7 +42,7 @@ module Statement
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :vandrew, :rickscott, :joyce, :gosar, :article_block_h2,
       :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :garypeters, :webster, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen, :schweikert, :ritchietorres,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :tillis, :emmer, :house_title_header, :good,
-      :porter, :neguse, :jasonsmith, :moulton, :bacon, :calvert, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley,
+      :porter, :neguse, :jasonsmith, :moulton, :bacon, :calvert, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler,
       :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :nikemawilliams, :owens]
     end
 
@@ -66,7 +66,7 @@ module Statement
         inhofe, fischer, kaine, padilla, clark, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, costa, house_drupal, cloud, ritchietorres,
         schumer, mcmorris, schiff, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, correa, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, tillis, barr, porter, crawford, good,
-        neguse, jasonsmith, moulton, bacon, calvert, capito, house_title_header, recordlist, tonko, aguilar, rosen, spanberger, media_digest, nikemawilliams, pressley,
+        neguse, jasonsmith, moulton, bacon, calvert, capito, house_title_header, recordlist, tonko, aguilar, rosen, spanberger, media_digest, nikemawilliams, pressley, reschenthaler,
         larsen, grijalva, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce, houlahan, lucas, schweikert, gosar, mcgovern].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
@@ -1012,7 +1012,6 @@ module Statement
           "https://dustyjohnson.house.gov/media/press-releases",
           "https://meuser.house.gov/media/press-releases",
           "https://miller.house.gov/media/press-releases",
-          "https://reschenthaler.house.gov/media/press-releases",
           "https://johnrose.house.gov/media/press-releases",
           "https://roy.house.gov/media/press-releases",
           "https://sherrill.house.gov/media/press-releases",
@@ -1140,7 +1139,10 @@ module Statement
           "https://courtney.house.gov/media-center/press-releases",
           "https://stauber.house.gov/media/press-releases",
           "https://mccaul.house.gov/media-center/press-releases",
-          "https://jeffduncan.house.gov/media/press-releases"
+          "https://jeffduncan.house.gov/media/press-releases",
+          "https://foster.house.gov/media/press-releases",
+          "https://schakowsky.house.gov/media/press-releases",
+          "https://craig.house.gov/media/press-releases"
         ]
       end
       results = []
@@ -2089,10 +2091,7 @@ module Statement
           "wild.house.gov",
           "harder.house.gov",
           "davids.house.gov",
-          "craig.house.gov",
-          "schakowsky.house.gov",
-          "eshoo.house.gov",
-          "foster.house.gov"
+          "eshoo.house.gov"
         ]
       end
 
@@ -2702,6 +2701,21 @@ module Statement
                      :title => row.text.strip,
                      :date => Date.parse(row.next.next.text),
                      :domain => 'www.scott.senate.gov' }
+      end
+      results
+    end
+
+    def self.reschenthaler(page=1)
+      results = []
+      url = "https://reschenthaler.house.gov/media/press-releases?PageNum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("#newscontent h2")[0..-1].each do |row|
+        results << { :source => url,
+                     :url => "https://reschenthaler.house.gov" + row.css('a').first['href'],
+                     :title => row.text.strip,
+                     :date => Date.parse(row.previous.previous.text),
+                     :domain => 'reschenthaler.house.gov' }
       end
       results
     end
