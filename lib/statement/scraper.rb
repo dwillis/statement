@@ -38,7 +38,7 @@ module Statement
 
     def self.member_methods
       [:klobuchar, :crapo, :trentkelly, :kilmer, :cardin, :heinrich, :bucshon, :document_query_new, :costa, :jordan, :barr, :lamborn, :media_body, :trone, :spanberger, :cloud, :nehls,
-      :wenstrup, :robbishop, :manchin, :timscott, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :tlaib, :grijalva, :aguilar, :bergman, :scanlon, :gimenez,
+      :wenstrup, :robbishop, :manchin, :timscott, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :tlaib, :grijalva, :aguilar, :bergman, :scanlon, :gimenez, :mcgovern,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :vandrew, :rickscott, :joyce, :gosar, :article_block_h2,
       :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :garypeters, :webster, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen, :schweikert, :ritchietorres,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :correa, :tillis, :emmer, :house_title_header, :good,
@@ -67,7 +67,7 @@ module Statement
         schumer, mcmorris, schiff, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, correa, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, tillis, barr, porter, crawford, good,
         neguse, jasonsmith, vargas, moulton, bacon, calvert, capito, house_title_header, recordlist, tonko, aguilar, rosen, spanberger, media_digest, nikemawilliams,
-        larsen, grijalva, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce, houlahan, lucas, schweikert, gosar].flatten
+        larsen, grijalva, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce, houlahan, lucas, schweikert, gosar, mcgovern].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -1068,7 +1068,6 @@ module Statement
           "https://spartz.house.gov/media/press-releases",
           "https://mann.house.gov/media/press-releases",
           "https://laturner.house.gov/media/press-releases",
-          "https://auchincloss.house.gov/media/press-releases",
           "https://ross.house.gov/media/press-releases",
           "https://manning.house.gov/media/press-releases",
           "https://fernandez.house.gov/media/press-releases",
@@ -1135,7 +1134,11 @@ module Statement
           "https://ciscomani.house.gov/media/press-releases",
           "https://crane.house.gov/media/press-releases",
           "https://democraticleader.house.gov/media/press-releases",
-          "https://buck.house.gov/media-center/press-releases"
+          "https://buck.house.gov/media-center/press-releases",
+          "https://horsford.house.gov/media/press-releases",
+          "https://cleaver.house.gov/media-center/press-releases",
+          "https://aderholt.house.gov/media-center/press-releases",
+          "https://courtney.house.gov/media-center/press-releases"
         ]
       end
       results = []
@@ -1840,9 +1843,7 @@ module Statement
         domains = [
           {"loudermilk.house.gov" => 27},
           {"davidscott.house.gov" => 377},
-          {"kathleenrice.house.gov" => 27},
           {"frankel.house.gov" => 27},
-          {'mcgovern.house.gov' => 2472},
           {'delbene.house.gov' => 27},
           {'wassermanschultz.house.gov' => 27}
         ]
@@ -1884,7 +1885,6 @@ module Statement
           {'escobar.house.gov' => 27},
           {'wexton.house.gov' => 27},
           {'arrington.house.gov' => 27},
-          {'stewart.house.gov' => 27},
           {'valadao.house.gov' => 27},
           {'weber.house.gov' => 27},
           {'kuster.house.gov' => 27},
@@ -2275,18 +2275,6 @@ module Statement
       results
     end
 
-    def self.aderholt(page=0)
-      results = []
-      domain = "aderholt.house.gov"
-      url = "https://aderholt.house.gov/media-center/press-releases?page=#{page}"
-      doc = open_html(url)
-      return if doc.nil?
-      doc.css(".view-content .views-row").first(10).each do |row|
-        results << {:source => url, :url => 'https://aderholt.house.gov' + row.css('h3').first.children.first['href'], :title => row.css('h3').first.children.first.text.strip, :date => Date.parse(row.css(".views-field .field-content")[1].text), :domain => domain }
-      end
-      results
-    end
-
     def self.trone(page=1)
       results = []
       domain = "trone.house.gov"
@@ -2342,7 +2330,19 @@ module Statement
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css("article").each do |row|
-        results << {:source => url, :url => "https://houlahan.house.gov"+ row.at_css('a')['href'], :title => row.at_css('a').text, :date => Date.parse(row.css("span.date").text + ", 2022"), :domain => domain }
+        results << {:source => url, :url => "https://houlahan.house.gov"+ row.at_css('a')['href'], :title => row.at_css('a').text, :date => Date.parse(row.css("span.date").text + ", 2023"), :domain => domain }
+      end
+      results
+    end
+
+    def self.mcgovern(page=1)
+      results = []
+      domain = 'mcgovern.house.gov'
+      url = "https://mcgovern.house.gov/news/documentquery.aspx?DocumentTypeID=2472&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("article").each do |row|
+        results << {:source => url, :url => "https://mcgovern.house.gov"+ row.at_css('a')['href'], :title => row.at_css('a').text, :date => row.at_css("time")['datetime'], :domain => domain }
       end
       results
     end
@@ -2369,7 +2369,8 @@ module Statement
           "duarte.house.gov",
           "brecheen.house.gov",
           "carter.house.gov",
-          "molinaro.house.gov"
+          "molinaro.house.gov",
+          "stewart.house.gov"
         ]
       end
       domains.each do |domain|
@@ -2535,7 +2536,8 @@ module Statement
           "https://cardenas.house.gov/media-center/press-releases",
           "https://mikelevin.house.gov/media/press-releases",
           "https://watsoncoleman.house.gov/newsroom/press-releases",
-          "https://bush.house.gov/media/press-releases"
+          "https://bush.house.gov/media/press-releases",
+          "https://auchincloss.house.gov/media/press-releases"
         ]
       end
       urls.each do |url|
