@@ -1151,7 +1151,8 @@ module Statement
           "https://boyle.house.gov/media-center/press-releases",
           "https://calvert.house.gov/media/press-releases",
           "https://ruppersberger.house.gov/news-room/press-releases",
-          "https://bobbyscott.house.gov/media-center/press-releases"
+          "https://bobbyscott.house.gov/media-center/press-releases",
+          "https://bilirakis.house.gov/media/press-releases"
         ]
       end
       results = []
@@ -2412,26 +2413,6 @@ module Statement
       results
     end
 
-    def self.backfill_bilirakis(page=1)
-      results = []
-      domain = 'bilirakis.house.gov'
-      url = "https://bilirakis.house.gov/press-releases?page=#{page}"
-      doc = open_html(url)
-      return if doc.nil?
-      doc.css("#region-content .views-row").each do |row|
-          title_anchor = row.css("h3 a")
-          title = title_anchor.text
-          release_url = "https://#{domain + title_anchor.attr('href')}"
-            raw_date = row.css(".views-field-created").text
-          results << { :source => url,
-                       :url => release_url,
-                       :title => title,
-                       :date => begin Date.parse(raw_date) rescue nil end,
-                       :domain => domain }
-      end
-      results
-    end
-
     def self.keating
       results = []
       domain = "keating.house.gov"
@@ -2450,7 +2431,6 @@ module Statement
       if urls.empty?
         urls = [
             "https://sherman.house.gov/media-center/press-releases",
-            "https://bilirakis.house.gov/media/press-releases",
             "https://quigley.house.gov/media-center/press-releases",
             "https://buchanan.house.gov/media-center/press-releases",
             "https://waters.house.gov/media-center/press-releases",
