@@ -959,7 +959,8 @@ module Statement
           "https://mcbath.house.gov/press-releases",
           "https://markgreen.house.gov/press-releases",
           "https://adamsmith.house.gov/press-releases",
-          "https://lahood.house.gov/press-releases"
+          "https://lahood.house.gov/press-releases",
+          "https://sewell.house.gov/press-releases"
         ]
      end
      results = []
@@ -2471,7 +2472,6 @@ module Statement
             "https://sherman.house.gov/media-center/press-releases",
             "https://bilirakis.house.gov/media/press-releases",
             "https://quigley.house.gov/media-center/press-releases",
-            "https://sewell.house.gov/media-center/press-releases",
             "https://buchanan.house.gov/media-center/press-releases",
             "https://waters.house.gov/media-center/press-releases",
             "https://swalwell.house.gov/media-center/press-releases",
