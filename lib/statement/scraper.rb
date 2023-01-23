@@ -2482,7 +2482,6 @@ module Statement
             "https://delauro.house.gov/media-center/press-releases",
             "https://dankildee.house.gov/media/press-releases",
             "https://smucker.house.gov/media/press-releases",
-            "https://price.house.gov/newsroom/press-releases",
             "https://lofgren.house.gov/media/press-releases",
             "https://sylviagarcia.house.gov/media/press-releases",
             "https://susielee.house.gov/media/press-releases",
