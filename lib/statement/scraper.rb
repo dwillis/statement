@@ -956,11 +956,10 @@ module Statement
         urls = [
           "https://halrogers.house.gov/press-releases",
           "https://fulcher.house.gov/press-releases",
-          "https://speier.house.gov/press-releases",
           "https://mcbath.house.gov/press-releases",
           "https://markgreen.house.gov/press-releases",
-          "https://rice.house.gov/press-releases",
-          "https://adamsmith.house.gov/press-releases"
+          "https://adamsmith.house.gov/press-releases",
+          "https://lahood.house.gov/press-releases"
         ]
      end
      results = []
@@ -1138,7 +1137,8 @@ module Statement
           "https://horsford.house.gov/media/press-releases",
           "https://cleaver.house.gov/media-center/press-releases",
           "https://aderholt.house.gov/media-center/press-releases",
-          "https://courtney.house.gov/media-center/press-releases"
+          "https://courtney.house.gov/media-center/press-releases",
+          "https://stauber.house.gov/media/press-releases"
         ]
       end
       results = []
@@ -1880,7 +1880,6 @@ module Statement
           {'debbiedingell.house.gov' => 27},
           {'gomez.house.gov' => 27},
           {"beyer.house.gov" => 27},
-          {'baird.house.gov' => 27},
           {"waltz.house.gov" => 27},
           {'escobar.house.gov' => 27},
           {'wexton.house.gov' => 27},
@@ -1898,7 +1897,6 @@ module Statement
           {"phillips.house.gov" => 27},
           {"timmons.house.gov" => 27},
           {"allen.house.gov" => 27},
-          {"palazzo.house.gov" => 2519},
           {'estes.house.gov' => 27},
           {'hill.house.gov' => 27},
           {"wittman.house.gov" => 2670},
@@ -2092,7 +2090,6 @@ module Statement
           "davids.house.gov",
           "pressley.house.gov",
           "craig.house.gov",
-          "stauber.house.gov",
           "schakowsky.house.gov",
           "eshoo.house.gov",
           "foster.house.gov"
@@ -2370,7 +2367,8 @@ module Statement
           "brecheen.house.gov",
           "carter.house.gov",
           "molinaro.house.gov",
-          "stewart.house.gov"
+          "stewart.house.gov",
+          "baird.house.gov"
         ]
       end
       domains.each do |domain|
