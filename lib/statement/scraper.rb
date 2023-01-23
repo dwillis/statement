@@ -2469,7 +2469,6 @@ module Statement
       if urls.empty?
         urls = [
             "https://sherman.house.gov/media-center/press-releases",
-            "https://butterfield.house.gov/media-center/press-releases",
             "https://bilirakis.house.gov/media/press-releases",
             "https://quigley.house.gov/media-center/press-releases",
             "https://sewell.house.gov/media-center/press-releases",
@@ -2481,7 +2480,6 @@ module Statement
             "https://panetta.house.gov/media/press-releases",
             "https://schneider.house.gov/media/press-releases",
             "https://delauro.house.gov/media-center/press-releases",
-            "https://lowenthal.house.gov/media/press-releases",
             "https://dankildee.house.gov/media/press-releases",
             "https://smucker.house.gov/media/press-releases",
             "https://price.house.gov/newsroom/press-releases",
