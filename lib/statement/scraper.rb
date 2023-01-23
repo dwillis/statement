@@ -2833,7 +2833,7 @@ module Statement
     def self.barbaralee(page=1)
       results = []
       url = "https://lee.house.gov/news/press-releases?PageNum_rs=#{page}"
-      doc = open_html(url)
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css("#newscontent h2").each do |row|
           title = row.text.strip
@@ -2841,7 +2841,7 @@ module Statement
           results << { :source => url,
                        :url => release_url,
                        :title => title,
-                       :date => begin row.next.next.text rescue nil end,
+                       :date => begin Date.parse(row.previous.previous.text) rescue nil end,
                        :domain => 'lee.house.gov'}
       end
       results
