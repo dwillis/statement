@@ -1142,7 +1142,9 @@ module Statement
           "https://jeffduncan.house.gov/media/press-releases",
           "https://foster.house.gov/media/press-releases",
           "https://schakowsky.house.gov/media/press-releases",
-          "https://craig.house.gov/media/press-releases"
+          "https://craig.house.gov/media/press-releases",
+          "https://bera.house.gov/media-center/press-releases",
+          "https://desaulnier.house.gov/media-center/press-releases"
         ]
       end
       results = []
@@ -2187,8 +2189,7 @@ module Statement
           "https://austinscott.house.gov/press-releases",
           "https://gooden.house.gov/press-releases",
           "https://hayes.house.gov/press-releases",
-          "https://desjarlais.house.gov/media-center",
-          "https://mcclain.house.gov/press-releases"
+          "https://desjarlais.house.gov/media-center"
         ]
       end
       results = []
@@ -2227,7 +2228,8 @@ module Statement
           "https://bowman.house.gov/press-releases",
           "https://sessions.house.gov/press-releases",
           "https://vanduyne.house.gov/press-releases",
-          "https://finstad.house.gov/press-releases"
+          "https://finstad.house.gov/press-releases",
+          "https://mcclain.house.gov/press-releases"
         ]
       end
       results = []
