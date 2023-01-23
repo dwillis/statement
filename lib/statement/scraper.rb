@@ -1022,7 +1022,7 @@ module Statement
           "https://shontelbrown.house.gov/media/press-releases",
           "https://stansbury.house.gov/media/press-releases",
           "https://troycarter.house.gov/media/press-releases",
-          "https://letlow.house.gov/media",
+          "https://letlow.house.gov/media/press-releases",
           "https://slotkin.house.gov/media/press-releases",
           "https://matsui.house.gov/media",
           "https://harris.house.gov/media/press-releases",
