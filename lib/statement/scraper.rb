@@ -1138,7 +1138,8 @@ module Statement
           "https://cleaver.house.gov/media-center/press-releases",
           "https://aderholt.house.gov/media-center/press-releases",
           "https://courtney.house.gov/media-center/press-releases",
-          "https://stauber.house.gov/media/press-releases"
+          "https://stauber.house.gov/media/press-releases",
+          "https://mccaul.house.gov/media-center/press-releases"
         ]
       end
       results = []
@@ -2468,7 +2469,6 @@ module Statement
       if urls.empty?
         urls = [
             "https://sherman.house.gov/media-center/press-releases",
-            "https://mccaul.house.gov/media-center/press-releases",
             "https://butterfield.house.gov/media-center/press-releases",
             "https://bilirakis.house.gov/media/press-releases",
             "https://quigley.house.gov/media-center/press-releases",
