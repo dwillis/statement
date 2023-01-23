@@ -1149,7 +1149,8 @@ module Statement
           "https://neguse.house.gov/media/press-releases",
           "https://murphy.house.gov/media/press-releases",
           "https://boyle.house.gov/media-center/press-releases",
-          "https://calvert.house.gov/media/press-releases"
+          "https://calvert.house.gov/media/press-releases",
+          "https://ruppersberger.house.gov/news-room/press-releases"
         ]
       end
       results = []
