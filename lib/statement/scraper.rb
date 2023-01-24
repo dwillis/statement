@@ -1950,7 +1950,7 @@ module Statement
 
     def self.crawford
       results = []
-      url = "https://crawford.house.gov/resources/in-the-news"
+      url = "https://crawford.house.gov/resources/uncategorized"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       json = JSON.load(doc.at_css('[id="__NEXT_DATA__"]').text)
