@@ -998,7 +998,6 @@ module Statement
           "https://meeks.house.gov/media/press-releases",
           "https://biggs.house.gov/media/press-releases",
           "https://johnjoyce.house.gov/media/press-releases",
-          "https://wilson.house.gov/media/press-releases",
           "https://blumenauer.house.gov/media-center/press-releases",
           "https://larson.house.gov/media-center/press-releases",
           "https://kaptur.house.gov/media-center/press-releases",
@@ -2367,7 +2366,8 @@ module Statement
           "greene.house.gov",
           "frankel.house.gov",
           "loudermilk.house.gov",
-          "curtis.house.gov"
+          "curtis.house.gov",
+          "wilson.house.gov"
         ]
       end
       domains.each do |domain|
