@@ -2221,7 +2221,8 @@ module Statement
           "https://sessions.house.gov/press-releases",
           "https://vanduyne.house.gov/press-releases",
           "https://finstad.house.gov/press-releases",
-          "https://mcclain.house.gov/press-releases"
+          "https://mcclain.house.gov/press-releases",
+          "https://scottpeters.house.gov/press-releases"
         ]
       end
       results = []
