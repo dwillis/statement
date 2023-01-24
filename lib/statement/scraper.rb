@@ -1155,7 +1155,8 @@ module Statement
           "https://norton.house.gov/media/press-releases",
           "https://mikethompson.house.gov/newsroom/press-releases",
           "https://smucker.house.gov/media/press-releases",
-          "https://degette.house.gov/media-center/press-releases"
+          "https://degette.house.gov/media-center/press-releases",
+          "https://ruiz.house.gov/media-center/press-releases"
         ]
       end
       results = []
