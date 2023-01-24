@@ -1111,7 +1111,6 @@ module Statement
           "https://sykes.house.gov/media/press-releases",
           "https://maxmiller.house.gov/media/press-releases",
           "https://landsman.house.gov/media/press-releases",
-          "https://lawler.house.gov/media/press-releases",
           "https://desposito.house.gov/media/press-releases",
           "https://lalota.house.gov/media/press-releases",
           "https://vasquez.house.gov/media/press-releases",
@@ -2367,7 +2366,8 @@ module Statement
           "frankel.house.gov",
           "loudermilk.house.gov",
           "curtis.house.gov",
-          "wilson.house.gov"
+          "wilson.house.gov",
+          "lawler.house.gov"
         ]
       end
       domains.each do |domain|
