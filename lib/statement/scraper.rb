@@ -1152,7 +1152,10 @@ module Statement
           "https://calvert.house.gov/media/press-releases",
           "https://ruppersberger.house.gov/news-room/press-releases",
           "https://bobbyscott.house.gov/media-center/press-releases",
-          "https://bilirakis.house.gov/media/press-releases"
+          "https://bilirakis.house.gov/media/press-releases",
+          "https://delauro.house.gov/media-center/press-releases",
+          "https://norton.house.gov/media/press-releases",
+          "https://mikethompson.house.gov/newsroom/press-releases"
         ]
       end
       results = []
@@ -2439,7 +2442,6 @@ module Statement
             "https://khanna.house.gov/media/press-releases",
             "https://panetta.house.gov/media/press-releases",
             "https://schneider.house.gov/media/press-releases",
-            "https://delauro.house.gov/media-center/press-releases",
             "https://dankildee.house.gov/media/press-releases",
             "https://smucker.house.gov/media/press-releases",
             "https://lofgren.house.gov/media/press-releases",
