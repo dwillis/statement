@@ -1155,7 +1155,8 @@ module Statement
           "https://bilirakis.house.gov/media/press-releases",
           "https://delauro.house.gov/media-center/press-releases",
           "https://norton.house.gov/media/press-releases",
-          "https://mikethompson.house.gov/newsroom/press-releases"
+          "https://mikethompson.house.gov/newsroom/press-releases",
+          "https://smucker.house.gov/media/press-releases"
         ]
       end
       results = []
@@ -2443,7 +2444,6 @@ module Statement
             "https://panetta.house.gov/media/press-releases",
             "https://schneider.house.gov/media/press-releases",
             "https://dankildee.house.gov/media/press-releases",
-            "https://smucker.house.gov/media/press-releases",
             "https://lofgren.house.gov/media/press-releases",
             "https://sylviagarcia.house.gov/media/press-releases",
             "https://susielee.house.gov/media/press-releases",
