@@ -41,7 +41,7 @@ module Statement
       :wenstrup, :robbishop, :manchin, :timscott, :senate_drupal_newscontent, :shaheen, :paul, :house_drupal, :tlaib, :grijalva, :aguilar, :bergman, :scanlon, :gimenez, :mcgovern,
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :vandrew, :rickscott, :joyce, :gosar, :article_block_h2,
       :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :garypeters, :webster, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen, :schweikert, :ritchietorres, :article_block_h2_date,
-      :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :good,
+      :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :good, :lujan,
       :porter, :jasonsmith, :moulton, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :hoyer,
       :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :nikemawilliams, :owens]
     end
@@ -65,7 +65,7 @@ module Statement
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=1), baldwin, casey, cruz, schatz, cassidy, cantwell, cornyn, senate_drupal_new, tlaib,
         inhofe, fischer, kaine, padilla, clark, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, costa, house_drupal, cloud, ritchietorres,
         schumer, mcmorris, schiff, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, hoyer,
-        bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, tillis, barr, porter, crawford, good,
+        bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, tillis, barr, porter, crawford, good, lujan,
         jasonsmith, moulton, bacon, capito, house_title_header, recordlist, tonko, aguilar, rosen, spanberger, media_digest, nikemawilliams, pressley, reschenthaler, article_block_h2_date,
         larsen, grijalva, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce, houlahan, lucas, schweikert, gosar, mcgovern].flatten
       results = results.compact
@@ -2549,7 +2549,6 @@ module Statement
         urls = [
           "https://www.kelly.senate.gov/media/press-releases/",
           "https://www.hickenlooper.senate.gov/media/press-releases/",
-          "https://www.lujan.senate.gov/media/press-releases/",
           "https://www.sanders.senate.gov/media/press-releases/",
           "https://www.marshall.senate.gov/media/press-releases/"
         ]
@@ -2672,6 +2671,21 @@ module Statement
                      :title => row.css('a').first.text.strip,
                      :date => Date.parse(row.css('li').first.text.strip),
                      :domain => 'www.padilla.senate.gov' }
+      end
+      results
+    end
+
+    def self.lujan(page=1)
+      results = []
+      url = "https://www.lujan.senate.gov/newsroom/press-releases/?jsf=jet-engine:press-list&pagenum=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css('div.jet-listing-grid__item').each do |row|
+        results << { :source => url,
+                     :url => row.css('a').first['href'],
+                     :title => row.css('a').first.text.strip,
+                     :date => Date.parse(row.css('li').first.text.strip),
+                     :domain => 'www.lujan.senate.gov' }
       end
       results
     end
