@@ -42,7 +42,7 @@ module Statement
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :vandrew, :rickscott, :joyce, :gosar, :article_block_h2,
       :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :garypeters, :webster, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen, :schweikert, :ritchietorres, :article_block_h2_date,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :good, :lujan,
-      :porter, :jasonsmith, :moulton, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :hoyer,
+      :porter, :jasonsmith, :moulton, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :hoyer, :kiley,
       :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :nikemawilliams, :owens]
     end
 
@@ -64,7 +64,7 @@ module Statement
       results = [klobuchar(year), kilmer, sullivan, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, jordan, lamborn, senate_wordpress, media_body, scanlon, nehls,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=1), baldwin, casey, cruz, schatz, cassidy, cantwell, cornyn, senate_drupal_new, tlaib,
         inhofe, fischer, kaine, padilla, clark, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, costa, house_drupal, cloud, ritchietorres,
-        schumer, mcmorris, schiff, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, hoyer,
+        schumer, mcmorris, schiff, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, hoyer, kiley,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, tillis, barr, porter, crawford, good, lujan,
         jasonsmith, moulton, bacon, capito, house_title_header, recordlist, tonko, aguilar, rosen, spanberger, media_digest, nikemawilliams, pressley, reschenthaler, article_block_h2_date,
         larsen, grijalva, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce, houlahan, lucas, schweikert, gosar, mcgovern].flatten
@@ -1093,7 +1093,6 @@ module Statement
           "https://flood.house.gov/media/press-releases",
           "https://patryan.house.gov/media/press-releases",
           "https://yakym.house.gov/media/press-releases",
-          "https://kiley.house.gov/media/press-releases",
           "https://kamlager-dove.house.gov/media/press-releases",
           "https://robertgarcia.house.gov/media/press-releases",
           "https://bean.house.gov/media/press-releases",
@@ -1299,6 +1298,19 @@ module Statement
       posts = json['props']['pageProps']['dehydratedState']['queries'][11]['state']['data']['posts']['edges']
       posts.each do |post|
         results << { :source => url, :url => post['node']['link'], :title => post['node']['title'], :date => Date.parse(post['node']['date']), :domain => 'nikemawilliams.house.gov'}
+      end
+      results
+    end
+
+    def self.kiley
+      results = []
+      url = "https://kiley.house.gov/press"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      json = JSON.load(doc.at_css('[id="__NEXT_DATA__"]').text)
+      posts = json['props']['pageProps']['dehydratedState']['queries'][11]['state']['data']['posts']['edges']
+      posts.each do |post|
+        results << { :source => url, :url => post['node']['link'], :title => post['node']['title'], :date => Date.parse(post['node']['date']), :domain => 'kiley.house.gov'}
       end
       results
     end
