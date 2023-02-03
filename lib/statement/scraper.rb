@@ -1098,7 +1098,6 @@ module Statement
           "https://mccormick.house.gov/media/press-releases",
           "https://moskowitz.house.gov/media/press-releases",
           "https://collins.house.gov/media/press-releases",
-          "https://budzinski.house.gov/media/press-releases",
           "https://houchin.house.gov/media/press-releases",
           "https://edwards.house.gov/media/press-releases",
           "https://kean.house.gov/media/press-releases",
@@ -1107,8 +1106,6 @@ module Statement
           "https://chavez-deremer.house.gov/media/press-releases",
           "https://magaziner.house.gov/media/press-releases",
           "https://vanorden.house.gov/media/press-releases",
-          "https://balint.house.gov/media/press-releases",
-          "https://gluesenkampperez.house.gov/media/press-releases",
           "https://kiggans.house.gov/media/press-releases",
           "https://hunt.house.gov/media/press-releases",
           "https://casar.house.gov/media/press-releases",
@@ -1119,7 +1116,6 @@ module Statement
           "https://deluzio.house.gov/media/press-releases",
           "https://sykes.house.gov/media/press-releases",
           "https://maxmiller.house.gov/media/press-releases",
-          "https://landsman.house.gov/media/press-releases",
           "https://desposito.house.gov/media/press-releases",
           "https://lalota.house.gov/media/press-releases",
           "https://vasquez.house.gov/media/press-releases",
@@ -1297,7 +1293,10 @@ module Statement
           "yakym.house.gov",
           "ritchietorres.house.gov",
           "cloud.house.gov",
-          "owens.house.gov"
+          "owens.house.gov",
+          "budzinski.house.gov",
+          "gluesenkampperez.house.gov",
+          "landsman.house.gov"
         ]
       end
       results = []
@@ -2352,7 +2351,8 @@ module Statement
           "loudermilk.house.gov",
           "curtis.house.gov",
           "wilson.house.gov",
-          "lawler.house.gov"
+          "lawler.house.gov",
+          "balint.house.gov"
         ]
       end
       domains.each do |domain|
