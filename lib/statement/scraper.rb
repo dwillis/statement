@@ -955,7 +955,7 @@ module Statement
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css(".view-content .views-row").each do |row|
-        results << { :source => url, :url => "https://hoyer.house.gov"+row.css('a').first['href'], :title => row.css('a').first.text.strip, :date => Date.parse(row.css(".views-field-created").text.strip), :domain => "hoyer.house.gov" }
+        results << { :source => url, :url => "https://hoyer.house.gov"+row.css('a').first['href'], :title => row.css('a').first.text.strip, :date => begin Date.parse(row.css(".views-field-created").text.strip) rescue Time.zone.today end, :domain => "hoyer.house.gov" }
       end
       results
     end
