@@ -1098,7 +1098,6 @@ module Statement
           "https://mccormick.house.gov/media/press-releases",
           "https://moskowitz.house.gov/media/press-releases",
           "https://collins.house.gov/media/press-releases",
-          "https://houchin.house.gov/media/press-releases",
           "https://edwards.house.gov/media/press-releases",
           "https://kean.house.gov/media/press-releases",
           "https://goldman.house.gov/media/press-releases",
