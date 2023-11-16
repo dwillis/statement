@@ -1485,12 +1485,12 @@ module Statement
 
     def self.cassidy(page=1)
       results = []
-      url = "https://www.cassidy.senate.gov/newsroom/press-releases?PageNum_rs=#{page}&"
-      doc = open_html(url)
+      url = "https://www.cassidy.senate.gov/newsroom/press-releases/?jsf=jet-engine:press-list&pagenum=#{page}"
+      doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      rows = doc.css("#press").first.css('h2')
+      rows = doc.css(".jet-listing-grid__item")
       rows.each do |row|
-        results << { :source => url, :url => "https://www.cassidy.senate.gov" + row.children.first['href'], :title => row.children.last.text.strip, :date => Date.strptime(row.previous.previous.text, "%m.%d.%y"), :domain => "www.cassidy.senate.gov" }
+        results << { :source => url, :url => row.css("a").first['href'], :title => row.css("a").text.strip, :date => Date.strptime(row.css("ul li").text.strip, "%m.%d.%Y"), :domain => "www.cassidy.senate.gov" }
       end
       results
     end
