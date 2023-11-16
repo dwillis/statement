@@ -1843,8 +1843,7 @@ module Statement
       results = []
       if domains.empty?
         domains = [
-          {'delbene.house.gov' => 27},
-          {'wassermanschultz.house.gov' => 27}
+          {'delbene.house.gov' => 27}
         ]
       end
       domains.each do |domain|
@@ -1866,6 +1865,7 @@ module Statement
       results = []
       if domains.empty?
         domains = [
+          {"wassermanschultz.house.gov"=>27},
           {'hern.house.gov' => 27},
           {'fletcher.house.gov' => 27},
           {'guthrie.house.gov' => 2381},
