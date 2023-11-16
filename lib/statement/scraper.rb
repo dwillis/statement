@@ -1043,7 +1043,6 @@ module Statement
           "https://chuygarcia.house.gov/media/press-releases",
           "https://omar.house.gov/media/press-releases",
           "https://underwood.house.gov/media/press-releases",
-          "https://steube.house.gov/media/press-releases",
           "https://casten.house.gov/media/press-releases",
           "https://pence.house.gov/media/press-releases",
           "https://fleischmann.house.gov/media/press-releases",
@@ -1066,7 +1065,6 @@ module Statement
           "https://steel.house.gov/media/press-releases",
           "https://boebert.house.gov/media/press-releases",
           "https://cammack.house.gov/media/press-releases",
-          "https://franklin.house.gov/media/press-releases",
           "https://salazar.house.gov/media/press-releases",
           "https://hinson.house.gov/media/press-releases",
           "https://millermeeks.house.gov/media/press-releases",
@@ -1076,7 +1074,6 @@ module Statement
           "https://spartz.house.gov/media/press-releases",
           "https://mann.house.gov/media/press-releases",
           "https://laturner.house.gov/media/press-releases",
-          "https://ross.house.gov/media/press-releases",
           "https://manning.house.gov/media/press-releases",
           "https://fernandez.house.gov/media/press-releases",
           "https://garbarino.house.gov/media/press-releases",
@@ -1086,7 +1083,6 @@ module Statement
           "https://mace.house.gov/media/press-releases",
           "https://harshbarger.house.gov/media/press-releases",
           "https://fallon.house.gov/media/press-releases",
-          "https://gonzales.house.gov/media/press-releases",
           "https://blakemoore.house.gov/media/press-releases",
           "https://strickland.house.gov/media/press-releases",
           "https://fitzgerald.house.gov/media/press-releases",
@@ -1096,7 +1092,6 @@ module Statement
           "https://robertgarcia.house.gov/media/press-releases",
           "https://bean.house.gov/media/press-releases",
           "https://mccormick.house.gov/media/press-releases",
-          "https://moskowitz.house.gov/media/press-releases",
           "https://collins.house.gov/media/press-releases",
           "https://edwards.house.gov/media/press-releases",
           "https://kean.house.gov/media/press-releases",
@@ -1105,16 +1100,13 @@ module Statement
           "https://chavez-deremer.house.gov/media/press-releases",
           "https://magaziner.house.gov/media/press-releases",
           "https://vanorden.house.gov/media/press-releases",
-          "https://kiggans.house.gov/media/press-releases",
           "https://hunt.house.gov/media/press-releases",
           "https://casar.house.gov/media/press-releases",
           "https://crockett.house.gov/media/press-releases",
           "https://luttrell.house.gov/media/press-releases",
           "https://moran.house.gov/media/press-releases",
-          "https://fry.house.gov/media/press-releases",
           "https://deluzio.house.gov/media/press-releases",
           "https://sykes.house.gov/media/press-releases",
-          "https://maxmiller.house.gov/media/press-releases",
           "https://desposito.house.gov/media/press-releases",
           "https://lalota.house.gov/media/press-releases",
           "https://vasquez.house.gov/media/press-releases",
@@ -1128,7 +1120,6 @@ module Statement
           "https://nunn.house.gov/media/press-releases",
           "https://tokuda.house.gov/media/press-releases",
           "https://laurellee.house.gov/media/press-releases",
-          "https://luna.house.gov/media/press-releases",
           "https://mills.house.gov/media/press-releases",
           "https://kevinmullin.house.gov/media/press-releases",
           "https://ciscomani.house.gov/media/press-releases",
@@ -1913,7 +1904,6 @@ module Statement
           {"perry.house.gov" => 2645},
           {"perry.house.gov" => 2608},
           {"neal.house.gov" => 27},
-          {'gottheimer.house.gov' => 27},
           {'rouzer.house.gov' => 27}
         ]
       end
@@ -2326,7 +2316,6 @@ module Statement
         domains = [
           "bluntrochester.house.gov",
           "sarajacobs.house.gov",
-          "lesko.house.gov",
           "balderson.house.gov",
           "case.house.gov",
           "mikegarcia.house.gov",
@@ -2348,7 +2337,6 @@ module Statement
           "greene.house.gov",
           "frankel.house.gov",
           "loudermilk.house.gov",
-          "curtis.house.gov",
           "wilson.house.gov",
           "lawler.house.gov",
           "balint.house.gov"
@@ -2421,7 +2409,6 @@ module Statement
         urls = [
             "https://sherman.house.gov/media-center/press-releases",
             "https://quigley.house.gov/media-center/press-releases",
-            "https://buchanan.house.gov/media-center/press-releases",
             "https://waters.house.gov/media-center/press-releases",
             "https://swalwell.house.gov/media-center/press-releases",
             "https://keating.house.gov/media-center/press-releases",
@@ -2432,8 +2419,7 @@ module Statement
             "https://lofgren.house.gov/media/press-releases",
             "https://sylviagarcia.house.gov/media/press-releases",
             "https://susielee.house.gov/media/press-releases",
-            "https://danbishop.house.gov/media/press-releases",
-            "https://evans.house.gov/media-center/press-releases"
+            "https://danbishop.house.gov/media/press-releases"
         ]
       end
 
