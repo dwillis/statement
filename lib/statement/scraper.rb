@@ -43,7 +43,7 @@ module Statement
       :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :garypeters, :webster, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen, :schweikert, :article_block_h2_date,
       :grassley, :bennet, :lofgren, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :good, :lujan,
       :porter, :jasonsmith, :moulton, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :hoyer,
-      :jeffries, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react]
+      :jeffries, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react, :tokuda]
     end
 
     def self.committee_methods
@@ -63,7 +63,7 @@ module Statement
       year = Date.today.year
       results = [klobuchar(year), kilmer, sullivan, shaheen, timscott, wenstrup, bucshon, angusking, document_query_new, jordan, lamborn, senate_wordpress, media_body, scanlon,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=1), baldwin, casey, cruz, schatz, cassidy, cantwell, cornyn, senate_drupal_new, tlaib,
-        inhofe, fischer, kaine, padilla, clark, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, costa, react, napolitano,
+        inhofe, fischer, kaine, padilla, clark, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, costa, react, napolitano, tokuda,
         schumer, mcmorris, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, hoyer,
         bennet(page=1), lofgren, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, tillis, barr, porter, crawford, good, lujan,
         jasonsmith, moulton, bacon, capito, house_title_header, recordlist, tonko, aguilar, rosen, spanberger, media_digest, pressley, reschenthaler, article_block_h2_date,
@@ -1122,7 +1122,6 @@ module Statement
           "https://mcgarvey.house.gov/media/press-releases",
           "https://sorensen.house.gov/media/press-releases",
           "https://nunn.house.gov/media/press-releases",
-          "https://tokuda.house.gov/media/press-releases",
           "https://laurellee.house.gov/media/press-releases",
           "https://mills.house.gov/media/press-releases",
           "https://ciscomani.house.gov/media/press-releases",
@@ -1162,8 +1161,16 @@ module Statement
           "https://schneider.house.gov/media/press-releases",
           "https://dankildee.house.gov/media/press-releases",
           "https://sylviagarcia.house.gov/media/press-releases",
-          "https://susielee.house.gov/media/press-releases"
-
+          "https://susielee.house.gov/media/press-releases",
+          "https://amo.house.gov/press-releases",
+          "https://mcclellan.house.gov/media/press-releases",
+          "https://rulli.house.gov/media/press-releases",
+          "https://suozzi.house.gov/media/press-releases",
+          "https://fong.house.gov/media/press-releases",
+          "https://lopez.house.gov/media/press-releases",
+          "https://mciver.house.gov/media/press-releases",
+          "https://wied.house.gov/media/press-releases",
+          "https://ericaleecarter.house.gov/media/press-releases"
         ]
       end
       results = []
@@ -1369,8 +1376,7 @@ module Statement
         urls = [
           "https://www.markey.senate.gov/news/press-releases",
           "https://www.murphy.senate.gov/newsroom/press-releases",
-          "https://www.cotton.senate.gov/news/press-releases",
-          "https://www.menendez.senate.gov/newsroom/press"
+          "https://www.cotton.senate.gov/news/press-releases"
         ]
       end
       results = []
@@ -1459,6 +1465,18 @@ module Statement
       results
     end
 
+    def self.tokuda(page=1)
+      results = []
+      url = "https://tokuda.house.gov/media/press-releases?PageNum_rs=#{page}&"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      rows = doc.css("#press").first.css('h2')
+      rows.each do |row|
+        results << { :source => url, :url => "https://tokuda.house.gov" + row.css('a')[0]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.previous.previous.text), :domain => "moulton.house.gov" }
+      end
+      results
+    end
+
     def self.kilmer(page=1)
       results = []
       url = "https://kilmer.house.gov/news/press-releases?PageNum_rs=#{page}&"
@@ -1510,7 +1528,7 @@ module Statement
 
     def self.cornyn(page=0)
       results = []
-      url = "https://www.cornyn.senate.gov/newsroom?field_news_category_tid=1&&date_filter[value]&page=#{page}"
+      url = "https://www.cornyn.senate.gov/news/"
       doc = open_html(url)
       return if doc.nil?
       doc.css(".view-content p").each do |row|
@@ -2362,7 +2380,9 @@ module Statement
           "loudermilk.house.gov",
           "wilson.house.gov",
           "lawler.house.gov",
-          "balint.house.gov"
+          "balint.house.gov",
+          "maloy.house.gov",
+          "kennedy.house.gov"
         ]
       end
       domains.each do |domain|
@@ -2373,6 +2393,18 @@ module Statement
         doc.css("article").each do |row|
           results << {:source => url, :url => "https://#{domain}/news/"+ row.at_css('a')['href'], :title => row.at_css('a').text, :date => Date.parse(row.at_css("time")['datetime']), :domain => domain }
         end
+      end
+      results
+    end
+
+    def self.mchenry(page=1)
+      results = []
+      domain = 'mchenry.house.gov'
+      url = "https://mchenry.house.gov/news/documentquery.aspx?DocumentTypeID=418&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("article").each do |row|
+        results << {:source => url, :url => "https://mchenry.house.gov/news/"+ row.at_css('a')['href'], :title => row.at_css('a').text.strip, :date => Date.parse(row.css("time").text), :domain => domain }
       end
       results
     end
