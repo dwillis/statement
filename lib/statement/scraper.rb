@@ -37,7 +37,7 @@ module Statement
     end
 
     def self.member_methods
-      [:klobuchar, :crapo, :trentkelly, :heinrich, :document_query_new, :costa, :jordan, :barr, :media_body, :steube, :bera, 
+      [:klobuchar, :crapo, :trentkelly, :heinrich, :document_query_new, :costa, :jordan, :barr, :media_body, :steube, :bera, :meeks,
        :robbishop, :timscott, :senate_drupal_newscontent, :shaheen, :paul, :tlaib, :grijalva, :aguilar, :bergman, :scanlon, :gimenez, :mcgovern,
       :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :vandrew, :rickscott, :joyce, :gosar, :article_block_h2,
       :schumer, :cassidy, :takano, :gillibrand, :garypeters, :maxmiller, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen, :schweikert, :article_block_h2_date,
@@ -61,7 +61,7 @@ module Statement
 
     def self.member_scrapers
       year = Date.today.year
-      results = [klobuchar(year), sullivan, shaheen, timscott, angusking, document_query_new, jordan, senate_wordpress, media_body, scanlon, bera,
+      results = [klobuchar(year), sullivan, shaheen, timscott, angusking, document_query_new, jordan, senate_wordpress, media_body, scanlon, bera, meeks,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=1), baldwin, casey, cruz, schatz, cassidy, cantwell, cornyn, senate_drupal_new, tlaib,
         fischer, kaine, padilla, clark, trentkelly, barbaralee, wyden, maxmiller, mast, hassan, cortezmasto, costa, react, tokuda, steube,
         schumer, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, hoyer,
@@ -1015,7 +1015,6 @@ module Statement
           "https://espaillat.house.gov/media/press-releases",
           "https://algreen.house.gov/media/press-releases",
           "https://mariodiazbalart.house.gov/media-center/press-releases",
-          "https://meeks.house.gov/media/press-releases",
           "https://biggs.house.gov/media/press-releases",
           "https://johnjoyce.house.gov/media/press-releases",
           "https://blumenauer.house.gov/media-center/press-releases",
@@ -1180,7 +1179,8 @@ module Statement
           "https://pelosi.house.gov/news/press-releases",
           "https://rutherford.house.gov/media/press-releases",
           "https://veasey.house.gov/media-center/press-releases",
-          "https://garamendi.house.gov/media/press-releases"
+          "https://garamendi.house.gov/media/press-releases",
+          "https://kustoff.house.gov/media/press-releases"
         ]
       end
       results = []
@@ -1732,6 +1732,18 @@ module Statement
       return if doc.nil?
       doc.css("#region-content .views-row").each do |row|
         results << { :source => url, :url => "https://costa.house.gov"+row.css("h3 a").attr('href').value, :title => row.css("h3 a").text, :date => Date.parse(row.css(".views-field-created").text.strip), :domain => domain}
+      end
+      results
+    end
+
+    def self.meeks(page=0)
+      results = []
+      domain = 'meeks.house.gov'
+      url = "https://meeks.house.gov/media/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".views-row").first(10).each do |row|
+        results << { :source => url, :url => "https://meeks.house.gov"+row.at_css("a.h4")['href'], :title => row.at_css("a.h4").text, :date => Date.parse(row.at_css(".evo-card-date").text), :domain => domain}
       end
       results
     end
@@ -2452,7 +2464,8 @@ module Statement
           "https://correa.house.gov/press",
           "https://thanedar.house.gov/media/press-releases",
           "https://rubengallego.house.gov/media-center/press-releases",
-          "https://casten.house.gov/media/press-releases"
+          "https://casten.house.gov/media/press-releases",
+          "https://sarajacobs.house.gov/news/press-releases"
         ]
       end
       urls.each do |url|
