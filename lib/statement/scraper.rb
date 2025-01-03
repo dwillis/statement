@@ -2342,12 +2342,12 @@ module Statement
 
     def self.griffith(page=1)
       results = []
-      domain = 'griffith.house.gov'
+      domain = 'morgangriffith.house.gov'
       url = "https://morgangriffith.house.gov/news/documentquery.aspx?DocumentTypeID=2235&Page=#{page}"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css("article").each do |row|
-        results << {:source => url, :url => "https://griffith.house.gov/news/"+ row.at_css('a')['href'], :title => row.at_css('a').text.strip, :date => Date.parse(row.css("time").text), :domain => domain }
+        results << {:source => url, :url => "https://morgangriffith.house.gov/news/"+ row.at_css('a')['href'], :title => row.at_css('a').text.strip, :date => Date.parse(row.css("time").text), :domain => domain }
       end
       results
     end
