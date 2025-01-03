@@ -42,7 +42,7 @@ module Statement
       :inhofe, :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :vandrew, :rickscott, :joyce, :gosar, :article_block_h2,
       :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :garypeters, :webster, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen, :schweikert, :article_block_h2_date,
       :grassley, :bennet, :lofgren, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :good, :lujan,
-      :porter, :jasonsmith, :moulton, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :hoyer,
+      :porter, :jasonsmith, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :hoyer,
       :jeffries, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react, :tokuda]
     end
 
@@ -66,7 +66,7 @@ module Statement
         inhofe, fischer, kaine, padilla, clark, trentkelly, barbaralee, cardin, wyden, webster, mast, hassan, cortezmasto, manchin, costa, react, napolitano, tokuda,
         schumer, mcmorris, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, hoyer,
         bennet(page=1), lofgren, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, tillis, barr, porter, crawford, good, lujan,
-        jasonsmith, moulton, bacon, capito, house_title_header, recordlist, tonko, aguilar, rosen, spanberger, media_digest, pressley, reschenthaler, article_block_h2_date,
+        jasonsmith, bacon, capito, house_title_header, recordlist, tonko, aguilar, rosen, spanberger, media_digest, pressley, reschenthaler, article_block_h2_date,
         larsen, grijalva, jeffries, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce, houlahan, lucas, schweikert, gosar, mcgovern].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
@@ -1170,7 +1170,8 @@ module Statement
           "https://lopez.house.gov/media/press-releases",
           "https://mciver.house.gov/media/press-releases",
           "https://wied.house.gov/media/press-releases",
-          "https://ericaleecarter.house.gov/media/press-releases"
+          "https://ericaleecarter.house.gov/media/press-releases",
+          "https://moulton.house.gov/news/press-releases"
         ]
       end
       results = []
@@ -1453,18 +1454,6 @@ module Statement
       results
     end
 
-    def self.moulton(page=1)
-      results = []
-      url = "https://moulton.house.gov/media/press-releases?PageNum_rs=#{page}&"
-      doc = Statement::Scraper.open_html(url)
-      return if doc.nil?
-      rows = doc.css("#press").first.css('h2')
-      rows.each do |row|
-        results << { :source => url, :url => "https://moulton.house.gov" + row.css('a')[0]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.previous.previous.text), :domain => "moulton.house.gov" }
-      end
-      results
-    end
-
     def self.tokuda(page=1)
       results = []
       url = "https://tokuda.house.gov/media/press-releases?PageNum_rs=#{page}&"
@@ -1472,7 +1461,7 @@ module Statement
       return if doc.nil?
       rows = doc.css("#press").first.css('h2')
       rows.each do |row|
-        results << { :source => url, :url => "https://tokuda.house.gov" + row.css('a')[0]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.previous.previous.text), :domain => "moulton.house.gov" }
+        results << { :source => url, :url => "https://tokuda.house.gov" + row.css('a')[0]['href'], :title => row.children[1].text.strip, :date => Date.parse(row.previous.previous.text), :domain => "tokuda.house.gov" }
       end
       results
     end
