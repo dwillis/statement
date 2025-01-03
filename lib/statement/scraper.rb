@@ -1929,7 +1929,8 @@ module Statement
           {"perry.house.gov" => 2645},
           {"perry.house.gov" => 2608},
           {"neal.house.gov" => 27},
-          {'rouzer.house.gov' => 27}
+          {'rouzer.house.gov' => 27},
+          {'burgess.house.gov' => 75},
         ]
       end
       domains.each do |domain|
@@ -2044,8 +2045,8 @@ module Statement
       url = "https://wenstrup.house.gov/updates/documentquery.aspx?DocumentTypeID=2491&Page=#{page}"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.xpath("//ul[@class='UnorderedNewsList']//article").each do |row|
-        article_url = 'https://wenstrup.house.gov/updates/' + row.css("h2 a").first['href'].gsub('/news/','')
+      doc.css("article").each do |row|
+        article_url = 'https://wenstrup.house.gov' + row.css("h2 a").first['href']
         results << {:source => url, :url => article_url, :title => row.css("h2").text.strip, :date => Date.parse(row.css('time').first['datetime']), :domain => 'wenstrup.house.gov' }
       end
       results
