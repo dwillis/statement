@@ -39,7 +39,7 @@ module Statement
     def self.member_methods
       [:klobuchar, :crapo, :trentkelly, :heinrich, :document_query_new, :costa, :jordan, :barr, :media_body, :steube, :bera, :meeks, :sykes, :barragan, :castor,
       :timscott, :senate_drupal_newscontent, :shaheen, :paul, :tlaib, :grijalva, :aguilar, :bergman, :scanlon, :gimenez, :mcgovern, :foxx, :clarke, :jayapal,
-      :document_query, :fischer, :clark, :sykes, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :rickscott, :joyce, :gosar, :article_block_h2,
+      :document_query, :fischer, :clark, :sykes, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :rickscott, :joyce, :gosar, :article_block_h2, :griffith,
       :schumer, :cassidy, :takano, :gillibrand, :garypeters, :maxmiller, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen, :schweikert, :article_block_h2_date,
       :grassley, :bennet, :lofgren, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :lujan,
       :porter, :jasonsmith, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler,
@@ -63,7 +63,7 @@ module Statement
       year = Date.today.year
       results = [klobuchar(year), sullivan, shaheen, timscott, angusking, document_query_new, jordan, senate_wordpress, media_body, scanlon, bera, meeks,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=1), baldwin, casey, cruz, schatz, cassidy, cantwell, cornyn, senate_drupal_new, tlaib,
-        fischer, kaine, padilla, clark, trentkelly, wyden, maxmiller, mast, hassan, cortezmasto, costa, react, tokuda, steube, foxx, clarke,
+        fischer, kaine, padilla, clark, trentkelly, wyden, maxmiller, mast, hassan, cortezmasto, costa, react, tokuda, steube, foxx, clarke, griffith,
         schumer, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, barragan, castor,
         bennet(page=1), lofgren, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, tillis, barr, crawford, lujan, jayapal,
         jasonsmith, bacon, capito, house_title_header, recordlist, tonko, aguilar, rosen, media_digest, pressley, reschenthaler, article_block_h2_date,
@@ -2318,6 +2318,18 @@ module Statement
       return if doc.nil?
       doc.css("article").each do |row|
         results << {:source => url, :url => "https://foxx.house.gov/news/"+ row.at_css('a')['href'], :title => row.at_css('a').text.strip, :date => Date.parse(row.css("time").text), :domain => domain }
+      end
+      results
+    end
+
+    def self.griffith(page=1)
+      results = []
+      domain = 'griffith.house.gov'
+      url = "https://morgangriffith.house.gov/news/documentquery.aspx?DocumentTypeID=2235&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("article").each do |row|
+        results << {:source => url, :url => "https://griffith.house.gov/news/"+ row.at_css('a')['href'], :title => row.at_css('a').text.strip, :date => Date.parse(row.css("time").text), :domain => domain }
       end
       results
     end
