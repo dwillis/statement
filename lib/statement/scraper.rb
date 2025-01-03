@@ -1776,7 +1776,7 @@ module Statement
       url = "https://jeffries.house.gov/category/press-release/page/#{page}"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.css("article").each do |row|
+      doc.css("article").first(10).each do |row|
         results << { :source => url, :url => row.at_css('a')['href'], :title => row.css("h1").text.strip, :date => Date.parse(row.at_css('time').text.strip), :domain => domain }
       end
       results
