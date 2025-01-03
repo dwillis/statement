@@ -2248,7 +2248,10 @@ module Statement
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css("article").each do |row|
-        results << {:source => url, :url => "https://houlahan.house.gov"+ row.at_css('a')['href'], :title => row.at_css('a').text, :date => Date.parse(row.css("span.date").text + ", 2023"), :domain => domain }
+        page_url = "https://houlahan.house.gov"+ row.at_css('a')['href'].strip
+        page = Statement::Scraper.open_html(page_url)
+        date = Date.parse(page.css(".topnewstext").text)
+        results << {:source => url, :url => page_url, :title => row.at_css('a').text, :date => date, :domain => domain }
       end
       results
     end
@@ -2312,7 +2315,7 @@ module Statement
           "fernandez.house.gov",
           "james.house.gov",
           "delbene.house.gov",
-          "vandrew.house.gov"
+          "vandrew.house.gov",
         ]
       end
       domains.each do |domain|
