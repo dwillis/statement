@@ -1048,9 +1048,7 @@ module Statement
           "https://fleischmann.house.gov/media/press-releases",
           "https://stevens.house.gov/media/press-releases",
           "https://guest.house.gov/media/press-releases",
-          "https://armstrong.house.gov/media/press-releases",
           "https://morelle.house.gov/media/press-releases",
-          "https://rubengallego.house.gov/media-center/press-releases",
           "https://beatty.house.gov/media-center/press-releases",
           "https://robinkelly.house.gov/media-center/press-releases",
           "https://clayhiggins.house.gov/media/press-releases",
@@ -1155,6 +1153,7 @@ module Statement
       end
       results = []
       urls.each do |url|
+        sleep(0.5)
         puts url
         uri = URI(url)
         source_url = "#{url}?page=#{page}"
@@ -2314,7 +2313,6 @@ module Statement
       if domains.empty?
         domains = [
           "bluntrochester.house.gov",
-          "sarajacobs.house.gov",
           "balderson.house.gov",
           "case.house.gov",
           "mikegarcia.house.gov",
@@ -2331,7 +2329,6 @@ module Statement
           "brecheen.house.gov",
           "carter.house.gov",
           "molinaro.house.gov",
-          "stewart.house.gov",
           "baird.house.gov",
           "greene.house.gov",
           "frankel.house.gov",
@@ -2466,7 +2463,8 @@ module Statement
           "https://auchincloss.house.gov/media/press-releases",
           "https://vargas.house.gov/media-center/press-releases",
           "https://correa.house.gov/press",
-          "https://thanedar.house.gov/media/press-releases"
+          "https://thanedar.house.gov/media/press-releases",
+          "https://rubengallego.house.gov/media-center/press-releases"
         ]
       end
       urls.each do |url|
@@ -2495,7 +2493,8 @@ module Statement
           "https://www.kelly.senate.gov/media/press-releases/",
           "https://www.hickenlooper.senate.gov/media/press-releases/",
           "https://www.sanders.senate.gov/media/press-releases/",
-          "https://www.marshall.senate.gov/media/press-releases/"
+          "https://www.marshall.senate.gov/media/press-releases/",
+
         ]
       end
       urls.each do |url|
