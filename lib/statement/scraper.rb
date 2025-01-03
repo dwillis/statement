@@ -1166,7 +1166,21 @@ module Statement
           "https://mciver.house.gov/media/press-releases",
           "https://wied.house.gov/media/press-releases",
           "https://ericaleecarter.house.gov/media/press-releases",
-          "https://moulton.house.gov/news/press-releases"
+          "https://moulton.house.gov/news/press-releases",
+          "https://nehls.house.gov/media",
+          "https://meng.house.gov/media-center/press-releases",
+          "https://lindasanchez.house.gov/media-center/press-releases",
+          "https://lamalfa.house.gov/media-center/press-releases",
+          "https://dondavis.house.gov/media/press-releases",
+          "https://strong.house.gov/media/press-releases",
+          "https://chu.house.gov/media-center/press-releases",
+          "https://lieu.house.gov/media-center/press-releases",
+          "https://joewilson.house.gov/media/press-releases",
+          "https://zinke.house.gov/media/press-releases",
+          "https://pelosi.house.gov/news/press-releases",
+          "https://rutherford.house.gov/media/press-releases",
+          "https://veasey.house.gov/media-center/press-releases",
+          "https://garamendi.house.gov/media/press-releases"
         ]
       end
       results = []
