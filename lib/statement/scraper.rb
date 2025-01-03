@@ -43,7 +43,7 @@ module Statement
       :schumer, :cassidy, :mcmorris, :takano, :gillibrand, :garypeters, :webster, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen, :schweikert, :article_block_h2_date,
       :grassley, :bennet, :drupal, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :good, :lujan,
       :porter, :jasonsmith, :moulton, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :hoyer,
-      :cartwright, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react]
+      :jeffries, :article_block, :jackreed, :blackburn, :article_block_h1, :casey, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react]
     end
 
     def self.committee_methods
@@ -67,7 +67,7 @@ module Statement
         schumer, mcmorris, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, hoyer,
         bennet(page=1), drupal, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, vandrew, tillis, barr, porter, crawford, good, lujan,
         jasonsmith, moulton, bacon, capito, house_title_header, recordlist, tonko, aguilar, rosen, spanberger, media_digest, pressley, reschenthaler, article_block_h2_date,
-        larsen, grijalva, cartwright, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce, houlahan, lucas, schweikert, gosar, mcgovern].flatten
+        larsen, grijalva, jeffries, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, trone, joyce, houlahan, lucas, schweikert, gosar, mcgovern].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -155,6 +155,16 @@ module Statement
                      :party => "majority" }
       end
       results
+    end
+
+    def self.bowman(page=1)
+      results = []
+      url = "https://bowman.house.gov/media/press-releases?PageNum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".link-list-press-item").each do |row|
+        results << { :source => url, :url => "https://bowman.house.gov" + row.css('a').first['href'].strip, :title => row.css('a').first.text.strip, :date => Date.parse(row.css('td')[0].text), :domain => "bowman.house.gov" }
+      end
     end
 
     def self.senate_banking_minority(page=1)
@@ -1760,6 +1770,18 @@ module Statement
       results
     end
 
+    def self.jeffries(page=1)
+      results = []
+      domain = 'jeffries.house.gov'
+      url = "https://jeffries.house.gov/category/press-release/page/#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("article").each do |row|
+        results << { :source => url, :url => row.at_css('a')['href'], :title => row.css("h1").text.strip, :date => Date.parse(row.at_css('time').text.strip), :domain => domain }
+      end
+      results
+    end
+
     def self.bacon(page=1)
       results = []
       domain = 'bacon.house.gov'
@@ -2194,7 +2216,6 @@ module Statement
           "https://bost.house.gov/press-releases",
           "https://comer.house.gov/press-release",
           "https://fischbach.house.gov/press-releases",
-          "https://bowman.house.gov/press-releases",
           "https://sessions.house.gov/press-releases",
           "https://vanduyne.house.gov/press-releases",
           "https://finstad.house.gov/press-releases",
