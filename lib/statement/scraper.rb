@@ -37,7 +37,7 @@ module Statement
     end
 
     def self.member_methods
-      [:klobuchar, :crapo, :trentkelly, :heinrich, :document_query_new, :costa, :jordan, :barr, :media_body, :steube,
+      [:klobuchar, :crapo, :trentkelly, :heinrich, :document_query_new, :costa, :jordan, :barr, :media_body, :steube, :bera, 
        :robbishop, :timscott, :senate_drupal_newscontent, :shaheen, :paul, :tlaib, :grijalva, :aguilar, :bergman, :scanlon, :gimenez, :mcgovern,
       :document_query, :fischer, :clark, :schiff, :barbaralee, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :vandrew, :rickscott, :joyce, :gosar, :article_block_h2,
       :schumer, :cassidy, :takano, :gillibrand, :garypeters, :maxmiller, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen, :schweikert, :article_block_h2_date,
@@ -61,7 +61,7 @@ module Statement
 
     def self.member_scrapers
       year = Date.today.year
-      results = [klobuchar(year), sullivan, shaheen, timscott, angusking, document_query_new, jordan, senate_wordpress, media_body, scanlon,
+      results = [klobuchar(year), sullivan, shaheen, timscott, angusking, document_query_new, jordan, senate_wordpress, media_body, scanlon, bera,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=1), baldwin, casey, cruz, schatz, cassidy, cantwell, cornyn, senate_drupal_new, tlaib,
         fischer, kaine, padilla, clark, trentkelly, barbaralee, wyden, maxmiller, mast, hassan, cortezmasto, costa, react, tokuda, steube,
         schumer, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, hoyer,
@@ -1087,7 +1087,6 @@ module Statement
           "https://bentz.house.gov/media/press-releases",
           "https://mace.house.gov/media/press-releases",
           "https://harshbarger.house.gov/media/press-releases",
-          "https://fallon.house.gov/media/press-releases",
           "https://blakemoore.house.gov/media/press-releases",
           "https://fitzgerald.house.gov/media/press-releases",
           "https://flood.house.gov/media/press-releases",
@@ -1108,7 +1107,6 @@ module Statement
           "https://casar.house.gov/media/press-releases",
           "https://crockett.house.gov/media/press-releases",
           "https://luttrell.house.gov/media/press-releases",
-          "https://moran.house.gov/media/press-releases",
           "https://deluzio.house.gov/media/press-releases",
           "https://sykes.house.gov/media/press-releases",
           "https://desposito.house.gov/media/press-releases",
@@ -1134,7 +1132,6 @@ module Statement
           "https://foster.house.gov/media/press-releases",
           "https://schakowsky.house.gov/media/press-releases",
           "https://craig.house.gov/media/press-releases",
-          "https://bera.house.gov/media-center/press-releases",
           "https://desaulnier.house.gov/media-center/press-releases",
           "https://scalise.house.gov/media/press-releases",
           "https://neguse.house.gov/media/press-releases",
@@ -2185,7 +2182,8 @@ module Statement
           "https://mcclain.house.gov/press-releases",
           "https://scottpeters.house.gov/press-releases",
           "https://franklin.house.gov/press-releases",
-          "https://ross.house.gov/press-releases"
+          "https://ross.house.gov/press-releases",
+          "https://gonzales.house.gov/press-releases"
         ]
       end
       results = []
@@ -2289,6 +2287,18 @@ module Statement
       results
     end
 
+    def self.bera(page=1)
+      results = []
+      domain = 'bera.house.gov'
+      url = "https://bera.house.gov/news/documentquery.aspx?DocumentTypeID=2402&Page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("article").each do |row|
+        results << {:source => url, :url => "https://bera.house.gov"+ row.at_css('a')['href'], :title => row.at_css('a').text, :date => row.at_css("time")['datetime'], :domain => domain }
+      end
+      results
+    end
+
     def self.article_newsblocker(domains=[], page=1)
       results = []
       if domains.empty?
@@ -2317,9 +2327,10 @@ module Statement
           "maloy.house.gov",
           "kennedy.house.gov",
           "alford.house.gov",
-
           "cline.house.gov",
-          "fry.house.gov"
+          "fry.house.gov",
+          "moran.house.gov",
+          "fallon.house.gov"
         ]
       end
       domains.each do |domain|
@@ -2426,7 +2437,8 @@ module Statement
           "https://vargas.house.gov/media-center/press-releases",
           "https://correa.house.gov/press",
           "https://thanedar.house.gov/media/press-releases",
-          "https://rubengallego.house.gov/media-center/press-releases"
+          "https://rubengallego.house.gov/media-center/press-releases",
+          "https://casten.house.gov/media/press-releases"
         ]
       end
       urls.each do |url|
