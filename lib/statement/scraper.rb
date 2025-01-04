@@ -40,7 +40,7 @@ module Statement
       [:klobuchar, :crapo, :trentkelly, :heinrich, :document_query_new, :costa, :jordan, :barr, :media_body, :steube, :bera, :meeks, :sykes, :barragan, :castor,
       :timscott, :senate_drupal_newscontent, :shaheen, :paul, :tlaib, :grijalva, :aguilar, :bergman, :scanlon, :gimenez, :mcgovern, :foxx, :clarke, :jayapal, :carey,
       :fischer, :clark, :sykes, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :rickscott, :joyce, :gosar, :article_block_h2, :griffith,
-      :schumer, :cassidy, :takano, :gillibrand, :garypeters, :maxmiller, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen, :schweikert, :article_block_h2_date,
+      :schumer, :cassidy, :takano, :gillibrand, :garypeters, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen, :schweikert, :article_block_h2_date,
       :grassley, :bennet, :lofgren, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :lujan,
       :porter, :jasonsmith, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :norcross,
       :jeffries, :article_block, :jackreed, :blackburn, :article_block_h1, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react, :tokuda, :huizenga]
@@ -63,7 +63,7 @@ module Statement
       year = Date.today.year
       results = [klobuchar(year), sullivan, shaheen, timscott, angusking, document_query_new, jordan, senate_wordpress, media_body, scanlon, bera, meeks, norcross,
         crapo, grassley(page=1), baldwin, casey, cruz, schatz, cassidy, cantwell, cornyn, senate_drupal_new, tlaib,
-        fischer, kaine, padilla, clark, trentkelly, wyden, maxmiller, mast, hassan, cortezmasto, costa, react, tokuda, steube, foxx, clarke, griffith, carey,
+        fischer, kaine, padilla, clark, trentkelly, wyden, mast, hassan, cortezmasto, costa, react, tokuda, steube, foxx, clarke, griffith, carey,
         schumer, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, barragan, castor,
         bennet(page=1), lofgren, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, tillis, barr, crawford, lujan, jayapal,
         jasonsmith, bacon, capito, house_title_header, recordlist, tonko, aguilar, rosen, media_digest, pressley, reschenthaler, article_block_h2_date, huizenga,
@@ -1194,18 +1194,6 @@ module Statement
       results
     end
 
-    def self.maxmiller
-      results = []
-      url = "https://maxmiller.house.gov/_next/data/wIhYnCUrABfKB3gb-rl2e/resources.json"
-      doc = Statement::Scraper.open_html(url)
-      json = JSON.parse(doc.text)
-      return if doc.nil?
-      json['pageProps']['initialData']['posts']['edges'].each do |row|
-        results << { :source => url, :url => row['node']['link'], :title => row['node']['title'], :date => Date.parse(row['node']['date']), :domain => "maxmiller.house.gov" }
-      end
-      results
-    end
-
     def self.youngkim
       results = []
       url = "https://youngkim.house.gov/media/press-releases/"
@@ -1338,7 +1326,8 @@ module Statement
           "moskowitz.house.gov",
           "gottheimer.house.gov",
           "kiggans.house.gov",
-          "luna.house.gov"
+          "luna.house.gov",
+          "maxmiller.house.gov",
         ]
       end
       results = []
