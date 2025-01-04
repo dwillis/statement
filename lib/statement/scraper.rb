@@ -39,7 +39,7 @@ module Statement
     def self.member_methods
       [:klobuchar, :crapo, :trentkelly, :heinrich, :document_query_new, :costa, :jordan, :barr, :media_body, :steube, :bera, :meeks, :sykes, :barragan, :castor,
       :timscott, :senate_drupal_newscontent, :shaheen, :paul, :tlaib, :grijalva, :aguilar, :bergman, :scanlon, :gimenez, :mcgovern, :foxx, :clarke, :jayapal, :carey,
-      :document_query, :fischer, :clark, :sykes, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :rickscott, :joyce, :gosar, :article_block_h2, :griffith,
+      :fischer, :clark, :sykes, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :rickscott, :joyce, :gosar, :article_block_h2, :griffith,
       :schumer, :cassidy, :takano, :gillibrand, :garypeters, :maxmiller, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen, :schweikert, :article_block_h2_date,
       :grassley, :bennet, :lofgren, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :lujan,
       :porter, :jasonsmith, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :norcross,
@@ -62,7 +62,7 @@ module Statement
     def self.member_scrapers
       year = Date.today.year
       results = [klobuchar(year), sullivan, shaheen, timscott, angusking, document_query_new, jordan, senate_wordpress, media_body, scanlon, bera, meeks, norcross,
-        document_query([], page=1), document_query([], page=2), crapo, grassley(page=1), baldwin, casey, cruz, schatz, cassidy, cantwell, cornyn, senate_drupal_new, tlaib,
+        crapo, grassley(page=1), baldwin, casey, cruz, schatz, cassidy, cantwell, cornyn, senate_drupal_new, tlaib,
         fischer, kaine, padilla, clark, trentkelly, wyden, maxmiller, mast, hassan, cortezmasto, costa, react, tokuda, steube, foxx, clarke, griffith, carey,
         schumer, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, barragan, castor,
         bennet(page=1), lofgren, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, tillis, barr, crawford, lujan, jayapal,
@@ -73,8 +73,8 @@ module Statement
     end
 
     def self.backfill_from_scrapers
-      results = [document_query(page=3), cardin(page=2), cornyn(page=1), timscott(page=2), timscott(page=3), document_query(page=4), grassley(page=2), grassley(page=3), grassley(page=4), cantwell(page=2),
-        clark(year=2013), kilmer(page=2), kilmer(page=3), heinrich(page=2), cassidy(page=2), cassidy(page=3), gillibrand(page=2), paul(page=1), paul(page=2), olson(year=2013), schumer(page=2), schumer(page=3), poe(year=2015, month=2), wyden(page=2),
+      results = [cornyn(page=1), timscott(page=2), timscott(page=3), grassley(page=2), grassley(page=3), grassley(page=4), cantwell(page=2),
+        clark(year=2013), heinrich(page=2), cassidy(page=2), cassidy(page=3), gillibrand(page=2), paul(page=1), paul(page=2), schumer(page=2), schumer(page=3), wyden(page=2),
         sykes(page=2), sykes(page=3), takano(page=2), takano(page=3)].flatten
       Utils.remove_generic_urls!(results)
     end
