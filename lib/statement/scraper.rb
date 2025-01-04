@@ -42,7 +42,7 @@ module Statement
       :document_query, :fischer, :clark, :sykes, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :rickscott, :joyce, :gosar, :article_block_h2, :griffith,
       :schumer, :cassidy, :takano, :gillibrand, :garypeters, :maxmiller, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen, :schweikert, :article_block_h2_date,
       :grassley, :bennet, :lofgren, :durbin, :senate_drupal, :senate_drupal_new, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :lujan,
-      :porter, :jasonsmith, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, 
+      :porter, :jasonsmith, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :norcross,
       :jeffries, :article_block, :jackreed, :blackburn, :article_block_h1, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react, :tokuda, :huizenga]
     end
 
@@ -61,7 +61,7 @@ module Statement
 
     def self.member_scrapers
       year = Date.today.year
-      results = [klobuchar(year), sullivan, shaheen, timscott, angusking, document_query_new, jordan, senate_wordpress, media_body, scanlon, bera, meeks,
+      results = [klobuchar(year), sullivan, shaheen, timscott, angusking, document_query_new, jordan, senate_wordpress, media_body, scanlon, bera, meeks, norcross,
         document_query([], page=1), document_query([], page=2), crapo, grassley(page=1), baldwin, casey, cruz, schatz, cassidy, cantwell, cornyn, senate_drupal_new, tlaib,
         fischer, kaine, padilla, clark, trentkelly, wyden, maxmiller, mast, hassan, cortezmasto, costa, react, tokuda, steube, foxx, clarke, griffith, carey,
         schumer, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, barragan, castor,
@@ -1173,7 +1173,9 @@ module Statement
           "https://evans.house.gov/media/press-releases",
           "https://salinas.house.gov/media/press-releases",
           "https://pallone.house.gov/media/press-releases",
-          "https://ramirez.house.gov/media/press-releases"
+          "https://ramirez.house.gov/media/press-releases",
+          "https://graves.house.gov/media/press-releases",
+          "https://cole.house.gov/media-center/press-releases"
         ]
       end
       results = []
@@ -2151,6 +2153,20 @@ module Statement
           next if row.children[3].text.strip == 'Title'
           results << { :source => url, :url => "https://"+domain+row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.parse(row.children[1].text), :domain => domain }
         end
+      end
+      results
+    end
+
+    def self.norcross(page=1)
+      results = []
+      url = "https://norcross.house.gov/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".media-digest-body").each do |row|
+        page_url = "https://norcross.house.gov"+ row.at_css("a.media-digest-body-link")['href']
+        page = Statement::Scraper.open_html(page_url)
+        date = Date.parse(page.at_css("h4 span.date").text)
+        results << { :source => url, :url => page_url, :title => row.at_css(".post-media-digest-title").text.strip, :date => date, :domain => "norcross.house.gov" }
       end
       results
     end
