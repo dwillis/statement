@@ -2165,7 +2165,11 @@ module Statement
       doc.css(".media-digest-body").each do |row|
         page_url = "https://norcross.house.gov"+ row.at_css("a.media-digest-body-link")['href']
         page = Statement::Scraper.open_html(page_url)
-        date = Date.parse(page.at_css("h4 span.date").text)
+        begin
+          date = Date.parse(page.at_css("h4 span.date").text)
+        rescue
+          next
+        end
         results << { :source => url, :url => page_url, :title => row.at_css(".post-media-digest-title").text.strip, :date => date, :domain => "norcross.house.gov" }
       end
       results
