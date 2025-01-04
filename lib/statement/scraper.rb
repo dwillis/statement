@@ -37,7 +37,7 @@ module Statement
     end
 
     def self.member_methods
-      [:klobuchar, :crapo, :trentkelly, :heinrich, :document_query_new, :costa, :jordan, :barr, :media_body, :steube, :bera, :meeks, :sykes, :barragan, :castor,
+      [:klobuchar, :crapo, :trentkelly, :heinrich, :document_query_new, :jordan, :barr, :media_body, :steube, :bera, :meeks, :sykes, :barragan, :castor,
       :timscott, :senate_drupal_newscontent, :shaheen, :paul, :tlaib, :grijalva, :aguilar, :bergman, :scanlon, :gimenez, :mcgovern, :foxx, :clarke, :jayapal, :carey,
       :fischer, :clark, :sykes, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :rickscott, :joyce, :gosar, :article_block_h2, :griffith,
       :schumer, :cassidy, :takano, :gillibrand, :garypeters, :cortezmasto, :hydesmith, :senate_wordpress, :recordlist, :rosen, :schweikert, :article_block_h2_date,
@@ -63,7 +63,7 @@ module Statement
       year = Date.today.year
       results = [klobuchar(year), sullivan, shaheen, timscott, angusking, document_query_new, jordan, senate_wordpress, media_body, scanlon, bera, meeks, norcross,
         crapo, grassley(page=1), baldwin, casey, cruz, schatz, cassidy, cantwell, cornyn, senate_drupal_new, tlaib,
-        fischer, kaine, padilla, clark, trentkelly, wyden, mast, hassan, cortezmasto, costa, react, tokuda, steube, foxx, clarke, griffith, carey,
+        fischer, kaine, padilla, clark, trentkelly, wyden, mast, hassan, cortezmasto, react, tokuda, steube, foxx, clarke, griffith, carey,
         schumer, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, barragan, castor,
         bennet(page=1), lofgren, durbin(page=1), gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, tillis, barr, crawford, lujan, jayapal,
         jasonsmith, bacon, capito, house_title_header, recordlist, tonko, aguilar, rosen, media_digest, pressley, reschenthaler, article_block_h2_date, huizenga,
