@@ -37,9 +37,9 @@ module Statement
     end
 
     def self.member_methods
-      [:crapo, :trentkelly, :heinrich, :document_query_new, :barr, :media_body, :steube, :bera, :meeks, :sykes, :barragan, :castor, :marshall, :hawley,
+      [:crapo, :trentkelly, :heinrich, :document_query_new, :barr, :media_body, :steube, :bera, :meeks, :sykes, :barragan, :castor, :marshall, :hawley, :lankford,
       :timscott, :senate_drupal_newscontent, :shaheen, :paul, :tlaib, :grijalva, :aguilar, :bergman, :scanlon, :gimenez, :mcgovern, :foxx, :clarke, :jayapal, :carey,
-      :fischer, :clark, :sykes, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :rickscott, :joyce, :gosar, :article_block_h2, :griffith, :daines,
+      :fischer, :clark, :sykes, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :rickscott, :joyce, :gosar, :article_block_h2, :griffith, :daines, :vanhollen,
       :schumer, :cassidy, :takano, :gillibrand, :garypeters, :cortezmasto, :hydesmith, :sanders, :recordlist, :rosen, :schweikert, :article_block_h2_date,
       :grassley, :bennet, :lofgren, :senate_drupal, :tinasmith, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :lujan,
       :porter, :jasonsmith, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :norcross,
@@ -61,8 +61,8 @@ module Statement
 
     def self.member_scrapers
       year = Date.today.year
-      results = [sullivan, shaheen, timscott, angusking, document_query_new, sanders, media_body, scanlon, bera, meeks, norcross,
-        crapo, grassley(page=1), baldwin, cruz, schatz, cassidy, cantwell, cornyn, tinasmith, tlaib, daines, marshall, hawley,
+      results = [sullivan, shaheen, timscott, angusking, document_query_new, sanders, media_body, scanlon, bera, meeks, norcross, vanhollen,
+        crapo, grassley(page=1), baldwin, cruz, schatz, cassidy, cantwell, cornyn, tinasmith, tlaib, daines, marshall, hawley, lankford,
         fischer, kaine, padilla, clark, trentkelly, wyden, mast, hassan, cortezmasto, react, tokuda, steube, foxx, clarke, griffith, carey,
         schumer, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, barragan, castor,
         bennet(page=1), lofgren, gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, tillis, barr, crawford, lujan, jayapal,
@@ -1520,6 +1520,18 @@ module Statement
       results
     end
 
+    def self.lankford(page=1)
+      results = []
+      url = "https://www.lankford.senate.gov/newsroom/press-releases/?jsf=jet-engine:press-list&pagenum=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      rows = doc.css(".jet-listing-grid__item")
+      rows.each do |row|
+        results << { :source => url, :url => row.css("a").first['href'], :title => row.css("a").text.strip, :date => Date.strptime(row.css("ul li").text.strip, "%m.%d.%Y"), :domain => "www.lankford.senate.gov" }
+      end
+      results
+    end
+
     def self.cornyn(page=1, posts_per_page=15)
       results = []
       url = "https://www.cornyn.senate.gov/wp-admin/admin-ajax.php?action=jet_smart_filters&provider=jet-engine%2Fdefault&defaults[post_status]=publish&defaults[found_posts]=1261&defaults[max_num_pages]=85&defaults[post_type]=news&defaults[orderby]=&defaults[order]=DESC&defaults[paged]=0&defaults[posts_per_page]=#{posts_per_page}&settings[lisitng_id]=16387&settings[columns]=1&settings[columns_tablet]=&settings[columns_mobile]=&settings[column_min_width]=240&settings[column_min_width_tablet]=&settings[column_min_width_mobile]=&settings[inline_columns_css]=false&settings[post_status][]=publish&settings[use_random_posts_num]=&settings[posts_num]=20&settings[max_posts_num]=9&settings[not_found_message]=No+data+was+found&settings[is_masonry]=&settings[equal_columns_height]=&settings[use_load_more]=&settings[load_more_id]=&settings[load_more_type]=click&settings[load_more_offset][unit]=px&settings[load_more_offset][size]=0&settings[loader_text]=&settings[loader_spinner]=&settings[use_custom_post_types]=yes&settings[custom_post_types][]=news&settings[hide_widget_if]=&settings[carousel_enabled]=&settings[slides_to_scroll]=1&settings[arrows]=true&settings[arrow_icon]=fa+fa-angle-left&settings[dots]=&settings[autoplay]=true&settings[pause_on_hover]=true&settings[autoplay_speed]=5000&settings[infinite]=true&settings[center_mode]=&settings[effect]=slide&settings[speed]=500&settings[inject_alternative_items]=&settings[scroll_slider_enabled]=&settings[scroll_slider_on][]=desktop&settings[scroll_slider_on][]=tablet&settings[scroll_slider_on][]=mobile&settings[custom_query]=&settings[custom_query_id]=&settings[_element_id]=&props[found_posts]=1261&props[max_num_pages]=85&props[page]=0&paged=#{page}"
@@ -1567,6 +1579,17 @@ module Statement
       return if doc.nil?
       doc.xpath("//li[@class='PageList__item']").each do |row|
         results << { :source => url, :url => row.css('a').first['href'], :title => row.css('a').first.text.strip, :date => Date.parse(row.css('p').text.gsub('.','/')), :domain => "www.grassley.senate.gov" }
+      end
+      results
+    end
+
+    def self.vanhollen(page=1)
+      results = []
+      url = "https://www.vanhollen.senate.gov/news/press-releases?pagenum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("ul li.PageList__item").each do |row|
+        results << { :source => url, :url => row.css('a').first['href'], :title => row.css('a').first.text.strip, :date => Date.parse(row.css('p').text.gsub('.','/')), :domain => "www.vanhollen.senate.gov" }
       end
       results
     end
@@ -2769,9 +2792,7 @@ module Statement
         urls = [
           "https://www.hoeven.senate.gov/news/news-releases",
           "https://www.murkowski.senate.gov/press/press-releases",
-          "https://www.lankford.senate.gov/news/press-releases",
           "https://www.republicanleader.senate.gov/newsroom/press-releases",
-          "https://www.vanhollen.senate.gov/news/press-releases"
         ]
       end
 
