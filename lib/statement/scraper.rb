@@ -1960,7 +1960,7 @@ module Statement
     def self.schumer(page=1)
       results = []
       domain = 'www.schumer.senate.gov'
-      url = "https://www.schumer.senate.gov/newsroom/press-releases/table?PageNum_rs=#{page}"
+      url = "https://www.schumer.senate.gov/newsroom/press-releases?pagenum_rs=#{page}"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css("div.ArticleBlock").each do |row|
