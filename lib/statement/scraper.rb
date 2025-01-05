@@ -2429,7 +2429,6 @@ module Statement
       results = []
       if urls.empty?
         urls = [
-          "https://www.young.senate.gov/newsroom/press-releases",
           "https://huffman.house.gov/media-center/press-releases",
           "https://castro.house.gov/media-center/press-releases",
           "https://mikelevin.house.gov/media/press-releases",
@@ -2520,7 +2519,7 @@ module Statement
       doc.css('.jet-listing-grid .ArticleBlock').each do |row|
         results << { :source => url,
                       :url => row.at_css("h2 a")['href'],
-                      :title => row.at_css("h2 a").text,
+                      :title => row.at_css("h2 a").text.strip,
                       :date => Date.parse(row.at_css("li span.elementor-icon-list-text").text.strip),
                       :domain => "www.cortezmasto.senate.gov" }
       end
