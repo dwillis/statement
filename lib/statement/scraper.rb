@@ -1097,7 +1097,6 @@ module Statement
           "https://courtney.house.gov/media-center/press-releases",
           "https://stauber.house.gov/media/press-releases",
           "https://mccaul.house.gov/media-center/press-releases",
-          "https://jeffduncan.house.gov/media/press-releases",
           "https://foster.house.gov/media/press-releases",
           "https://schakowsky.house.gov/media/press-releases",
           "https://craig.house.gov/media/press-releases",
