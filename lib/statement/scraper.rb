@@ -1081,7 +1081,6 @@ module Statement
           "https://crockett.house.gov/media/press-releases",
           "https://luttrell.house.gov/media/press-releases",
           "https://deluzio.house.gov/media/press-releases",
-          "https://desposito.house.gov/media/press-releases",
           "https://lalota.house.gov/media/press-releases",
           "https://vasquez.house.gov/media/press-releases",
           "https://scholten.house.gov/media/press-releases",
