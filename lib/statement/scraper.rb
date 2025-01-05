@@ -1074,7 +1074,6 @@ module Statement
           "https://kean.house.gov/media/press-releases",
           "https://goldman.house.gov/media/press-releases",
           "https://langworthy.house.gov/media/press-releases",
-          "https://chavez-deremer.house.gov/media/press-releases",
           "https://magaziner.house.gov/media/press-releases",
           "https://vanorden.house.gov/media/press-releases",
           "https://hunt.house.gov/media/press-releases",
