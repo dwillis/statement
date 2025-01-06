@@ -40,11 +40,11 @@ module Statement
       [:crapo, :trentkelly, :heinrich, :document_query_new, :barr, :media_body, :steube, :bera, :meeks, :sykes, :barragan, :castor, :marshall, :hawley, :lankford, :barrasso,
       :timscott, :senate_drupal_newscontent, :shaheen, :paul, :tlaib, :grijalva, :aguilar, :bergman, :scanlon, :gimenez, :mcgovern, :foxx, :clarke, :jayapal, :carey, :mikelee,
       :fischer, :clark, :sykes, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :rickscott, :joyce, :gosar, :article_block_h2, :griffith, :daines, :vanhollen, :lummis,
-      :schumer, :cassidy, :takano, :gillibrand, :garypeters, :cortezmasto, :hydesmith, :sanders, :recordlist, :rosen, :schweikert, :article_block_h2_date, :hagerty, :graham,
+      :schumer, :cassidy, :takano, :gillibrand, :garypeters, :cortezmasto, :hydesmith, :recordlist, :rosen, :schweikert, :article_block_h2_date, :hagerty, :graham,
       :grassley, :bennet, :lofgren, :senate_drupal, :tinasmith, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :lujan, :ronjohnson,
       :porter, :jasonsmith, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :norcross,
       :jeffries, :article_block, :jackreed, :blackburn, :article_block_h1, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react, :tokuda, :huizenga,
-      :moran, :murray, :thune, :tuberville, :warner, :boozman, :merkley, :rubio, :whitehouse, :wicker, :toddyoung, :britt, :markey, :budd, :elementor_post_date]
+      :moran, :murray, :thune, :tuberville, :warner, :boozman, :fetterman, :rubio, :whitehouse, :wicker, :toddyoung, :britt, :markey, :budd, :elementor_post_date]
     end
 
     def self.committee_methods
@@ -62,14 +62,14 @@ module Statement
 
     def self.member_scrapers
       year = Date.today.year
-      results = [sullivan, shaheen, timscott, angusking, document_query_new, sanders, media_body, scanlon, bera, meeks, norcross, vanhollen, barrasso, mikelee,
+      results = [sullivan, shaheen, timscott, angusking, document_query_new, media_body, scanlon, bera, meeks, norcross, vanhollen, barrasso, mikelee,
         crapo, grassley(page=1), baldwin, cruz, schatz, cassidy, cantwell, cornyn, tinasmith, tlaib, daines, marshall, hawley, lankford, hagerty, graham, murray,
         fischer, kaine, padilla, clark, trentkelly, wyden, mast, hassan, cortezmasto, react, tokuda, steube, foxx, clarke, griffith, carey, ronjohnson, moran, tuberville,
         schumer, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, barragan, castor,
         bennet(page=1), lofgren, gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, tillis, barr, crawford, lujan, jayapal, lummis, thune,
         jasonsmith, bacon, capito, house_title_header, recordlist, tonko, aguilar, rosen, media_digest, pressley, reschenthaler, article_block_h2_date, huizenga,
         larsen, grijalva, jeffries, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, joyce, houlahan, lucas, schweikert, gosar, mcgovern, warner,
-        boozman, merkley, rubio, whitehouse, wicker, toddyoung, britt, markey, budd, elementor_post_date].flatten
+        boozman, rubio, whitehouse, wicker, toddyoung, britt, markey, budd, elementor_post_date, fetterman].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -2580,8 +2580,7 @@ module Statement
       if urls.empty?
         urls = [
           "https://www.sanders.senate.gov/media/press-releases/page/",
-          "https://www.merkley.senate.gov/news/press-releases/",
-          "https://www.fetterman.senate.gov/press-release/page/"
+          "https://www.merkley.senate.gov/news/press-releases/"
         ]
       end
 
@@ -2596,39 +2595,24 @@ module Statement
           results << { :source => url,
                        :url => row.css('a').first['href'],
                        :title => row.css('h2').text.strip,
-                       :date => Date.parse(row.css('.elementor-post-date').text.strip),
+                       :date => Date.parse(row.at_css('.elementor-post-date').text.strip),
                        :domain => domain }
         end
       end
       results
     end
 
-    def self.sanders(page=1)
+    def self.fetterman(page=1)
       results = []
-      url = "https://www.sanders.senate.gov/media/press-releases/page/#{page}"
+      url = "https://www.fetterman.senate.gov/press-release/page/#{page}"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css('.elementor-post__text').each do |row|
         results << { :source => url,
                       :url => row.css('a').first['href'],
                       :title => row.css('h2').text.strip,
-                      :date => Date.parse(row.css('.elementor-post-date').text.strip),
-                      :domain => 'www.sanders.senate.gov' }
-      end
-      results
-    end
-
-    def self.merkley(page=1)
-      results = []
-      url = "https://www.merkley.senate.gov/news/press-releases/#{page}/"
-      doc = Statement::Scraper.open_html(url)
-      return if doc.nil?
-      doc.css('.elementor-post__text').each do |row|
-        results << { :source => url,
-                      :url => row.css('a').first['href'],
-                      :title => row.css('h2').text.strip,
-                      :date => Date.parse(row.css('.elementor-post-date').text.strip),
-                      :domain => 'www.merkley.senate.gov' }
+                      :date => Date.parse(row.css('span.elementor-post-date').text.strip),
+                      :domain => 'www.fetterman.senate.gov' }
       end
       results
     end
