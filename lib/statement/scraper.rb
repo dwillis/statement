@@ -43,7 +43,8 @@ module Statement
       :schumer, :cassidy, :takano, :gillibrand, :garypeters, :cortezmasto, :hydesmith, :sanders, :recordlist, :rosen, :schweikert, :article_block_h2_date, :hagerty, :graham,
       :grassley, :bennet, :lofgren, :senate_drupal, :tinasmith, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :lujan, :ronjohnson,
       :porter, :jasonsmith, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :norcross,
-      :jeffries, :article_block, :jackreed, :blackburn, :article_block_h1, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react, :tokuda, :huizenga]
+      :jeffries, :article_block, :jackreed, :blackburn, :article_block_h1, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react, :tokuda, :huizenga,
+      :moran]
     end
 
     def self.committee_methods
@@ -63,7 +64,7 @@ module Statement
       year = Date.today.year
       results = [sullivan, shaheen, timscott, angusking, document_query_new, sanders, media_body, scanlon, bera, meeks, norcross, vanhollen, barrasso, mikelee,
         crapo, grassley(page=1), baldwin, cruz, schatz, cassidy, cantwell, cornyn, tinasmith, tlaib, daines, marshall, hawley, lankford, hagerty, graham,
-        fischer, kaine, padilla, clark, trentkelly, wyden, mast, hassan, cortezmasto, react, tokuda, steube, foxx, clarke, griffith, carey, ronjohnson,
+        fischer, kaine, padilla, clark, trentkelly, wyden, mast, hassan, cortezmasto, react, tokuda, steube, foxx, clarke, griffith, carey, ronjohnson, moran,
         schumer, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, barragan, castor,
         bennet(page=1), lofgren, gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, tillis, barr, crawford, lujan, jayapal, lummis,
         jasonsmith, bacon, capito, house_title_header, recordlist, tonko, aguilar, rosen, media_digest, pressley, reschenthaler, article_block_h2_date, huizenga,
@@ -1265,50 +1266,6 @@ module Statement
       results
     end
 
-    def self.cold_fusion(year=current_year, month=nil, skip_domains=[])
-      results = []
-      year = current_year if not year
-      domains = ['www.wicker.senate.gov', 'www.enzi.senate.gov']
-      domains = domains - skip_domains if skip_domains
-      domains.each do |domain|
-        if domain == 'www.wicker.senate.gov'
-          if not month
-            url = "https://#{domain}/public/index.cfm/press-releases"
-          else
-            url = "https://#{domain}/public/index.cfm/press-releases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
-          end
-        elsif domain == 'www.mcconnell.senate.gov'
-          if not month
-            url = "https://#{domain}/public/index.cfm/pressreleases"
-          else
-            url = "https://#{domain}/public/index.cfm/pressreleases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
-          end
-        else
-          if not month
-            url = "https://#{domain}/public/index.cfm/press-releases"
-          else
-            url = "https://#{domain}/public/index.cfm/press-releases?YearDisplay=#{year}&MonthDisplay=#{month}&page=1"
-          end
-        end
-        doc = Statement::Scraper.open_html(url)
-        return if doc.nil?
-        return if doc.xpath("//tr").empty?
-        if domain == 'www.lee.senate.gov' or domain == 'www.barrasso.senate.gov' or domain == "www.heitkamp.senate.gov" or domain == 'www.moran.senate.gov' or domain == 'www.feinstein.senate.gov' or domain == 'www.shelby.senate.gov'
-          rows = doc.xpath("//tr")[1..-1]
-        else
-          rows = doc.xpath("//tr")[2..-1]
-        end
-        rows.each do |row|
-          date_text, title = row.children.map{|c| c.text.strip}.reject{|c| c.empty?}
-          next if date_text == 'Date' or date_text.size > 10
-          date = Date.parse(date_text)
-          url = row.children[3].children.first['href'].chars.first == '/' ? "http://#{domain}"+row.children[3].children.first['href'] : row.children[3].children.first['href']
-          results << { :source => url, :url => url, :title => title, :date => date, :domain => domain }
-        end
-      end
-      results.flatten
-    end
-
     def self.react(domains=[])
       if domains == []
         domains = [
@@ -1350,6 +1307,17 @@ module Statement
       return if doc.nil?
       doc.css(".element").each do |row|
         results << { :source => url, :url => row.css('a').first['href'], :title => row.css(".element-title").text, :date => Date.strptime(row.css(".element-datetime").text, "%m/%d/%Y"), :domain => "www.tillis.senate.gov" }
+      end
+      results
+    end
+
+    def self.moran(page=1)
+      results = []
+      url = "https://www.moran.senate.gov/public/index.cfm/news-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("table tbody tr").each do |row|
+        results << { :source => url, :url => "https://www.moran.senate.gov" + row.at_css('a')['href'], :title => row.at_css('a').text, :date => Date.parse(row.at_css('td.recordListDate').text), :domain => "www.moran.senate.gov" }
       end
       results
     end
