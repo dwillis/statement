@@ -44,7 +44,7 @@ module Statement
       :grassley, :lofgren, :senate_drupal, :tinasmith, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :lujan, :ronjohnson,
       :porter, :jasonsmith, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :norcross,
       :jeffries, :article_block, :jackreed, :blackburn, :article_block_h1, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react, :tokuda, :huizenga,
-      :moran, :murray, :thune, :tuberville, :warner, :boozman, :fetterman, :rubio, :whitehouse, :wicker, :toddyoung, :britt, :markey, :budd, :elementor_post_date]
+      :moran, :murray, :thune, :tuberville, :warner, :boozman, :fetterman, :rubio, :whitehouse, :wicker, :toddyoung, :britt, :markey, :budd, :elementor_post_date, :markkelly]
     end
 
     def self.committee_methods
@@ -69,7 +69,7 @@ module Statement
         lofgren, gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, tillis, barr, crawford, lujan, jayapal, lummis, thune,
         jasonsmith, bacon, capito, house_title_header, recordlist, tonko, aguilar, rosen, media_digest, pressley, reschenthaler, article_block_h2_date, huizenga,
         larsen, grijalva, jeffries, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, joyce, houlahan, lucas, schweikert, gosar, mcgovern, warner,
-        boozman, rubio, whitehouse, wicker, toddyoung, britt, markey, budd, elementor_post_date, fetterman, article_span_published].flatten
+        boozman, rubio, whitehouse, wicker, toddyoung, britt, markey, budd, elementor_post_date, fetterman, article_span_published, markkelly].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -1556,6 +1556,17 @@ module Statement
       rows = doc.css(".jet-listing-grid__item")
       rows.each do |row|
         results << { :source => url, :url => row.css("a").first['href'], :title => row.css("a").text.strip, :date => Date.parse(row.css("span.elementor-post-info__item--type-date").text.strip), :domain => "www.young.senate.gov" }
+      end
+      results
+    end
+
+    def self.markkelly(page=1)
+      results = []
+      url = "https://www.kelly.senate.gov/newsroom/press-releases/?jsf=jet-engine:press-list&pagenum=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css('div.jet-listing-grid__item').each do |row|
+        results << { :source => url, :url => row.css("h3 a").first['href'], :title => row.css("h3 a").text.strip, :date => Date.parse(row.css("span.elementor-post-info__item--type-date").text.strip), :domain => "www.kelly.senate.gov" }
       end
       results
     end
