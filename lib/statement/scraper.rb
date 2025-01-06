@@ -44,7 +44,7 @@ module Statement
       :grassley, :bennet, :lofgren, :senate_drupal, :tinasmith, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :lujan, :ronjohnson,
       :porter, :jasonsmith, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :norcross,
       :jeffries, :article_block, :jackreed, :blackburn, :article_block_h1, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react, :tokuda, :huizenga,
-      :moran, :murray, :thune, :tuberville, :warner, :boozman, :merkley]
+      :moran, :murray, :thune, :tuberville, :warner, :boozman, :merkley, :rubio]
     end
 
     def self.committee_methods
@@ -69,7 +69,7 @@ module Statement
         bennet(page=1), lofgren, gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, tillis, barr, crawford, lujan, jayapal, lummis, thune,
         jasonsmith, bacon, capito, house_title_header, recordlist, tonko, aguilar, rosen, media_digest, pressley, reschenthaler, article_block_h2_date, huizenga,
         larsen, grijalva, jeffries, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, joyce, houlahan, lucas, schweikert, gosar, mcgovern, warner,
-        boozman, merkley].flatten
+        boozman, merkley, rubio].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -1533,6 +1533,18 @@ module Statement
       rows = doc.css("article.et_pb_post")
       rows.each do |row|
         results << { :source => url, :url => row.at_css("h2 a")['href'], :title => row.at_css("h2 a").text.strip, :date => Date.parse(row.at_css("p span.published").text), :domain => "www.lummis.senate.gov" }
+      end
+      results
+    end
+
+    def self.rubio(page=1)
+      results = []
+      url = "https://www.rubio.senate.gov/news/page/#{page}/?et_blog"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      rows = doc.css("article.et_pb_post")
+      rows.each do |row|
+        results << { :source => url, :url => row.at_css("h3 a")['href'], :title => row.at_css("h3 a").text.strip, :date => Date.parse(row.at_css("p span.published").text), :domain => "www.rubio.senate.gov" }
       end
       results
     end
