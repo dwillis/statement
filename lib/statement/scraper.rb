@@ -2758,7 +2758,7 @@ module Statement
 
     def self.hawley(page=1)
       results = []
-      url = "https://www.hawley.senate.gov/press-releases/#{page}/"
+      url = "https://www.hawley.senate.gov/press-releases/page/#{page}/"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css('article .post').each do |row|
