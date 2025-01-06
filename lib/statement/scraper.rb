@@ -40,7 +40,7 @@ module Statement
       [:crapo, :trentkelly, :heinrich, :document_query_new, :barr, :media_body, :steube, :bera, :meeks, :sykes, :barragan, :castor, :marshall, :hawley, :lankford,
       :timscott, :senate_drupal_newscontent, :shaheen, :paul, :tlaib, :grijalva, :aguilar, :bergman, :scanlon, :gimenez, :mcgovern, :foxx, :clarke, :jayapal, :carey,
       :fischer, :clark, :sykes, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :rickscott, :joyce, :gosar, :article_block_h2, :griffith, :daines, :vanhollen,
-      :schumer, :cassidy, :takano, :gillibrand, :garypeters, :cortezmasto, :hydesmith, :sanders, :recordlist, :rosen, :schweikert, :article_block_h2_date,
+      :schumer, :cassidy, :takano, :gillibrand, :garypeters, :cortezmasto, :hydesmith, :sanders, :recordlist, :rosen, :schweikert, :article_block_h2_date, :hagerty,
       :grassley, :bennet, :lofgren, :senate_drupal, :tinasmith, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :lujan,
       :porter, :jasonsmith, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :norcross,
       :jeffries, :article_block, :jackreed, :blackburn, :article_block_h1, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react, :tokuda, :huizenga]
@@ -62,7 +62,7 @@ module Statement
     def self.member_scrapers
       year = Date.today.year
       results = [sullivan, shaheen, timscott, angusking, document_query_new, sanders, media_body, scanlon, bera, meeks, norcross, vanhollen,
-        crapo, grassley(page=1), baldwin, cruz, schatz, cassidy, cantwell, cornyn, tinasmith, tlaib, daines, marshall, hawley, lankford,
+        crapo, grassley(page=1), baldwin, cruz, schatz, cassidy, cantwell, cornyn, tinasmith, tlaib, daines, marshall, hawley, lankford, hagerty,
         fischer, kaine, padilla, clark, trentkelly, wyden, mast, hassan, cortezmasto, react, tokuda, steube, foxx, clarke, griffith, carey,
         schumer, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, barragan, castor,
         bennet(page=1), lofgren, gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, tillis, barr, crawford, lujan, jayapal,
@@ -1516,6 +1516,18 @@ module Statement
       rows = doc.css(".jet-listing-grid__item")
       rows.each do |row|
         results << { :source => url, :url => row.css("a").first['href'], :title => row.css("a").text.strip, :date => Date.strptime(row.css("ul li").text.strip, "%m.%d.%Y"), :domain => "www.cassidy.senate.gov" }
+      end
+      results
+    end
+
+    def self.hagerty(page=1)
+      results = []
+      url = "https://www.hagerty.senate.gov/press-releases/?et_blog&sf_paged=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      rows = doc.css("article.et_pb_post")
+      rows.each do |row|
+        results << { :source => url, :url => row.at_css("h2 a")['href'], :title => row.at_css("h2 a").text.strip, :date => Date.parse(row.at_css("p span.published").text), :domain => "www.hagerty.senate.gov" }
       end
       results
     end
