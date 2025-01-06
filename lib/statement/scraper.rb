@@ -41,7 +41,7 @@ module Statement
       :timscott, :senate_drupal_newscontent, :shaheen, :paul, :tlaib, :grijalva, :aguilar, :bergman, :scanlon, :gimenez, :mcgovern, :foxx, :clarke, :jayapal, :carey,
       :fischer, :clark, :sykes, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :rickscott, :joyce, :gosar, :article_block_h2, :griffith, :daines, :vanhollen,
       :schumer, :cassidy, :takano, :gillibrand, :garypeters, :cortezmasto, :hydesmith, :sanders, :recordlist, :rosen, :schweikert, :article_block_h2_date, :hagerty,
-      :grassley, :bennet, :lofgren, :senate_drupal, :tinasmith, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :lujan,
+      :grassley, :bennet, :lofgren, :senate_drupal, :tinasmith, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :lujan, :ronjohnson,
       :porter, :jasonsmith, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :norcross,
       :jeffries, :article_block, :jackreed, :blackburn, :article_block_h1, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react, :tokuda, :huizenga]
     end
@@ -63,7 +63,7 @@ module Statement
       year = Date.today.year
       results = [sullivan, shaheen, timscott, angusking, document_query_new, sanders, media_body, scanlon, bera, meeks, norcross, vanhollen,
         crapo, grassley(page=1), baldwin, cruz, schatz, cassidy, cantwell, cornyn, tinasmith, tlaib, daines, marshall, hawley, lankford, hagerty,
-        fischer, kaine, padilla, clark, trentkelly, wyden, mast, hassan, cortezmasto, react, tokuda, steube, foxx, clarke, griffith, carey,
+        fischer, kaine, padilla, clark, trentkelly, wyden, mast, hassan, cortezmasto, react, tokuda, steube, foxx, clarke, griffith, carey, ronjohnson,
         schumer, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, barragan, castor,
         bennet(page=1), lofgren, gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, tillis, barr, crawford, lujan, jayapal,
         jasonsmith, bacon, capito, house_title_header, recordlist, tonko, aguilar, rosen, media_digest, pressley, reschenthaler, article_block_h2_date, huizenga,
@@ -1173,7 +1173,8 @@ module Statement
           "https://ramirez.house.gov/media/press-releases",
           "https://graves.house.gov/media/press-releases",
           "https://cole.house.gov/media-center/press-releases",
-          "https://jordan.house.gov/media/press-releases"
+          "https://jordan.house.gov/media/press-releases",
+          "https://hageman.house.gov/media/press-releases"
         ]
       end
       results = []
@@ -2114,7 +2115,8 @@ module Statement
           "https://buchanan.house.gov/press-releases",
           "https://markgreen.house.gov/press-releases",
           "https://halrogers.house.gov/press-releases",
-          "https://www.klobuchar.senate.gov/public/index.cfm/news-releases"
+          "https://www.klobuchar.senate.gov/public/index.cfm/news-releases",
+          "https://www.risch.senate.gov/public/index.cfm/pressreleases",
         ]
       end
       results = []
@@ -2684,6 +2686,19 @@ module Statement
       rows.each do |row|
         year = Date.today.month == 1 ? Date.today.year-1 : Date.today.year
         results << { :source => url, :url => row.css('a').first['href'], :title => row.css('.element-title').text.strip, :date => Date.strptime(row.css('.element-date').text + " "+ year.to_s, "%b %d %Y"), :domain => "www.rickscott.senate.gov" }
+      end
+      results
+    end
+
+    def self.ronjohnson(page=1)
+      results = []
+      url = "https://www.ronjohnson.senate.gov/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      rows = doc.css(".element")
+      rows.each do |row|
+        puts row.css('a').first['href']
+        results << { :source => url, :url => row.css('a').first['href'], :title => row.css('.element-title').text.strip, :date => Date.parse(row.css('span.element-datetime').text), :domain => "www.ronjohnson.senate.gov" }
       end
       results
     end
