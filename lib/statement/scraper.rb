@@ -2989,7 +2989,7 @@ module Statement
     def self.ossoff(page=1)
       results = []
       domain = "www.ossoff.senate.gov"
-      url = "https://www.daines.senate.gov/news/press-releases/"
+      url = "https://www.ossoff.senate.gov/press-releases/"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css("article").each do |row|
