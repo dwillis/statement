@@ -37,7 +37,7 @@ module Statement
     end
 
     def self.member_methods
-      [:crapo, :trentkelly, :heinrich, :document_query_new, :barr, :media_body, :steube, :bera, :meeks, :sykes, :barragan, :castor, :marshall, :hawley, :lankford,
+      [:crapo, :trentkelly, :heinrich, :document_query_new, :barr, :media_body, :steube, :bera, :meeks, :sykes, :barragan, :castor, :marshall, :hawley, :lankford, :barrasso,
       :timscott, :senate_drupal_newscontent, :shaheen, :paul, :tlaib, :grijalva, :aguilar, :bergman, :scanlon, :gimenez, :mcgovern, :foxx, :clarke, :jayapal, :carey,
       :fischer, :clark, :sykes, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :rickscott, :joyce, :gosar, :article_block_h2, :griffith, :daines, :vanhollen,
       :schumer, :cassidy, :takano, :gillibrand, :garypeters, :cortezmasto, :hydesmith, :sanders, :recordlist, :rosen, :schweikert, :article_block_h2_date, :hagerty,
@@ -61,7 +61,7 @@ module Statement
 
     def self.member_scrapers
       year = Date.today.year
-      results = [sullivan, shaheen, timscott, angusking, document_query_new, sanders, media_body, scanlon, bera, meeks, norcross, vanhollen,
+      results = [sullivan, shaheen, timscott, angusking, document_query_new, sanders, media_body, scanlon, bera, meeks, norcross, vanhollen, barrasso,
         crapo, grassley(page=1), baldwin, cruz, schatz, cassidy, cantwell, cornyn, tinasmith, tlaib, daines, marshall, hawley, lankford, hagerty,
         fischer, kaine, padilla, clark, trentkelly, wyden, mast, hassan, cortezmasto, react, tokuda, steube, foxx, clarke, griffith, carey, ronjohnson,
         schumer, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, barragan, castor,
@@ -2131,6 +2131,17 @@ module Statement
           next if row.children[3].text.strip == 'Title'
           results << { :source => url, :url => "https://"+domain+row.children[3].children[0]['href'], :title => row.children[3].text.strip, :date => Date.parse(row.children[1].text), :domain => domain }
         end
+      end
+      results
+    end
+
+    def self.barrasso(page=1)
+      results = []
+      url = "https://www.barrasso.senate.gov/public/index.cfm/news-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("table tbody tr").each do |row|
+        results << { :source => url, :url => row.at_css('a')['href'], :title => row.at_css('a').text, :date => Date.parse(row.at_css('td.recordListDate').text), :domain => "www.barrasso.senate.gov" }
       end
       results
     end
