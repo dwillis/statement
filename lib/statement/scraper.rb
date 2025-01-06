@@ -44,7 +44,7 @@ module Statement
       :grassley, :bennet, :lofgren, :senate_drupal, :tinasmith, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :lujan, :ronjohnson,
       :porter, :jasonsmith, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :norcross,
       :jeffries, :article_block, :jackreed, :blackburn, :article_block_h1, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react, :tokuda, :huizenga,
-      :moran, :murray, :thune, :tuberville]
+      :moran, :murray, :thune, :tuberville, :warner]
     end
 
     def self.committee_methods
@@ -68,7 +68,7 @@ module Statement
         schumer, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, barragan, castor,
         bennet(page=1), lofgren, gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, tillis, barr, crawford, lujan, jayapal, lummis, thune,
         jasonsmith, bacon, capito, house_title_header, recordlist, tonko, aguilar, rosen, media_digest, pressley, reschenthaler, article_block_h2_date, huizenga,
-        larsen, grijalva, jeffries, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, joyce, houlahan, lucas, schweikert, gosar, mcgovern].flatten
+        larsen, grijalva, jeffries, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, joyce, houlahan, lucas, schweikert, gosar, mcgovern, warner].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -2704,6 +2704,17 @@ module Statement
                        :title => row.at_css("h2 a").text,
                        :date => Date.parse(row.at_css("span.published").text),
                        :domain => domain }
+      end
+      results
+    end
+
+    def self.warner(page=1)
+      results = []
+      url = "https://www.warner.senate.gov/public/index.cfm/pressreleases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css('article').each do |row|
+        results << { :source => url, :url => "https://www.warner.senate.gov" + row.at_css('h1 a')['href'], :title => row.at_css('h1 a').text.strip, :date => Date.parse(row.at_css('h4').text.strip), :domain => "www.warner.senate.gov" }
       end
       results
     end
