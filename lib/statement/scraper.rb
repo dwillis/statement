@@ -1429,7 +1429,8 @@ module Statement
       if urls.empty?
         urls = [
           "https://www.blumenthal.senate.gov/newsroom/press",
-          "https://www.collins.senate.gov/newsroom/press-releases"
+          "https://www.collins.senate.gov/newsroom/press-releases",
+          "https://www.hirono.senate.gov/news/press-releases"
         ]
       end
 
