@@ -44,7 +44,7 @@ module Statement
       :grassley, :bennet, :lofgren, :senate_drupal, :tinasmith, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :lujan, :ronjohnson,
       :porter, :jasonsmith, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :norcross,
       :jeffries, :article_block, :jackreed, :blackburn, :article_block_h1, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react, :tokuda, :huizenga,
-      :moran, :murray, :thune, :tuberville, :warner, :boozman, :merkley, :rubio]
+      :moran, :murray, :thune, :tuberville, :warner, :boozman, :merkley, :rubio, :whitehouse]
     end
 
     def self.committee_methods
@@ -69,7 +69,7 @@ module Statement
         bennet(page=1), lofgren, gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, tillis, barr, crawford, lujan, jayapal, lummis, thune,
         jasonsmith, bacon, capito, house_title_header, recordlist, tonko, aguilar, rosen, media_digest, pressley, reschenthaler, article_block_h2_date, huizenga,
         larsen, grijalva, jeffries, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, joyce, houlahan, lucas, schweikert, gosar, mcgovern, warner,
-        boozman, merkley, rubio].flatten
+        boozman, merkley, rubio, whitehouse].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -2682,6 +2682,22 @@ module Statement
                      :title => row.css('a').first.text.strip,
                      :date => Date.parse(row.css('li').first.text.strip),
                      :domain => 'www.padilla.senate.gov' }
+      end
+      results
+    end
+
+    def self.whitehouse(page=1)
+      results = []
+      url = "https://www.whitehouse.senate.gov/news/release/?jsf=jet-engine:press-list&pagenum=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css('div.jet-listing-grid__item').each do |row|
+        next if row.at_css('h3 a').nil?
+        results << { :source => url,
+                     :url => row.at_css('h3 a')['href'],
+                     :title => row.css('h3 a').text.strip,
+                     :date => Date.parse(row.css('h3').first.text.strip),
+                     :domain => 'www.whitehouse.senate.gov' }
       end
       results
     end
