@@ -2607,10 +2607,10 @@ module Statement
       url = "https://www.fetterman.senate.gov/press-release/page/#{page}"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
-      doc.css('.elementor-post__text').each do |row|
+      doc.css('article').each do |row|
         results << { :source => url,
-                      :url => row.css('a').first['href'],
-                      :title => row.css('h2').text.strip,
+                      :url => row.at_css('h3 a')['href'],
+                      :title => row.at_css('h3 a').text.strip,
                       :date => Date.parse(row.css('span.elementor-post-date').text.strip),
                       :domain => 'www.fetterman.senate.gov' }
       end
