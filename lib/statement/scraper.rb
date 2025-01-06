@@ -1620,6 +1620,25 @@ module Statement
       results
     end
 
+    def self.jetlisting_h2(urls=[], page=1)
+      results = []
+      if urls.empty?
+        urls = [
+          "https://www.lankford.senate.gov/newsroom/press-releases/?jsf=jet-engine:press-list&pagenum=",
+          "https://www.ricketts.senate.gov/newsroom/press-releases/?jsf=jet-engine:press-list&pagenum="
+        ]
+      end
+      urls.each do |url|
+        doc = Statement::Scraper.open_html("#{url}#{page}")
+        return if doc.nil?
+        rows = doc.css(".jet-listing-grid__item")
+        rows.each do |row|
+          results << { :source => url, :url => row.css("h2 a").first['href'], :title => row.css("h2 a").text.strip, :date => Date.parse(row.css("span.elementor-post-info__item--type-date").text.strip), :domain => URI.parse(url).host }
+        end
+      end
+      results
+    end
+
     def self.lankford(page=1)
       results = []
       url = "https://www.lankford.senate.gov/newsroom/press-releases/?jsf=jet-engine:press-list&pagenum=#{page}"
@@ -1628,6 +1647,18 @@ module Statement
       rows = doc.css(".jet-listing-grid__item")
       rows.each do |row|
         results << { :source => url, :url => row.at_css("h2 a")['href'], :title => row.at_css("h2 a").text.strip, :date => Date.parse(row.at_css("span.elementor-post-info__item--type-date").text.strip), :domain => "www.lankford.senate.gov" }
+      end
+      results
+    end
+
+    def self.ricketts(page=1)
+      results = []
+      url = "https://www.ricketts.senate.gov/newsroom/press-releases/?jsf=jet-engine:press-list&pagenum=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      rows = doc.css(".jet-listing-grid__item")
+      rows.each do |row|
+        results << { :source => url, :url => row.at_css("h2 a")['href'], :title => row.at_css("h2 a").text.strip, :date => Date.parse(row.at_css("span.elementor-post-info__item--type-date").text.strip), :domain => "www.ricketts.senate.gov" }
       end
       results
     end
