@@ -1322,6 +1322,17 @@ module Statement
       results
     end
 
+    def self.thune(page=1)
+      results = []
+      url = "https://www.thune.senate.gov/public/index.cfm/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("table tbody tr").each do |row|
+        results << { :source => url, :url => "https://www.thune.senate.gov" + row.at_css('a')['href'], :title => row.at_css('a').text, :date => Date.parse(row.at_css('td.recordListDate').text), :domain => "www.thune.senate.gov" }
+      end
+      results
+    end
+
     def self.article_block(urls=[], page=1)
       if urls.empty?
         urls = [
@@ -2794,7 +2805,7 @@ module Statement
       doc.css('.elementor-post__text').each do |row|
         results << { :source => url,
                       :url => row.css('a').first['href'],
-                      :title => row.css('h3').text.strip,
+                      :title => row.css('h2').text.strip,
                       :date => Date.parse(row.css('.elementor-post-date').text.strip),
                       :domain => domain }
         end
