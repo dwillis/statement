@@ -40,7 +40,7 @@ module Statement
       [:crapo, :trentkelly, :heinrich, :document_query_new, :barr, :media_body, :steube, :bera, :meeks, :sykes, :barragan, :castor, :marshall, :hawley, :lankford, :barrasso,
       :timscott, :senate_drupal_newscontent, :shaheen, :paul, :tlaib, :grijalva, :aguilar, :bergman, :scanlon, :gimenez, :mcgovern, :foxx, :clarke, :jayapal, :carey, :mikelee,
       :fischer, :clark, :sykes, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :rickscott, :joyce, :gosar, :article_block_h2, :griffith, :daines, :vanhollen, :lummis,
-      :schumer, :cassidy, :takano, :gillibrand, :garypeters, :cortezmasto, :hydesmith, :recordlist, :rosen, :schweikert, :article_block_h2_date, :hagerty, :graham,
+      :schumer, :cassidy, :takano, :gillibrand, :garypeters, :cortezmasto, :hydesmith, :recordlist, :rosen, :schweikert, :article_block_h2_date, :hagerty, :graham, :article_span_published,
       :grassley, :bennet, :lofgren, :senate_drupal, :tinasmith, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :lujan, :ronjohnson,
       :porter, :jasonsmith, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :norcross,
       :jeffries, :article_block, :jackreed, :blackburn, :article_block_h1, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react, :tokuda, :huizenga,
@@ -69,7 +69,7 @@ module Statement
         bennet(page=1), lofgren, gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, tillis, barr, crawford, lujan, jayapal, lummis, thune,
         jasonsmith, bacon, capito, house_title_header, recordlist, tonko, aguilar, rosen, media_digest, pressley, reschenthaler, article_block_h2_date, huizenga,
         larsen, grijalva, jeffries, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, joyce, houlahan, lucas, schweikert, gosar, mcgovern, warner,
-        boozman, rubio, whitehouse, wicker, toddyoung, britt, markey, budd, elementor_post_date, fetterman].flatten
+        boozman, rubio, whitehouse, wicker, toddyoung, britt, markey, budd, elementor_post_date, fetterman, article_span_published].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -2057,6 +2057,30 @@ module Statement
                      :title => row.at_css('h3').text,
                      :date => Date.parse(row.at_css('p').text),
                      :domain => domain }
+      end
+      results
+    end
+
+    def self.article_span_published(urls=[], page=1)
+      if urls.empty?
+        urls = [
+          "https://www.bennet.senate.gov/news/page/",
+          "https://www.hickenlooper.senate.gov/press/page/"
+        ]
+      end
+
+      results = []
+      urls.each do |url|
+        puts url
+        doc = Statement::Scraper.open_html("#{url}#{page}")
+        return if doc.nil?
+        doc.css("article").each do |row|
+          results << { :source => url,
+                       :url => row.at_css("h3 a")['href'],
+                       :title => row.at_css("h3 a").text,
+                       :date => Date.parse(row.at_css("span.published").text),
+                       :domain => URI.parse(url).host }
+        end
       end
       results
     end
