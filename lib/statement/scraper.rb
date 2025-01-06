@@ -1527,7 +1527,7 @@ module Statement
       return if doc.nil?
       rows = doc.css(".jet-listing-grid__item")
       rows.each do |row|
-        results << { :source => url, :url => row.css("a").first['href'], :title => row.css("a").text.strip, :date => Date.strptime(row.css("ul li").text.strip, "%m.%d.%Y"), :domain => "www.lankford.senate.gov" }
+        results << { :source => url, :url => row.at_css("h2 a")['href'], :title => row.at_css("h2 a").text.strip, :date => Date.parse(row.at_css("span.elementor-post-info__item--type-date").text.strip), :domain => "www.lankford.senate.gov" }
       end
       results
     end
