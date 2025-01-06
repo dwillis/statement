@@ -1524,6 +1524,18 @@ module Statement
       results
     end
 
+    def self.britt(page=1)
+      results = []
+      url = "https://www.britt.senate.gov/media/press-releases/?jsf=jet-engine:press-list&pagenum=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      rows = doc.css(".jet-listing-grid__item")
+      rows.each do |row|
+        results << { :source => url, :url => row.css("a").first['href'], :title => row.at_css("h3 a").text.strip, :date => Date.strptime(row.at_css("h3.elementor-heading-title").text.strip, "%m.%d.%Y"), :domain => "www.britt.senate.gov" }
+      end
+      results
+    end
+
     def self.toddyoung(page=1)
       results = []
       url = "https://www.young.senate.gov/newsroom/press-releases/?jsf=jet-engine:press-list&pagenum=#{page}"
