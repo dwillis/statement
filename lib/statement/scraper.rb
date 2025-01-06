@@ -45,7 +45,7 @@ module Statement
       :porter, :jasonsmith, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :norcross,
       :jeffries, :article_block, :jackreed, :blackburn, :article_block_h1, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react, :tokuda, :huizenga,
       :moran, :murray, :thune, :tuberville, :warner, :boozman, :fetterman, :rubio, :whitehouse, :wicker, :toddyoung, :britt, :markey, :budd, :elementor_post_date, :markkelly,
-      :ossoff, :vance]
+      :ossoff, :vance, :welch]
     end
 
     def self.committee_methods
@@ -67,7 +67,7 @@ module Statement
         crapo, grassley(page=1), baldwin, cruz, schatz, cassidy, cantwell, cornyn, tinasmith, tlaib, daines, marshall, hawley, jetlisting_h2, hagerty, graham, murray,
         fischer, kaine, padilla, clark, trentkelly, wyden, mast, hassan, cortezmasto, react, tokuda, steube, foxx, clarke, griffith, carey, ronjohnson, moran, tuberville,
         schumer, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, barragan, castor, 
-        lofgren, gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, tillis, barr, crawford, lujan, jayapal, lummis, thune, mullin,
+        lofgren, gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, tillis, barr, crawford, lujan, jayapal, lummis, thune, mullin, welch,
         jasonsmith, bacon, capito, house_title_header, recordlist, tonko, aguilar, rosen, media_digest, pressley, reschenthaler, article_block_h2_date, huizenga,
         larsen, grijalva, jeffries, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, joyce, houlahan, lucas, schweikert, gosar, mcgovern, warner,
         boozman, rubio, whitehouse, wicker, toddyoung, britt, markey, budd, elementor_post_date, fetterman, article_span_published, markkelly, ossoff, vance].flatten
@@ -1615,6 +1615,18 @@ module Statement
       rows = doc.css("article.et_pb_post")
       rows.each do |row|
         results << { :source => url, :url => row.at_css("h2 a")['href'], :title => row.at_css("h2 a").text.strip, :date => Date.parse(row.at_css("p span.published").text), :domain => "www.lummis.senate.gov" }
+      end
+      results
+    end
+
+    def self.welch(page=1)
+      results = []
+      url = "https://www.welch.senate.gov/category/press-release/page/#{page}/"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      rows = doc.css("article")
+      rows.each do |row|
+        results << { :source => url, :url => row.at_css("a")['href'], :title => row.at_css("h2").text.strip, :date => Date.parse(row.at_css(".postDate span").text), :domain => "www.welch.senate.gov" }
       end
       results
     end
