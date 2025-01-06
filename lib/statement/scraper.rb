@@ -44,7 +44,8 @@ module Statement
       :grassley, :lofgren, :senate_drupal, :tinasmith, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :lujan, :ronjohnson, :mullin,
       :porter, :jasonsmith, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :norcross,
       :jeffries, :article_block, :jackreed, :blackburn, :article_block_h1, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react, :tokuda, :huizenga,
-      :moran, :murray, :thune, :tuberville, :warner, :boozman, :fetterman, :rubio, :whitehouse, :wicker, :toddyoung, :britt, :markey, :budd, :elementor_post_date, :markkelly]
+      :moran, :murray, :thune, :tuberville, :warner, :boozman, :fetterman, :rubio, :whitehouse, :wicker, :toddyoung, :britt, :markey, :budd, :elementor_post_date, :markkelly,
+      :ossoff]
     end
 
     def self.committee_methods
@@ -69,7 +70,7 @@ module Statement
         lofgren, gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, tillis, barr, crawford, lujan, jayapal, lummis, thune, mullin,
         jasonsmith, bacon, capito, house_title_header, recordlist, tonko, aguilar, rosen, media_digest, pressley, reschenthaler, article_block_h2_date, huizenga,
         larsen, grijalva, jeffries, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, joyce, houlahan, lucas, schweikert, gosar, mcgovern, warner,
-        boozman, rubio, whitehouse, wicker, toddyoung, britt, markey, budd, elementor_post_date, fetterman, article_span_published, markkelly].flatten
+        boozman, rubio, whitehouse, wicker, toddyoung, britt, markey, budd, elementor_post_date, fetterman, article_span_published, markkelly, ossoff].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -2976,6 +2977,22 @@ module Statement
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css('.elementor-post__text').each do |row|
+        results << { :source => url,
+                      :url => row.css('a').first['href'],
+                      :title => row.css('h3').text.strip,
+                      :date => Date.parse(row.css('.elementor-post-date').text.strip),
+                      :domain => domain }
+        end
+      results
+    end
+
+    def self.ossoff(page=1)
+      results = []
+      domain = "www.ossoff.senate.gov"
+      url = "https://www.daines.senate.gov/news/press-releases/"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css("article").each do |row|
         results << { :source => url,
                       :url => row.css('a').first['href'],
                       :title => row.css('h3').text.strip,
