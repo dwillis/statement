@@ -2633,7 +2633,7 @@ module Statement
     def self.timscott(page=1)
       results = []
       domain = "www.scott.senate.gov"
-      url = "https://www.scott.senate.gov/media-center/press-releases?PageNum_rs=#{page}"
+      url = "https://www.scott.senate.gov/media-center/press-releases/jsf/jet-engine:press-list/pagenum/#{page}/"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css('.jet-listing-grid .elementor-widget-wrap').each do |row|
