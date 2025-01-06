@@ -2815,6 +2815,22 @@ module Statement
       results
     end
 
+    def self.warnock(page=1)
+      results = []
+      url = "https://www.warnock.senate.gov/newsroom/press-releases/?jsf=jet-engine:press-list&pagenum=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css('div.jet-listing-grid__item').each do |row|
+        next if row.at_css('h4 a').nil?
+        results << { :source => url,
+                     :url => row.at_css('h4 a')['href'],
+                     :title => row.css('h4 a').text.strip,
+                     :date => Date.parse(row.css('span.elementor-post-info__item--type-date').text.strip.gsub('.','/')),
+                     :domain => 'www.warnock.senate.gov' }
+      end
+      results
+    end
+
     def self.lujan(page=1)
       results = []
       url = "https://www.lujan.senate.gov/newsroom/press-releases/?jsf=jet-engine:press-list&pagenum=#{page}"
