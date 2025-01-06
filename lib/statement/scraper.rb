@@ -44,7 +44,7 @@ module Statement
       :grassley, :bennet, :lofgren, :senate_drupal, :tinasmith, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :lujan, :ronjohnson,
       :porter, :jasonsmith, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :norcross,
       :jeffries, :article_block, :jackreed, :blackburn, :article_block_h1, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react, :tokuda, :huizenga,
-      :moran]
+      :moran, :murray]
     end
 
     def self.committee_methods
@@ -63,7 +63,7 @@ module Statement
     def self.member_scrapers
       year = Date.today.year
       results = [sullivan, shaheen, timscott, angusking, document_query_new, sanders, media_body, scanlon, bera, meeks, norcross, vanhollen, barrasso, mikelee,
-        crapo, grassley(page=1), baldwin, cruz, schatz, cassidy, cantwell, cornyn, tinasmith, tlaib, daines, marshall, hawley, lankford, hagerty, graham,
+        crapo, grassley(page=1), baldwin, cruz, schatz, cassidy, cantwell, cornyn, tinasmith, tlaib, daines, marshall, hawley, lankford, hagerty, graham, murray,
         fischer, kaine, padilla, clark, trentkelly, wyden, mast, hassan, cortezmasto, react, tokuda, steube, foxx, clarke, griffith, carey, ronjohnson, moran,
         schumer, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, barragan, castor,
         bennet(page=1), lofgren, gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, tillis, barr, crawford, lujan, jayapal, lummis,
@@ -2773,6 +2773,22 @@ module Statement
       results = []
       domain = "www.daines.senate.gov"
       url = "https://www.daines.senate.gov/news/press-releases/#{page}/"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css('.elementor-post__text').each do |row|
+        results << { :source => url,
+                      :url => row.css('a').first['href'],
+                      :title => row.css('h3').text.strip,
+                      :date => Date.parse(row.css('.elementor-post-date').text.strip),
+                      :domain => domain }
+        end
+      results
+    end
+
+    def self.murray(page=1)
+      results = []
+      domain = "www.murray.senate.gov"
+      url = "https://www.murray.senate.gov/category/press-releases/page/#{page}/"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css('.elementor-post__text').each do |row|
