@@ -37,7 +37,7 @@ module Statement
     end
 
     def self.member_methods
-      [:crapo, :trentkelly, :heinrich, :document_query_new, :barr, :media_body, :steube, :bera, :meeks, :sykes, :barragan, :castor, :marshall, :hawley, :lankford, :barrasso,
+      [:crapo, :trentkelly, :heinrich, :document_query_new, :barr, :media_body, :steube, :bera, :meeks, :sykes, :barragan, :castor, :marshall, :hawley, :jetlisting_h2, :barrasso,
       :timscott, :senate_drupal_newscontent, :shaheen, :paul, :tlaib, :grijalva, :aguilar, :bergman, :scanlon, :gimenez, :mcgovern, :foxx, :clarke, :jayapal, :carey, :mikelee,
       :fischer, :clark, :sykes, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :rickscott, :joyce, :gosar, :article_block_h2, :griffith, :daines, :vanhollen, :lummis,
       :schumer, :cassidy, :takano, :gillibrand, :garypeters, :cortezmasto, :hydesmith, :recordlist, :rosen, :schweikert, :article_block_h2_date, :hagerty, :graham, :article_span_published,
@@ -64,7 +64,7 @@ module Statement
     def self.member_scrapers
       year = Date.today.year
       results = [sullivan, shaheen, timscott, angusking, document_query_new, media_body, scanlon, bera, meeks, norcross, vanhollen, barrasso, mikelee,
-        crapo, grassley(page=1), baldwin, cruz, schatz, cassidy, cantwell, cornyn, tinasmith, tlaib, daines, marshall, hawley, lankford, hagerty, graham, murray,
+        crapo, grassley(page=1), baldwin, cruz, schatz, cassidy, cantwell, cornyn, tinasmith, tlaib, daines, marshall, hawley, jetlisting_h2, hagerty, graham, murray,
         fischer, kaine, padilla, clark, trentkelly, wyden, mast, hassan, cortezmasto, react, tokuda, steube, foxx, clarke, griffith, carey, ronjohnson, moran, tuberville,
         schumer, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, barragan, castor, 
         lofgren, gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, tillis, barr, crawford, lujan, jayapal, lummis, thune, mullin,
@@ -1635,30 +1635,6 @@ module Statement
         rows.each do |row|
           results << { :source => url, :url => row.css("h2 a").first['href'], :title => row.css("h2 a").text.strip, :date => Date.parse(row.css("span.elementor-post-info__item--type-date").text.strip), :domain => URI.parse(url).host }
         end
-      end
-      results
-    end
-
-    def self.lankford(page=1)
-      results = []
-      url = "https://www.lankford.senate.gov/newsroom/press-releases/?jsf=jet-engine:press-list&pagenum=#{page}"
-      doc = Statement::Scraper.open_html(url)
-      return if doc.nil?
-      rows = doc.css(".jet-listing-grid__item")
-      rows.each do |row|
-        results << { :source => url, :url => row.at_css("h2 a")['href'], :title => row.at_css("h2 a").text.strip, :date => Date.parse(row.at_css("span.elementor-post-info__item--type-date").text.strip), :domain => "www.lankford.senate.gov" }
-      end
-      results
-    end
-
-    def self.ricketts(page=1)
-      results = []
-      url = "https://www.ricketts.senate.gov/newsroom/press-releases/?jsf=jet-engine:press-list&pagenum=#{page}"
-      doc = Statement::Scraper.open_html(url)
-      return if doc.nil?
-      rows = doc.css(".jet-listing-grid__item")
-      rows.each do |row|
-        results << { :source => url, :url => row.at_css("h2 a")['href'], :title => row.at_css("h2 a").text.strip, :date => Date.parse(row.at_css("span.elementor-post-info__item--type-date").text.strip), :domain => "www.ricketts.senate.gov" }
       end
       results
     end
