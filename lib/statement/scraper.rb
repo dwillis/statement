@@ -2494,7 +2494,8 @@ module Statement
           "https://blakemoore.house.gov/media/press-releases",
           "https://mcgarvey.house.gov/media/press-releases",
           "https://torres.house.gov/media-center/press-releases",
-          "https://www.durbin.senate.gov/newsroom/press-releases"
+          "https://www.durbin.senate.gov/newsroom/press-releases",
+          "https://www.warren.senate.gov/newsroom/press-releases"
         ]
       end
       urls.each do |url|
