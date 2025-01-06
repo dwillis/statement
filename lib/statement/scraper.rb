@@ -38,7 +38,7 @@ module Statement
 
     def self.member_methods
       [:crapo, :trentkelly, :heinrich, :document_query_new, :barr, :media_body, :steube, :bera, :meeks, :sykes, :barragan, :castor, :marshall, :hawley, :lankford, :barrasso,
-      :timscott, :senate_drupal_newscontent, :shaheen, :paul, :tlaib, :grijalva, :aguilar, :bergman, :scanlon, :gimenez, :mcgovern, :foxx, :clarke, :jayapal, :carey,
+      :timscott, :senate_drupal_newscontent, :shaheen, :paul, :tlaib, :grijalva, :aguilar, :bergman, :scanlon, :gimenez, :mcgovern, :foxx, :clarke, :jayapal, :carey, :mikelee,
       :fischer, :clark, :sykes, :cantwell, :wyden, :cornyn, :connolly, :mast, :hassan, :rickscott, :joyce, :gosar, :article_block_h2, :griffith, :daines, :vanhollen,
       :schumer, :cassidy, :takano, :gillibrand, :garypeters, :cortezmasto, :hydesmith, :sanders, :recordlist, :rosen, :schweikert, :article_block_h2_date, :hagerty, :graham,
       :grassley, :bennet, :lofgren, :senate_drupal, :tinasmith, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :lujan, :ronjohnson,
@@ -61,7 +61,7 @@ module Statement
 
     def self.member_scrapers
       year = Date.today.year
-      results = [sullivan, shaheen, timscott, angusking, document_query_new, sanders, media_body, scanlon, bera, meeks, norcross, vanhollen, barrasso,
+      results = [sullivan, shaheen, timscott, angusking, document_query_new, sanders, media_body, scanlon, bera, meeks, norcross, vanhollen, barrasso, mikelee,
         crapo, grassley(page=1), baldwin, cruz, schatz, cassidy, cantwell, cornyn, tinasmith, tlaib, daines, marshall, hawley, lankford, hagerty, graham,
         fischer, kaine, padilla, clark, trentkelly, wyden, mast, hassan, cortezmasto, react, tokuda, steube, foxx, clarke, griffith, carey, ronjohnson,
         schumer, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, barragan, castor,
@@ -2709,6 +2709,18 @@ module Statement
       rows.each do |row|
         year = Date.today.month == 1 ? Date.today.year-1 : Date.today.year
         results << { :source => url, :url => row.css('a').first['href'], :title => row.css('.element-title').text.strip, :date => Date.strptime(row.css('.element-date').text + " "+ year.to_s, "%b %d %Y"), :domain => "www.rickscott.senate.gov" }
+      end
+      results
+    end
+
+    def self.mikelee(page=1)
+      results = []
+      url = "https://www.lee.senate.gov/press-releases?page=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      rows = doc.css(".element")
+      rows.each do |row|
+        results << { :source => url, :url => row.css('a').first['href'], :title => row.css('.element-title').text.strip, :date => Date.parse(row.css('.element-date').text), :domain => "www.lee.senate.gov" }
       end
       results
     end
