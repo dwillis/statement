@@ -2610,7 +2610,7 @@ module Statement
         results << { :source => url,
                      :url => row.css('a').first['href'],
                      :title => row.css('a').first.text.strip,
-                     :date => Date.parse(row.css('li').first.text.strip),
+                     :date => Date.parse(row.css('li').first(3).map{|x| x.text.strip}.join(' ')),
                      :domain => 'www.lujan.senate.gov' }
       end
       results
