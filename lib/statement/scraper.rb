@@ -44,7 +44,7 @@ module Statement
       :grassley, :bennet, :lofgren, :senate_drupal, :tinasmith, :rounds, :sullivan, :kennedy, :duckworth, :angusking, :tillis, :emmer, :house_title_header, :lujan, :ronjohnson,
       :porter, :jasonsmith, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :norcross,
       :jeffries, :article_block, :jackreed, :blackburn, :article_block_h1, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react, :tokuda, :huizenga,
-      :moran, :murray, :thune, :tuberville, :warner, :boozman, :merkley, :rubio, :whitehouse, :wicker, :toddyoung, :britt]
+      :moran, :murray, :thune, :tuberville, :warner, :boozman, :merkley, :rubio, :whitehouse, :wicker, :toddyoung, :britt, :markey]
     end
 
     def self.committee_methods
@@ -69,7 +69,7 @@ module Statement
         bennet(page=1), lofgren, gillibrand, kennedy, duckworth, senate_drupal_newscontent, senate_drupal, tillis, barr, crawford, lujan, jayapal, lummis, thune,
         jasonsmith, bacon, capito, house_title_header, recordlist, tonko, aguilar, rosen, media_digest, pressley, reschenthaler, article_block_h2_date, huizenga,
         larsen, grijalva, jeffries, article_block, jackreed, blackburn, article_block_h1, clyburn, titus, joyce, houlahan, lucas, schweikert, gosar, mcgovern, warner,
-        boozman, merkley, rubio, whitehouse, wicker, toddyoung, britt].flatten
+        boozman, merkley, rubio, whitehouse, wicker, toddyoung, britt, markey].flatten
       results = results.compact
       Utils.remove_generic_urls!(results)
     end
@@ -1383,7 +1383,6 @@ module Statement
     def self.article_block_h1(urls=[], page=1)
       if urls.empty?
         urls = [
-          "https://www.markey.senate.gov/news/press-releases",
           "https://www.murphy.senate.gov/newsroom/press-releases",
           "https://www.cotton.senate.gov/news/press-releases"
         ]
@@ -1395,10 +1394,10 @@ module Statement
        uri = URI(url)
        source_url = "#{url}?pagenum_rs=#{page}"
        domain =  URI.parse(source_url).host
-       doc = open_html(source_url)
+       doc = Statement::Scraper.open_html(source_url)
        return if doc.nil?
        doc.css(".ArticleBlock").each do |row|
-         results << { :source => url, :url => row.css('a').first['href'], :title => row.css('a').text.strip, :date => Date.parse(row.css('.ArticleBlock__date').text), :domain => domain }
+         results << { :source => url, :url => row.css('h1 a').first['href'], :title => row.css('h1 a').text.strip, :date => Date.parse(row.css('.ArticleBlock__date').text), :domain => domain }
        end
       end
       results
@@ -1446,6 +1445,18 @@ module Statement
         doc.css(".ArticleBlock").each do |row|
           results << { :source => url, :url => row.css('a').first['href'], :title => row.css("h2").text.strip, :date => Date.parse(row.css('p').text), :domain => domain }
         end
+      end
+      results
+    end
+
+    def self.markey(page=1)
+      results = []
+      domain = 'www.markey.senate.gov'
+      url = "https://www.markey.senate.gov/news/press-releases?pagenum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".ArticleBlock").each do |row|
+        results << { :source => url, :url => row.css('a').first['href'], :title => row.css("a").first.text.strip, :date => Date.parse(row.css('.ArticleBlock__date').text), :domain => domain }
       end
       results
     end
