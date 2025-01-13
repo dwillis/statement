@@ -45,7 +45,7 @@ module Statement
       :porter, :jasonsmith, :bacon, :capito, :tonko, :larsen, :mooney, :ellzey, :media_digest, :crawford, :lucas, :article_newsblocker, :pressley, :reschenthaler, :norcross,
       :jeffries, :article_block, :jackreed, :blackburn, :article_block_h1, :schatz, :kaine, :cruz, :padilla, :baldwin, :clyburn, :titus, :houlahan, :react, :tokuda, :huizenga,
       :moran, :murray, :thune, :tuberville, :warner, :boozman, :fetterman, :rubio, :whitehouse, :wicker, :toddyoung, :britt, :markey, :budd, :elementor_post_date, :markkelly,
-      :ossoff, :vance, :welch]
+      :ossoff, :vance, :welch, :cotton]
     end
 
     def self.committee_methods
@@ -63,7 +63,7 @@ module Statement
 
     def self.member_scrapers
       year = Date.today.year
-      results = [shaheen, timscott, angusking, document_query_new, media_body, scanlon, bera, meeks, norcross, vanhollen, barrasso, mikelee, brownley,
+      results = [shaheen, timscott, angusking, document_query_new, media_body, scanlon, bera, meeks, norcross, vanhollen, barrasso, mikelee, brownley, cotton,
         crapo, grassley(page=1), baldwin, cruz, schatz, cassidy, cantwell, cornyn, tinasmith, tlaib, daines, marshall, hawley, jetlisting_h2, hagerty, graham, murray,
         fischer, kaine, padilla, clark, trentkelly, wyden, mast, hassan, cortezmasto, react, tokuda, steube, foxx, clarke, griffith, carey, ronjohnson, moran, tuberville,
         schumer, takano, heinrich, garypeters, rounds, connolly, paul, hydesmith, rickscott, mooney, ellzey, bergman, gimenez, article_block_h2, barragan, castor, 
@@ -1385,7 +1385,6 @@ module Statement
       if urls.empty?
         urls = [
           "https://www.murphy.senate.gov/newsroom/press-releases",
-          "https://www.cotton.senate.gov/news/press-releases"
         ]
       end
       results = []
@@ -1455,6 +1454,18 @@ module Statement
       results = []
       domain = 'www.markey.senate.gov'
       url = "https://www.markey.senate.gov/news/press-releases?pagenum_rs=#{page}"
+      doc = Statement::Scraper.open_html(url)
+      return if doc.nil?
+      doc.css(".ArticleBlock").each do |row|
+        results << { :source => url, :url => row.css('a').first['href'], :title => row.css("a").first.text.strip, :date => Date.parse(row.css('.ArticleBlock__date').text), :domain => domain }
+      end
+      results
+    end
+
+    def self.cotton(page=1)
+      results = []
+      domain = 'www.cotton.senate.gov'
+      url = "https://www.cotton.senate.gov/news/press-releases?pagenum_rs=#{page}"
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css(".ArticleBlock").each do |row|
