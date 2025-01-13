@@ -2382,7 +2382,7 @@ module Statement
       return if doc.nil?
       doc.css(".post").each do |row|
         next if row.at_css('a').nil?
-        results << {:source => url, :url => "https://barragan.house.gov"+ row.css('a').first['href'], :title => row.css('h2').text, :date => Date.parse(row.css("p").text), :domain => domain }
+        results << {:source => url, :url => row.css('a').first['href'], :title => row.css('h2').text, :date => Date.parse(row.css("p").text), :domain => domain }
       end
       results
     end
