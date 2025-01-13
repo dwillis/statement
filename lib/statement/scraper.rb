@@ -2590,7 +2590,7 @@ module Statement
       return if doc.nil?
       doc.css('.card-body').each do |row|
         results << { :source => url,
-                     :url => "https://lofgren.house.gov/" + row.css('.h3 a').first['href'],
+                     :url => "https://lofgren.house.gov" + row.css('.h3 a').first['href'],
                      :title => row.css('.h3').text,
                      :date => Date.parse(row.css('.row').text),
                      :domain => 'lofgren.house.gov' }
