@@ -1482,7 +1482,7 @@ module Statement
       rows = doc.css("table#browser_table tbody tr")
       rows.each do |row|
         next if row.at_css("a").nil?
-        results << { :source => url, :url => "https://sykes.house.gov" + row.css('a').first['href'], :title => row.css('a').first.text.strip, :date => Date.parse(row.css("time").text), :domain => "sykes.house.gov" }
+        results << { :source => url, :url => "https://sykes.house.gov" + row.css('a').first['href'].strip, :title => row.css('a').first.text.strip, :date => Date.parse(row.css("time").text), :domain => "sykes.house.gov" }
       end
       results
     end
