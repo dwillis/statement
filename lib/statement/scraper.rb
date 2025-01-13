@@ -2422,7 +2422,7 @@ module Statement
       doc = Statement::Scraper.open_html(url)
       return if doc.nil?
       doc.css("article").each do |row|
-        results << {:source => url, :url => "https://bera.house.gov/"+ row.at_css('a')['href'], :title => row.at_css('a').text, :date => row.at_css("time")['datetime'], :domain => domain }
+        results << {:source => url, :url => "https://bera.house.gov/news/"+ row.at_css('a')['href'], :title => row.at_css('a').text, :date => row.at_css("time")['datetime'], :domain => domain }
       end
       results
     end
