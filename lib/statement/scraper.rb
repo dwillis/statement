@@ -2692,7 +2692,7 @@ module Statement
     def self.elementor_post_date(urls=[], page=1)
       if urls.empty?
         urls = [
-          "https://www.sanders.senate.gov/media/press-releases/page/",
+          "https://www.sanders.senate.gov/media/press-releases/",
           "https://www.merkley.senate.gov/news/press-releases/"
         ]
       end
