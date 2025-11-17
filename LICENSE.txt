@@ -1,4 +1,4 @@
-Copyright (c) 2013 Derek Willis
+Copyright (c) 2013-2025 Derek Willis
 
 MIT License
 

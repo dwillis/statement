@@ -413,7 +413,6 @@ When adding or updating scrapers:
 
 - [Official House directory](https://www.house.gov/representatives)
 - [Official Senate directory](https://www.senate.gov/senators)
-- [ProPublica Congress API](https://projects.propublica.org/api-docs/congress-api/)
 - [GovTrack](https://www.govtrack.us/)
 
 ## Support
