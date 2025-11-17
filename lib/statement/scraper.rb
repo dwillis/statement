@@ -3,16 +3,14 @@ require 'uri'
 require 'open-uri'
 require 'american_date'
 require 'nokogiri'
+require_relative 'scraper_base'
 
 module Statement
-  class Scraper
+  class Scraper < ScraperBase
 
-    def self.open_html(url)
-      begin
-        Nokogiri::HTML(open(url).read)
-      rescue
-        nil
-      end
+    # Kept for backward compatibility, but now uses base class method
+    def self.open_html(url, retries = 0)
+      super(url, retries)
     end
 
     def self.house_gop(url)

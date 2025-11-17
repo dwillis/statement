@@ -1,0 +1,319 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'json'
+require_relative '../lib/statement'
+
+module Statement
+  class CLI
+    DEFAULT_CONGRESS = 119
+
+    def initialize(args)
+      @options = {
+        congress: DEFAULT_CONGRESS,
+        type: 'members',
+        format: 'json',
+        log_level: 'info',
+        output: nil,
+        performance: false,
+        single_url: nil,
+        scraper: nil
+      }
+      parse_options(args)
+    end
+
+    def run
+      setup_logger
+      Statement::Logger.info("Statement CLI - Congress #{@options[:congress]}")
+
+      if @options[:single_url]
+        run_single_url
+      elsif @options[:scraper]
+        run_single_scraper
+      elsif @options[:type] == 'members'
+        run_members
+      elsif @options[:type] == 'committees'
+        run_committees
+      elsif @options[:type] == 'all'
+        run_all
+      else
+        puts "Unknown type: #{@options[:type]}"
+        exit 1
+      end
+    end
+
+    private
+
+    def parse_options(args)
+      OptionParser.new do |opts|
+        opts.banner = "Usage: statement [options]"
+        opts.separator ""
+        opts.separator "Options:"
+
+        opts.on("-c", "--congress NUMBER", Integer, "Congress number (default: #{DEFAULT_CONGRESS})") do |c|
+          @options[:congress] = c
+        end
+
+        opts.on("-t", "--type TYPE", String, "Type: members, committees, or all (default: members)") do |t|
+          @options[:type] = t
+        end
+
+        opts.on("-s", "--scraper NAME", String, "Run a specific scraper by name") do |s|
+          @options[:scraper] = s
+        end
+
+        opts.on("-u", "--url URL", String, "Scrape a single URL (auto-detects scraper)") do |url|
+          @options[:single_url] = url
+        end
+
+        opts.on("-f", "--format FORMAT", String, "Output format: json, csv, pretty (default: json)") do |f|
+          @options[:format] = f
+        end
+
+        opts.on("-o", "--output FILE", String, "Output file (default: stdout)") do |o|
+          @options[:output] = o
+        end
+
+        opts.on("-p", "--performance", "Include performance metrics in output") do
+          @options[:performance] = true
+        end
+
+        opts.on("-l", "--log-level LEVEL", String, "Log level: debug, info, warn, error (default: info)") do |l|
+          @options[:log_level] = l
+        end
+
+        opts.on("-L", "--list-scrapers", "List all available scrapers") do
+          list_scrapers
+          exit 0
+        end
+
+        opts.on("-h", "--help", "Show this help message") do
+          puts opts
+          exit 0
+        end
+
+        opts.on("-v", "--version", "Show version") do
+          puts "Statement version #{Statement::VERSION}"
+          exit 0
+        end
+      end.parse!(args)
+    end
+
+    def setup_logger
+      level = case @options[:log_level].downcase
+              when 'debug' then Logger::DEBUG
+              when 'info' then Logger::INFO
+              when 'warn' then Logger::WARN
+              when 'error' then Logger::ERROR
+              else Logger::INFO
+              end
+
+      Statement::Logger.setup(log_level: level)
+    end
+
+    def run_single_url
+      Statement::Logger.info("Scraping single URL: #{@options[:single_url]}")
+      # For now, try to use RSS feed parser
+      begin
+        results = Statement::Feed.from_rss(@options[:single_url])
+        output_results(results, { scraper: 'rss_feed', url: @options[:single_url] })
+      rescue => e
+        Statement::Logger.error("Failed to scrape URL: #{e.message}")
+        exit 1
+      end
+    end
+
+    def run_single_scraper
+      scraper_name = @options[:scraper].to_sym
+      Statement::Logger.info("Running scraper: #{scraper_name}")
+
+      begin
+        if Statement::Scraper.respond_to?(scraper_name)
+          start_time = Time.now
+          results = Statement::Scraper.send(scraper_name)
+          duration = Time.now - start_time
+
+          metadata = {
+            scraper: scraper_name,
+            count: results&.length || 0,
+            duration: duration
+          }
+
+          output_results(results || [], metadata)
+        else
+          Statement::Logger.error("Unknown scraper: #{scraper_name}")
+          exit 1
+        end
+      rescue => e
+        Statement::Logger.error("Scraper failed: #{e.message}")
+        Statement::Logger.debug(e.backtrace.join("\n"))
+        exit 1
+      end
+    end
+
+    def run_members
+      Statement::Logger.info("Running all member scrapers")
+      start_time = Time.now
+      results = Statement::Scraper.member_scrapers
+      duration = Time.now - start_time
+
+      metadata = {
+        type: 'members',
+        congress: @options[:congress],
+        count: results.length,
+        duration: duration
+      }
+
+      output_results(results, metadata)
+    end
+
+    def run_committees
+      Statement::Logger.info("Running all committee scrapers")
+      start_time = Time.now
+      results = Statement::Scraper.committee_scrapers
+      duration = Time.now - start_time
+
+      metadata = {
+        type: 'committees',
+        congress: @options[:congress],
+        count: results.length,
+        duration: duration
+      }
+
+      output_results(results, metadata)
+    end
+
+    def run_all
+      Statement::Logger.info("Running all scrapers (members and committees)")
+      start_time = Time.now
+
+      member_results = Statement::Scraper.member_scrapers
+      committee_results = Statement::Scraper.committee_scrapers
+
+      duration = Time.now - start_time
+
+      all_results = {
+        members: member_results,
+        committees: committee_results
+      }
+
+      metadata = {
+        type: 'all',
+        congress: @options[:congress],
+        member_count: member_results.length,
+        committee_count: committee_results.length,
+        total_count: member_results.length + committee_results.length,
+        duration: duration
+      }
+
+      output_results(all_results, metadata)
+    end
+
+    def output_results(results, metadata = {})
+      output_data = if @options[:performance]
+                      { results: results, metadata: metadata }
+                    else
+                      results
+                    end
+
+      formatted_output = case @options[:format]
+                         when 'json'
+                           JSON.pretty_generate(output_data)
+                         when 'pretty'
+                           format_pretty(output_data, metadata)
+                         when 'csv'
+                           format_csv(results)
+                         else
+                           JSON.pretty_generate(output_data)
+                         end
+
+      if @options[:output]
+        File.write(@options[:output], formatted_output)
+        Statement::Logger.info("Results written to #{@options[:output]}")
+      else
+        puts formatted_output
+      end
+    end
+
+    def format_pretty(data, metadata)
+      output = []
+      output << "=" * 80
+      output << "Statement Results"
+      output << "=" * 80
+
+      if metadata[:type]
+        output << "Type: #{metadata[:type]}"
+        output << "Congress: #{metadata[:congress]}" if metadata[:congress]
+        output << "Duration: #{metadata[:duration]&.round(2)}s" if metadata[:duration]
+
+        if metadata[:type] == 'all'
+          output << "Member results: #{metadata[:member_count]}"
+          output << "Committee results: #{metadata[:committee_count]}"
+          output << "Total: #{metadata[:total_count]}"
+        else
+          output << "Results: #{metadata[:count]}"
+        end
+      end
+
+      output << "-" * 80
+
+      results = data.is_a?(Hash) && data[:results] ? data[:results] : data
+
+      if results.is_a?(Hash)
+        results.each do |key, items|
+          output << "\n#{key.to_s.upcase}:"
+          output += format_results_array(items)
+        end
+      else
+        output += format_results_array(results)
+      end
+
+      output.join("\n")
+    end
+
+    def format_results_array(results)
+      return ["No results"] if results.nil? || results.empty?
+
+      results.first(10).map.with_index do |result, i|
+        "#{i + 1}. #{result[:title]}\n   URL: #{result[:url]}\n   Date: #{result[:date]}\n   Source: #{result[:domain]}"
+      end + (results.length > 10 ? ["... and #{results.length - 10} more"] : [])
+    end
+
+    def format_csv(results)
+      return "" if results.nil? || results.empty?
+
+      # Handle both simple arrays and hashes with multiple result sets
+      items = if results.is_a?(Hash)
+                results.values.flatten
+              else
+                results.is_a?(Array) ? results : [results]
+              end
+
+      return "" if items.empty?
+
+      headers = items.first.keys.join(",")
+      rows = items.map { |r| r.values.map { |v| "\"#{v}\"" }.join(",") }
+
+      ([headers] + rows).join("\n")
+    end
+
+    def list_scrapers
+      puts "Available scrapers:"
+      puts "\nMember scrapers:"
+      Statement::Scraper.member_methods.sort.each do |method|
+        puts "  - #{method}"
+      end
+
+      puts "\nCommittee scrapers:"
+      Statement::Scraper.committee_methods.sort.each do |method|
+        puts "  - #{method}"
+      end
+
+      puts "\nTotal: #{Statement::Scraper.member_methods.length} member scrapers, #{Statement::Scraper.committee_methods.length} committee scrapers"
+    end
+  end
+end
+
+# Run the CLI
+cli = Statement::CLI.new(ARGV)
+cli.run

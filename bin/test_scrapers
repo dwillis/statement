@@ -1,0 +1,53 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/statement'
+require_relative '../lib/statement/scraper_tester'
+
+# Setup logger
+Statement::Logger.setup(log_level: Logger::INFO)
+
+puts "=" * 80
+puts "Statement Scraper Test Suite"
+puts "=" * 80
+puts ""
+
+# Create tester
+tester = Statement::ScraperTester.new
+
+# Parse command line arguments
+if ARGV.include?('--members')
+  puts "Testing member scrapers only..."
+  tester.test_members
+elsif ARGV.include?('--committees')
+  puts "Testing committee scrapers only..."
+  tester.test_committees
+else
+  puts "Testing all scrapers..."
+  tester.test_all
+end
+
+puts ""
+puts "=" * 80
+puts "Generating report..."
+puts "=" * 80
+puts ""
+
+# Determine output format
+format = if ARGV.include?('--json')
+           'json'
+         elsif ARGV.include?('--csv')
+           'csv'
+         elsif ARGV.include?('--html')
+           'html'
+         else
+           'text'
+         end
+
+# Determine output file
+output_file = ARGV.find { |arg| arg.start_with?('--output=') }&.split('=')&.last
+
+# Generate report
+tester.generate_report(format: format, output: output_file)
+
+puts ""
+puts "Testing complete!"

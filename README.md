@@ -1,10 +1,26 @@
 # Statement
 
-Statement parses RSS feeds and HTML pages containing press releases and other official statements from members of Congress, and produces hashes with information about those pages. It has been tested under Ruby 1.9.3 and 2.x.
+Statement parses RSS feeds and HTML pages containing press releases and other official statements from members of Congress, and produces hashes with information about those pages. It has been tested under Ruby 1.9.3, 2.x, and 3.x.
+
+## What's New in Version 2.3
+
+🎉 **Major improvements for reliability and maintainability!**
+
+- **Error handling**: No more crashes! Scrapers log errors and continue running
+- **Command-line interface**: New `statement` CLI for easy scraper execution
+- **Performance testing**: Automated testing suite with detailed performance reports
+- **Comprehensive logging**: Track what's happening with configurable log levels
+- **Better organization**: Modular code structure for easier maintenance
+
+See [CHANGELOG.md](CHANGELOG.md) for full details and [MAINTAINER_GUIDE.md](MAINTAINER_GUIDE.md) for documentation.
 
 ## Coverage
 
-Statement currently parses press releases for members of the House and Senate. For members with RSS feeds, you can pass the feed URL into Statement. For members without RSS feeds (or with broken ones), HTML scrapers are provided, as are methods for special groups, such as House Republicans. Suggestions are welcomed.
+Statement currently parses press releases for members of the House and Senate. For members with RSS feeds, you can pass the feed URL into Statement. For members without RSS feeds (or with broken ones), HTML scrapers are provided, as are methods for special groups, such as House Republicans.
+
+**Current status**: 185 scrapers (129 member, 56 committee). Many congressional websites now block automated access, but the gem handles these gracefully. See [PERFORMANCE_REPORT.txt](PERFORMANCE_REPORT.txt) for current scraper health.
+
+Suggestions and contributions are welcomed!
 
 ## Installation
 
@@ -25,6 +41,44 @@ Or install it yourself as:
 ```sh
 $ gem install statement
 ```
+
+## Quick Start
+
+### Command Line Interface (NEW in 2.3!)
+
+Run scrapers directly from the command line:
+
+```sh
+# Run all member scrapers for current Congress (119th)
+$ statement --type members
+
+# Run all committee scrapers
+$ statement --type committees
+
+# Run a specific scraper
+$ statement --scraper shaheen
+
+# Save results to file with performance metrics
+$ statement --type members --output results.json --performance
+
+# List all available scrapers
+$ statement --list-scrapers
+
+# Get help
+$ statement --help
+```
+
+See `statement --help` for all options including output formats (JSON, CSV, pretty print), log levels, and more.
+
+### Testing Scrapers
+
+Test all scrapers and generate a performance report:
+
+```sh
+$ ruby -I lib bin/test_scrapers
+```
+
+This will test all 185 scrapers and generate a comprehensive report showing which are working, broken, or slow.
 
 ## Usage
 
@@ -111,12 +165,41 @@ t.bulk_timeline('congress')
 [:id=>343541632844587008, :body=>"On the Skagit river getting a close-up view of the bridge repairs. http://t.co/SMsdwiFaR6", :link=>nil, :in_reply_to_screen_name=>nil, :total_tweets=>226, :created_time=>2013-06-08 21:34:42 -0400, :retweets=>1, :favorites=>2, :screen_name=>"RepDelBene"}..]
 ```
 
+## Logging and Error Handling (NEW in 2.3!)
+
+Statement now includes comprehensive error handling and logging:
+
+```ruby
+# Configure logging level (default: INFO)
+Statement::Logger.setup(log_level: Logger::DEBUG)
+
+# Scrapers automatically log errors instead of crashing
+results = Statement::Scraper.member_scrapers
+# Even if some scrapers fail, you'll get results from successful ones
+
+# Errors are logged with full context
+# [2024-11-17 10:30:45] ERROR: HTTP error fetching https://example.gov: 403 Forbidden
+# [2024-11-17 10:30:45] INFO: Retrying https://example.gov (attempt 1/2)
+```
+
+All scrapers now:
+- Return empty arrays instead of raising exceptions on errors
+- Automatically retry failed requests (up to 2 times with exponential backoff)
+- Log all errors with timestamps and details
+- Include timeout protection (30 seconds)
+
 ## Tests
 
 Statement uses MiniTest, to run tests:
 
 ```sh
 $ rake test
+```
+
+For comprehensive scraper testing:
+
+```sh
+$ ruby -I lib bin/test_scrapers --output=report.txt
 ```
 
 ## Contributing

@@ -1,4 +1,7 @@
 require "statement/version"
+require "statement/logger"
+require "statement/scraper_base"
+require "statement/scraper_registry"
 require "statement/feed"
 require "statement/scraper"
 require "statement/utils"
